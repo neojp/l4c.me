@@ -22,9 +22,6 @@ body
 	min-width 1000px
 	width 90%
 
-header, footer
-	noselect()
-
 header
 	background #00b8f4
 	color #fff
@@ -185,19 +182,27 @@ footer
 	background #ffc68c
 	border 2px solid #ff9a35
 	color #fff
-	font-size 18px
+	font-size 20px
+	font-weight bold
 	margin 0 0 30px
-	padding 10px
+	padding 10px 45px
+	position relative
 	text-align center
 	border-radius( 5px )
 	clearfix()
+	text-shadow( 1px 1px 5px rgba(#000, 0.15) )
 
 	a.more
+		border-bottom 2px solid #fff
 		margin-left 10px
+		text-decoration none
 
 	a.close
 		ir()
 		background-image url(images/icon_message_close.png)
 		height 22px
-		float right
+		position absolute
+		margin-top -11px
+		right 10px
+		top 50%
 		width 22px

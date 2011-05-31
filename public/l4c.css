@@ -13,7 +13,7 @@ button{border:3px double #ffa500;color:#fff;cursor:pointer;font-size:12px;font-w
 .hidden{display:none;visibility:hidden}
 .visuallyhidden{left:-9999px;position:absolute !important;top:-9999px}
 .invisible{visibility:hidden}
-.noselect{-webkit-user-select:none;-khtml-user-select:none;-moz-user-select:none;-o-user-select:none;user-select:none}
+.noselect{-webkit-user-select:none;-khtml-user-select:none;-moz-user-select:none;-ms-user-select:none;-o-user-select:none;user-select:none;-moz-user-select:-moz-none}
 .clearfix{zoom:1;}
 .clearfix:before,.clearfix:after{content:"\0020";display:block;height:0;visibility:hidden}
 .clearfix:after{clear:both}
@@ -24,7 +24,6 @@ button{border:3px double #ffa500;color:#fff;cursor:pointer;font-size:12px;font-w
 .alignjustify{text-align:justify}
 body{background:#242c33;color:#333;font-size:12px;font-family:Helvetica,Arial,sans-serif;margin:0;min-width:1000px;padding:0}
 .wrap{margin:0 auto;position:relative;min-width:1000px;width:90%}
-header,footer{-webkit-user-select:none;-khtml-user-select:none;-moz-user-select:none;-o-user-select:none;user-select:none}
 header{background:#00b8f4;color:#fff;height:60px;}
 header #logo{height:49px;left:13px;margin:0;position:absolute;top:5px;width:96px;}
 header #logo a{background-repeat:no-repeat;height:100%;direction:ltr;display:block;overflow:hidden;text-align:left;text-indent:-999em;width:100%;text-indent:0}
@@ -57,8 +56,8 @@ footer #dotgaia a{background-image:url("http://www.cristalab.com/images/icons/do
 footer #p3 a{background-image:url("http://www.cristalab.com/images/icons/p3.png")}
 #inner{background:#fff}
 #wrap{padding:30px 0}
-#message{background:#ffc68c;border:2px solid #ff9a35;color:#fff;font-size:18px;margin:0 0 30px;padding:10px;text-align:center;border-radius:5px;-o-border-radius:5px;-ms-border-radius:5px;-moz-border-radius:5px;-webkit-border-radius:5px;-webkit-background-clip:padding-box;zoom:1;}
+#message{background:#ffc68c;border:2px solid #ff9a35;color:#fff;font-size:20px;font-weight:bold;margin:0 0 30px;padding:10px 45px;position:relative;text-align:center;border-radius:5px;-o-border-radius:5px;-ms-border-radius:5px;-moz-border-radius:5px;-webkit-border-radius:5px;-webkit-background-clip:padding-box;zoom:1;text-shadow:1px 1px 5px rgba(0,0,0,0.15);-o-text-shadow:1px 1px 5px rgba(0,0,0,0.15);-ms-text-shadow:1px 1px 5px rgba(0,0,0,0.15);-moz-text-shadow:1px 1px 5px rgba(0,0,0,0.15);-webkit-text-shadow:1px 1px 5px rgba(0,0,0,0.15);}
 #message:before,#message:after{content:"\0020";display:block;height:0;visibility:hidden}
 #message:after{clear:both}
-#message a.more{margin-left:10px}
-#message a.close{background-repeat:no-repeat;height:100%;direction:ltr;display:block;overflow:hidden;text-align:left;text-indent:-999em;width:100%;background-image:url("images/icon_message_close.png");height:22px;float:right;width:22px}
+#message a.more{border-bottom:2px solid #fff;margin-left:10px;text-decoration:none}
+#message a.close{background-repeat:no-repeat;height:100%;direction:ltr;display:block;overflow:hidden;text-align:left;text-indent:-999em;width:100%;background-image:url("images/icon_message_close.png");height:22px;position:absolute;margin-top:-11px;right:10px;top:50%;width:22px}
