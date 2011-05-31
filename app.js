@@ -12,7 +12,8 @@ app.configure(function(){
   app.use(express.bodyParser());
   //app.use(express.logger({ format: ':status ":method :url"' }));
   
-  app.use(express.static(__dirname + '/public'));
+  var oneYear = 31556926000; // 1 year on milliseconds
+  app.use(express.static(__dirname + '/public', { maxAge: oneYear }));
 });
 
 
