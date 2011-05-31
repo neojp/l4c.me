@@ -1,0 +1,179 @@
+@css {
+/* L4C.me
+	@import 'fonts/stylesheet.css';
+*/
+}
+@import "reset"
+@import "classes"
+//@import "boilerplate"
+
+body
+	background #242c33
+	color #333
+	font-size 12px
+	font-family Helvetica, Arial, sans-serif
+	margin 0
+	min-width 1000px
+	padding 0
+
+.wrap
+	margin 0 auto
+	position relative
+	min-width 1000px
+	width 90%
+
+header, footer
+	noselect()
+
+header
+	background #00b8f4
+	color #fff
+	height 60px
+
+	#logo
+		height 49px
+		left 13px
+		margin 0
+		position absolute
+		top 5px
+		width 96px
+
+		a
+			ir()
+			text-indent 0
+
+	#nav-aside
+		float right
+		font-size 1.2em
+		width 720px
+		width 75%
+	
+	nav
+		float left
+		height 30px
+		line-height 30px
+		padding-top 15px
+
+		ul.menu
+			list-style none
+			margin 0
+			padding 0
+		
+		ul.menu, ul.menu > li, ul.menu > li > a
+			float left
+			height 30px
+		
+		ul.menu > li
+			margin-right 5px
+			
+			> a
+				padding 0 10px
+				text-decoration none
+				border-radius( 5px )
+			
+			> a:hover,
+			&.menu-selected > a
+				background #0a93ca
+			
+	
+	aside
+		float right
+		padding-top 18px
+		height 25px
+		line-height 25px
+
+		a
+			text-decoration none
+		
+		a.username
+			border-bottom 2px solid #80dcfa
+			
+			&:hover
+				border-color #fff
+		
+		a.profile, a.logout
+			background none no-repeat 90% 50%
+			display inline-block
+			height 25px
+			margin 0 3px
+			padding 0 25px 0 10px
+			border-radius( 5px )
+			
+			&:after
+				content: "|"
+				font-size 16px
+				color #37cdff
+				height 20px
+				margin-left 8px
+				overflow hidden
+				width 0
+		
+		a.profile
+			background-color #c2ecfc
+			background-image url(images/icon_profile.png)
+			color #0a93ca
+		
+		a.logout
+			background-color #0a93ca
+			background-image url(images/icon_logout.png)
+			color #c2ecfc
+
+footer
+	background #242c33
+	color #fff
+	padding 13px
+	text-align center
+
+	ul
+		height 37px
+		list-style none
+		margin 0
+		padding 0
+	
+	li
+		display inline-block
+		height 37px
+		line-height 37px
+		margin 0 0 0 18px
+		vertical-align middle
+	
+	a
+		background none no-repeat left center
+		display inline-block
+		height 16px
+		line-height 16px
+		padding-left 20px
+		text-decoration none
+		vertical-align middle
+	
+	a:hover
+		text-decoration underline
+	
+	#claborg
+		margin 0
+
+		a
+			ir()
+			background-image url("http://www.cristalab.com/images/general/label-cristalab-org.png")
+			display inline-block
+			height 37px
+			padding 0
+			width 136px
+	
+	#cristalab a
+		background-image url("http://www.cristalab.com/images/icons/icon-logo.png")
+	
+	#l4c a
+		background-image url("http://www.cristalab.com/images/icons/l4c.png")
+	
+	#tiaxime a
+		background-image url("http://www.cristalab.com/images/icons/tiaxime.png")
+	
+	#dotgaia a
+		background-image url("http://www.cristalab.com/images/icons/dotgaia.png")
+	
+	#p3 a
+		background-image url("http://www.cristalab.com/images/icons/p3.png")
+
+#inner
+	background #fff

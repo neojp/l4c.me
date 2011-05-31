@@ -1,5 +1,29 @@
-var http = require('http');
-http.createServer(function (req, res) {
-  res.writeHead(200, {'Content-Type': 'text/plain'});
-  res.end('Hello World\nApp (l4c) is running..');
-}).listen(10265);
+// Module dependencies
+var express = require('express'),
+    stylus  = require('stylus'),
+    app     = module.exports = express.createServer();
+
+
+// Configuration
+app.configure(function(){
+  app.set('views', __dirname + '/views');
+  app.set('view engine', 'jade');
+
+  app.use(express.favicon());
+  app.use(express.bodyParser());
+  //app.use(express.logger({ format: ':status ":method :url"' }));
+  
+  app.use(express.static(__dirname + '/public'));
+});
+
+
+// Routes
+app.get('/', function(req, res){
+  res.render('index');
+});
+
+// Only listen on $ node app.js
+if (!module.parent) {
+  app.listen(10265);
+  console.log("Listening on port %d", app.address().port);
+}

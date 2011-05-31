@@ -1,0 +1,319 @@
+/* L4C.me
+	@import 'fonts/stylesheet.css';
+*/
+a {
+  color: inherit;
+  cursor: pointer;
+  text-decoration: underline;
+}
+a:focus,
+a:hover,
+a:active {
+  text-decoration: none;
+}
+p {
+  margin: 0 0 1em;
+}
+label {
+  cursor: pointer;
+  font-weight: bold;
+}
+input,
+textarea {
+  border: 3px double #bbb;
+  font: 12px/14px "saxMonoRegular", "Courier New", Courier, monospace;
+  margin: 5px;
+  padding: 5px;
+rgba(102,102,102,0.1)
+}
+input:focus,
+textarea:focus,
+input:active,
+textarea:active {
+  border-color: #ffa500;
+  outline: 0;
+}
+textarea {
+  bottom: 0;
+  left: 0;
+  overflow: auto;
+  position: absolute;
+  resize: none;
+  right: 0;
+  top: 1.5em;
+}
+button {
+  border: 3px double #ffa500;
+  color: #fff;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: bold;
+  outline: 0;
+  padding: 5px 25px;
+#d98c00
+#ffae1a
+}
+.ir {
+  background-repeat: no-repeat;
+  height: 100%;
+  direction: ltr;
+  display: block;
+  overflow: hidden;
+  text-align: left;
+  text-indent: -999em;
+  width: 100%;
+}
+.hidden {
+  display: none;
+  visibility: hidden;
+}
+.visuallyhidden {
+  left: -9999px;
+  position: absolute !important;
+  top: -9999px;
+}
+.invisible {
+  visibility: hidden;
+}
+.noselect {
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+}
+.clearfix {
+  zoom: 1;
+}
+.clearfix:before,
+.clearfix:after {
+  content: "\0020";
+  display: block;
+  height: 0;
+  visibility: hidden;
+}
+.clearfix:after {
+  clear: both;
+}
+.clear {
+  display: block;
+  clear: both;
+  height: 0;
+  overflow: hidden;
+  visibility: hidden;
+}
+.aligncenter {
+  text-align: center;
+}
+.alignleft {
+  float: left;
+}
+.alignright {
+  float: right;
+}
+.alignjustify {
+  text-align: justify;
+}
+body {
+  background: #242c33;
+  color: #333;
+  font-size: 12px;
+  font-family: Helvetica, Arial, sans-serif;
+  margin: 0;
+  min-width: 1000px;
+  padding: 0;
+}
+.wrap {
+  margin: 0 auto;
+  position: relative;
+  min-width: 1000px;
+  width: 90%;
+}
+header,
+footer {
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+}
+header {
+  background: #00b8f4;
+  color: #fff;
+  height: 60px;
+}
+header #logo {
+  height: 49px;
+  left: 13px;
+  margin: 0;
+  position: absolute;
+  top: 5px;
+  width: 96px;
+}
+header #logo a {
+  background-repeat: no-repeat;
+  height: 100%;
+  direction: ltr;
+  display: block;
+  overflow: hidden;
+  text-align: left;
+  text-indent: -999em;
+  width: 100%;
+  text-indent: 0;
+}
+header #nav-aside {
+  float: right;
+  font-size: 1.2em;
+  width: 720px;
+  width: 75%;
+}
+header nav {
+  float: left;
+  height: 30px;
+  line-height: 30px;
+  padding-top: 15px;
+}
+header nav ul.menu {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+header nav ul.menu,
+header nav ul.menu > li,
+header nav ul.menu > li > a {
+  float: left;
+  height: 30px;
+}
+header nav ul.menu > li {
+  margin-right: 5px;
+}
+header nav ul.menu > li > a {
+  padding: 0 10px;
+  text-decoration: none;
+  border-radius: 5px;
+  -o-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -webkit-background-clip: padding-box;
+}
+header nav ul.menu > li > a:hover,
+header nav ul.menu > li.menu-selected > a {
+  background: #0a93ca;
+}
+header aside {
+  float: right;
+  padding-top: 18px;
+  height: 25px;
+  line-height: 25px;
+}
+header aside a {
+  text-decoration: none;
+}
+header aside a.username {
+  border-bottom: 2px solid #80dcfa;
+}
+header aside a.username:hover {
+  border-color: #fff;
+}
+header aside a.profile,
+header aside a.logout {
+  background: none no-repeat 90% 50%;
+  display: inline-block;
+  height: 25px;
+  margin: 0 3px;
+  padding: 0 25px 0 10px;
+  border-radius: 5px;
+  -o-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -webkit-background-clip: padding-box;
+}
+header aside a.profile:after,
+header aside a.logout:after {
+  content: "|";
+  font-size: 16px;
+  color: #37cdff;
+  height: 20px;
+  margin-left: 8px;
+  overflow: hidden;
+  width: 0;
+}
+header aside a.profile {
+  background-color: #c2ecfc;
+  background-image: url("images/icon_profile.png");
+  color: #0a93ca;
+}
+header aside a.logout {
+  background-color: #0a93ca;
+  background-image: url("images/icon_logout.png");
+  color: #c2ecfc;
+}
+footer {
+  background: #242c33;
+  color: #fff;
+  padding: 13px;
+  text-align: center;
+}
+footer ul {
+  height: 37px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+footer li {
+  display: inline-block;
+  height: 37px;
+  line-height: 37px;
+  margin: 0 0 0 18px;
+  vertical-align: middle;
+}
+footer a {
+  background: none no-repeat left center;
+  display: inline-block;
+  height: 16px;
+  line-height: 16px;
+  padding-left: 20px;
+  text-decoration: none;
+  vertical-align: middle;
+}
+footer a:hover {
+  text-decoration: underline;
+}
+footer #claborg {
+  margin: 0;
+}
+footer #claborg a {
+  background-repeat: no-repeat;
+  height: 100%;
+  direction: ltr;
+  display: block;
+  overflow: hidden;
+  text-align: left;
+  text-indent: -999em;
+  width: 100%;
+  background-image: url("http://www.cristalab.com/images/general/label-cristalab-org.png");
+  display: inline-block;
+  height: 37px;
+  padding: 0;
+  width: 136px;
+}
+footer #cristalab a {
+  background-image: url("http://www.cristalab.com/images/icons/icon-logo.png");
+}
+footer #l4c a {
+  background-image: url("http://www.cristalab.com/images/icons/l4c.png");
+}
+footer #tiaxime a {
+  background-image: url("http://www.cristalab.com/images/icons/tiaxime.png");
+}
+footer #dotgaia a {
+  background-image: url("http://www.cristalab.com/images/icons/dotgaia.png");
+}
+footer #p3 a {
+  background-image: url("http://www.cristalab.com/images/icons/p3.png");
+}
+#inner {
+  background: #fff;
+}

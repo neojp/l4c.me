@@ -1,0 +1,149 @@
+@css {
+/*  CSS3 ✰ Classes  */
+}
+
+border-radius( value = 5px )
+	border-radius value
+	-o-border-radius value
+	-ms-border-radius value
+	-moz-border-radius value
+	-webkit-border-radius value
+	-webkit-background-clip padding-box
+
+box-shadow( value = 0 0 5px rgba(#000, 0.10) )
+	box-shadow value
+	-o-box-shadow value
+	-ms-box-shadow value
+	-moz-box-shadow value
+	-webkit-box-shadow value
+	-webkit-background-clip padding-box
+
+gradient( top_color, bottom_color = false, inverse = false )
+	
+	if !bottom_color
+		original_color = top_color
+		top_color = lighten(original_color, 15%)
+		bottom_color = darken(original_color, 15%)
+	
+	if inverse
+		temp_color = top_color
+		top_color = bottom_color
+		bottom_color = temp_color
+
+	background-color top_color
+	background-image -moz-linear-gradient(top, top_color, bottom_color)
+	background-image -webkit-gradient(linear, left top, left bottom, color-stop(0, top_color), color-stop(1, bottom_color))
+	background-image linear-gradient(top, top_color, bottom_color)
+	filter unquote("progid:DXImageTransform.Microsoft.gradient(startColorStr='" + rgb(bottom_color) + "', EndColorStr='" + rgb(top_color) + "')")
+
+text-shadow( value = 1px 1px 1px rgba(#000, 0.25) ) 
+	text-shadow value
+	-o-text-shadow value
+	-ms-text-shadow value
+	-moz-text-shadow value
+	-webkit-text-shadow value
+
+transform( value = rotate(180deg) ) 
+	transform value
+	-o-transform value
+	-ms-transform value
+	-moz-transform value
+	-webkit-transform value
+
+transition( value = all 0.150s linear )
+	transition value
+	-o-transition value
+	-ms-transition value
+	-moz-transition value
+	-webkit-transition value
+
+// Image replacement
+ir()
+	background-repeat no-repeat
+	height 100%
+	direction ltr 
+	display block
+	overflow hidden
+	text-align left
+	text-indent -999em
+	width 100%
+
+.ir
+	ir()
+
+// Accesible & Design hidden classes
+.hidden  
+	display none
+	visibility hidden 
+
+visuallyhidden()
+	left -9999px
+	position absolute !important
+	top -9999px
+	//clip rect(1px 1px 1px 1px)
+	//clip rect(1px, 1px, 1px, 1px) 
+
+.visuallyhidden
+	visuallyhidden()
+
+.invisible  
+	visibility  hidden 
+
+noselect()
+	-webkit-user-select none
+	-khtml-user-select none
+	-moz-user-select none
+	-o-user-select none
+	user-select none
+
+.noselect
+	noselect()
+
+// Clearing
+clearfix()
+	zoom 1
+
+	&:before,
+	&:after  
+		content "\0020"
+		display block
+		height 0
+		visibility hidden  
+
+	&:after  
+		clear both
+
+.clearfix
+	clearfix()
+
+.clear
+	display block
+	clear both
+	height 0
+	overflow hidden
+	visibility hidden
+
+// Aligning for WordPress
+align(value)
+	text-align value
+
+.aligncenter
+	align(center)
+
+.alignleft 
+	//align(left)
+	float left
+
+.alignright 
+	//align(right)
+	float right
+
+.alignjustify 
+	align(justify)
+
+// wrappers
+wrapper()
+	margin 0 auto
+	position relative
+	width 960px
+

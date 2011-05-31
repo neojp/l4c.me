@@ -1,0 +1,62 @@
+
+a
+	color inherit
+	//display inline-block
+	cursor pointer
+	//padding 5px
+	text-decoration underline
+
+	&:focus, &:hover, &:active
+		text-decoration none
+
+p
+	margin 0 0 1em
+
+label
+	cursor pointer
+	font-weight bold
+
+input, textarea
+	border 3px double #bbb
+	font 12px/14px 'saxMonoRegular', 'Courier New', Courier, monospace;
+	margin 5px
+	padding 5px
+	border-radius()
+	box-shadow( inset 1px 1px 5px rgba(#666, 0.1) )
+
+	&:focus, &:active
+		border-color orange
+		outline 0
+
+textarea
+	bottom 0
+	left 0
+	overflow auto
+	position absolute
+	resize none
+	right 0
+	top 1.5em
+	transition(all .150s linear)
+
+button
+	border 3px double orange
+	color #fff
+	cursor pointer
+	font-size 12px
+	font-weight bold
+	outline 0
+	padding 5px 25px
+	text-shadow()
+	gradient( lighten(orange, 10%), darken(orange, 15%) )
+	border-radius()
+	box-shadow()
+	transition(all .150s linear)
+	
+	&:hover
+		gradient( lighten(orange, 20%), darken(orange, 15%) )
+
+	&:focus, &:active
+		gradient( darken(orange, 15%), lighten(orange, 10%) )
+	
+	&:hover, &:focus, &:active
+		box-shadow(0 0 10px rgba(#000, 0.450))
