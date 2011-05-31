@@ -1,6 +1,5 @@
 // Module dependencies
 var express = require('express'),
-    stylus  = require('stylus'),
     app     = module.exports = express.createServer();
 
 
