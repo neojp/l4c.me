@@ -56,3 +56,9 @@ footer #tiaxime a{background-image:url("http://www.cristalab.com/images/icons/ti
 footer #dotgaia a{background-image:url("http://www.cristalab.com/images/icons/dotgaia.png")}
 footer #p3 a{background-image:url("http://www.cristalab.com/images/icons/p3.png")}
 #inner{background:#fff}
+#wrap{padding:30px 0}
+#message{background:#ffc68c;border:2px solid #ff9a35;color:#fff;font-size:18px;margin:0 0 30px;padding:10px;text-align:center;border-radius:5px;-o-border-radius:5px;-ms-border-radius:5px;-moz-border-radius:5px;-webkit-border-radius:5px;-webkit-background-clip:padding-box;zoom:1;}
+#message:before,#message:after{content:"\0020";display:block;height:0;visibility:hidden}
+#message:after{clear:both}
+#message a.more{margin-left:10px}
+#message a.close{background-repeat:no-repeat;height:100%;direction:ltr;display:block;overflow:hidden;text-align:left;text-indent:-999em;width:100%;background-image:url("images/icon_message_close.png");height:22px;float:right;width:22px}
