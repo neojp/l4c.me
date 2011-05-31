@@ -1,1 +1,1 @@
-stylus -w -o public stylus/l4c.styl
+stylus -c -w -o public stylus/l4c.styl
