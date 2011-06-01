@@ -16,6 +16,18 @@ body
 	min-width 1000px
 	padding 0
 
+a
+	text-decoration none
+
+hr
+	background url(images/bg_hr.png) repeat-x left bottom
+	border 0
+	clear both
+	margin 25px 0
+	height 1px
+	overflow hidden
+	width 100%
+
 .wrap
 	margin 0 auto
 	position relative
@@ -190,7 +202,7 @@ footer
 	text-align center
 	border-radius( 5px )
 	clearfix()
-	text-shadow( 1px 1px 5px rgba(#000, 0.15) )
+	//text-shadow( 1px 1px 5px rgba(#000, 0.15) )
 
 	a.more
 		border-bottom 2px solid #fff
@@ -206,3 +218,116 @@ footer
 		right 10px
 		top 50%
 		width 22px
+
+#breadcrumb
+	height 45px
+	line-height 45px
+	margin 25px 0
+	
+	h1
+		color #0a93ca
+		float left
+		margin 0 30px 0 0
+
+
+	ul
+		float left
+		//height 28px
+		//line-height 28px
+		list-style none
+		margin 0
+		//padding 6px 0 0
+		padding 0
+		clearfix()
+		
+		li
+			background url(images/sep_blue.png) no-repeat left center
+			float left
+			padding 0 10px 0 17px
+
+			&:first-child
+				background none
+				padding-left 10px
+		
+		a
+			color #0a93ca
+			border-bottom 2px solid #84c9e4
+
+		a.active
+			color #ffae5e
+			border-color #ffd6ae
+
+	#upload
+		float right
+		margin 0
+		
+		a
+			background #ff9933
+			color #fff
+			display inline-block
+			font-size 22px
+			font-weight bold
+			padding 0 24px
+			border-radius( 5px )
+
+.pagination
+	font-weight bold
+	height 30px
+	line-height 30px
+	text-align center
+
+	li, a
+		display inline-block
+		height 30px
+		vertical-align middle
+	
+	li
+		padding-left 1px
+	
+		&:first-child
+			padding 0
+		
+		&.sep
+			color #999
+			letter-spacing 1px
+			width 22px
+	
+	a
+		background #999
+		color #fff
+		padding 0 8px
+
+		transition()
+
+		&:hover
+			background-color lighten( #999, 10% )
+	
+		&.prev, &.next
+			background #ff9933 none no-repeat
+
+			&:hover
+				background-color lighten( #ff9933, 10% )
+		
+		&.prev
+			background-image url(images/icon_prev.png)
+			background-position 18% 50%
+			padding 0 15px 0 40px
+			border-radius( 30px 0 0 30px )
+		
+		&.next
+			background-image url(images/icon_next.png)
+			background-position 86% 50%
+			padding 0 40px 0 15px
+			border-radius( 0 30px 30px 0 )
+		
+		&.disabled, &.disabled:hover
+			background-color #ccc
+			cursor default
+		
+		&.active
+			background-color #00b8f4
+			cursor default
+			font-size 1.2em
+
+#content
+	display none

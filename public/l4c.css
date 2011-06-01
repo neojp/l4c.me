@@ -23,6 +23,8 @@ button{border:3px double #ffa500;color:#fff;cursor:pointer;font-size:12px;font-w
 .alignright{float:right}
 .alignjustify{text-align:justify}
 body{background:#242c33;color:#333;font-size:12px;font-family:Helvetica,Arial,sans-serif;margin:0;min-width:1000px;padding:0}
+a{text-decoration:none}
+hr{background:url("images/bg_hr.png") repeat-x left bottom;border:0;clear:both;margin:25px 0;height:1px;overflow:hidden;width:100%}
 .wrap{margin:0 auto;position:relative;min-width:1000px;width:90%}
 header{background:#00b8f4;color:#fff;height:60px;}
 header #logo{height:49px;left:13px;margin:0;position:absolute;top:5px;width:96px;}
@@ -56,8 +58,33 @@ footer #dotgaia a{background-image:url("http://www.cristalab.com/images/icons/do
 footer #p3 a{background-image:url("http://www.cristalab.com/images/icons/p3.png")}
 #inner{background:#fff}
 #wrap{padding:30px 0}
-#message{background:#ffc68c;border:2px solid #ff9a35;color:#fff;font-size:20px;font-weight:bold;margin:0 0 30px;padding:10px 45px;position:relative;text-align:center;border-radius:5px;-o-border-radius:5px;-ms-border-radius:5px;-moz-border-radius:5px;-webkit-border-radius:5px;-webkit-background-clip:padding-box;zoom:1;text-shadow:1px 1px 5px rgba(0,0,0,0.15);-o-text-shadow:1px 1px 5px rgba(0,0,0,0.15);-ms-text-shadow:1px 1px 5px rgba(0,0,0,0.15);-moz-text-shadow:1px 1px 5px rgba(0,0,0,0.15);-webkit-text-shadow:1px 1px 5px rgba(0,0,0,0.15);}
+#message{background:#ffc68c;border:2px solid #ff9a35;color:#fff;font-size:20px;font-weight:bold;margin:0 0 30px;padding:10px 45px;position:relative;text-align:center;border-radius:5px;-o-border-radius:5px;-ms-border-radius:5px;-moz-border-radius:5px;-webkit-border-radius:5px;-webkit-background-clip:padding-box;zoom:1;}
 #message:before,#message:after{content:"\0020";display:block;height:0;visibility:hidden}
 #message:after{clear:both}
 #message a.more{border-bottom:2px solid #fff;margin-left:10px;text-decoration:none}
 #message a.close{background-repeat:no-repeat;height:100%;direction:ltr;display:block;overflow:hidden;text-align:left;text-indent:-999em;width:100%;background-image:url("images/icon_message_close.png");height:22px;position:absolute;margin-top:-11px;right:10px;top:50%;width:22px}
+#breadcrumb{height:45px;line-height:45px;margin:25px 0;}
+#breadcrumb h1{color:#0a93ca;float:left;margin:0 30px 0 0}
+#breadcrumb ul{float:left;list-style:none;margin:0;padding:0;zoom:1;}
+#breadcrumb ul:before,#breadcrumb ul:after{content:"\0020";display:block;height:0;visibility:hidden}
+#breadcrumb ul:after{clear:both}
+#breadcrumb ul li{background:url("images/sep_blue.png") no-repeat left center;float:left;padding:0 10px 0 17px;}
+#breadcrumb ul li:first-child{background:none;padding-left:10px}
+#breadcrumb ul a{color:#0a93ca;border-bottom:2px solid #84c9e4}
+#breadcrumb ul a.active{color:#ffae5e;border-color:#ffd6ae}
+#breadcrumb #upload{float:right;margin:0;}
+#breadcrumb #upload a{background:#f93;color:#fff;display:inline-block;font-size:22px;font-weight:bold;padding:0 24px;border-radius:5px;-o-border-radius:5px;-ms-border-radius:5px;-moz-border-radius:5px;-webkit-border-radius:5px;-webkit-background-clip:padding-box}
+.pagination{font-weight:bold;height:30px;line-height:30px;text-align:center;}
+.pagination li,.pagination a{display:inline-block;height:30px;vertical-align:middle}
+.pagination li{padding-left:1px;}
+.pagination li:first-child{padding:0}
+.pagination li.sep{color:#999;letter-spacing:1px;width:22px}
+.pagination a{background:#999;color:#fff;padding:0 8px;transition:all .15s linear;-o-transition:all .15s linear;-ms-transition:all .15s linear;-moz-transition:all .15s linear;-webkit-transition:all .15s linear;}
+.pagination a:hover{background-color:#a8a8a8}
+.pagination a.prev,.pagination a.next{background:#f93 none no-repeat;}
+.pagination a.prev:hover,.pagination a.next:hover{background-color:#ffa852}
+.pagination a.prev{background-image:url("images/icon_prev.png");background-position:18% 50%;padding:0 15px 0 40px;border-radius:30px 0 0 30px;-o-border-radius:30px 0 0 30px;-ms-border-radius:30px 0 0 30px;-moz-border-radius:30px 0 0 30px;-webkit-border-radius:30px 0 0 30px;-webkit-background-clip:padding-box}
+.pagination a.next{background-image:url("images/icon_next.png");background-position:86% 50%;padding:0 40px 0 15px;border-radius:0 30px 30px 0;-o-border-radius:0 30px 30px 0;-ms-border-radius:0 30px 30px 0;-moz-border-radius:0 30px 30px 0;-webkit-border-radius:0 30px 30px 0;-webkit-background-clip:padding-box}
+.pagination a.disabled,.pagination a.disabled:hover{background-color:#ccc;cursor:default}
+.pagination a.active{background-color:#00b8f4;cursor:default;font-size:1.2em}
+#content{display:none}
