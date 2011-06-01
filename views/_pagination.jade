@@ -1,0 +1,18 @@
+nav.pagination
+	ul
+		li
+			a.prev.disabled Anterior
+		
+		- _.each( _.range(1,6), function(i){
+			li
+				a( class= (i == 1) ? 'active' : '' )= i
+		- });
+
+		li.sep ...
+
+		li
+			a 255
+		li
+			a 256
+		li
+			a.next Siguiente
