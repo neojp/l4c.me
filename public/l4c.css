@@ -57,14 +57,14 @@ footer #tiaxime a{background-image:url("http://www.cristalab.com/images/icons/ti
 footer #dotgaia a{background-image:url("http://www.cristalab.com/images/icons/dotgaia.png")}
 footer #p3 a{background-image:url("http://www.cristalab.com/images/icons/p3.png")}
 #inner{background:#fff}
-#wrap{padding:30px 0}
-#message{background:#ffc68c;border:2px solid #ff9a35;color:#fff;font-size:20px;font-weight:bold;margin:0 0 30px;padding:10px 45px;position:relative;text-align:center;border-radius:5px;-o-border-radius:5px;-ms-border-radius:5px;-moz-border-radius:5px;-webkit-border-radius:5px;-webkit-background-clip:padding-box;zoom:1;}
+#wrap{padding:15px 0 25px}
+#message{background:#ffc68c;border:2px solid #ff9a35;color:#fff;font-size:20px;margin:0 0 25px;padding:10px 45px;position:relative;text-align:center;border-radius:5px;-o-border-radius:5px;-ms-border-radius:5px;-moz-border-radius:5px;-webkit-border-radius:5px;-webkit-background-clip:padding-box;zoom:1;}
 #message:before,#message:after{content:"\0020";display:block;height:0;visibility:hidden}
 #message:after{clear:both}
 #message a.more{border-bottom:2px solid #fff;margin-left:10px;text-decoration:none}
 #message a.close{background-repeat:no-repeat;height:100%;direction:ltr;display:block;overflow:hidden;text-align:left;text-indent:-999em;width:100%;background-image:url("images/icon_message_close.png");height:22px;position:absolute;margin-top:-11px;right:10px;top:50%;width:22px}
-#breadcrumb{height:45px;line-height:45px;margin:25px 0;}
-#breadcrumb h1{color:#0a93ca;float:left;margin:0 30px 0 0}
+#breadcrumb{height:45px;line-height:45px;margin:0 0 25px;}
+#breadcrumb h1{color:#0a93ca;float:left;font-size:2em;margin:0 30px 0 0}
 #breadcrumb ul{float:left;list-style:none;margin:0;padding:0;zoom:1;}
 #breadcrumb ul:before,#breadcrumb ul:after{content:"\0020";display:block;height:0;visibility:hidden}
 #breadcrumb ul:after{clear:both}
