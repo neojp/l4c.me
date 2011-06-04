@@ -18,17 +18,21 @@ hr
 != partial('_pagination')
 
 #content
-	ul
-	- _.each( _.range(1, 3*4+1), function(i){
-		li
-			a
-				img( src="/images/img_1.jpg" )
-				span.icon
-			span.name Flores por 
-				strong hCant&eacute;
-			a.comments Comentarios
+	ul.grid
+		- var a = _.range(1,5), length = 3*4+1;
+		- _.each( _.range(1, length), function(i){
+			li
+				span.img
+					a
+						- rand = Math.floor(Math.random() * 4) + 1;
+						img( src= "/images/img_" + rand + ".jpg" )
+						span.icon
+				
+				span.name Flores por 
+					strong hCant&eacute;
+				a.comments Comentarios
 
-	- });
+		- });
 
 hr
 

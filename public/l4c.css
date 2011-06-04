@@ -87,4 +87,15 @@ footer #p3 a{background-image:url("http://www.cristalab.com/images/icons/p3.png"
 .pagination a.next{background-image:url("images/icon_next.png");background-position:86% 50%;padding:0 40px 0 15px;border-radius:0 30px 30px 0;-o-border-radius:0 30px 30px 0;-ms-border-radius:0 30px 30px 0;-moz-border-radius:0 30px 30px 0;-webkit-border-radius:0 30px 30px 0;-webkit-background-clip:padding-box}
 .pagination a.disabled,.pagination a.disabled:hover{background-color:#ccc;cursor:default}
 .pagination a.active{background-color:#00b8f4;cursor:default;font-size:1.2em}
-#content{display:none}
+.grid{text-align:center;zoom:1;}
+.grid:before,.grid:after{content:"\0020";display:block;height:0;visibility:hidden}
+.grid:after{clear:both}
+.grid li{display:inline-block;height:220px;margin:20px;width:200px}
+.grid span.img{display:inline-block;}
+.grid span.img a,.grid span.img img{display:inline-block;position:relative;vertical-align:middle}
+.grid span.img img{border:4px solid #fff;transition:all .15s linear;-o-transition:all .15s linear;-ms-transition:all .15s linear;-moz-transition:all .15s linear;-webkit-transition:all .15s linear}
+.grid span.img:hover img{border-color:#ccc}
+.grid span.img:hover span.icon{opacity:1}
+.grid span.icon{background:rgba(255,153,51,0.8) url("images/icon_zoom.png") no-repeat center;bottom:4px;height:36px;opacity:0;position:absolute;right:4px;width:36px;transition:all .15s linear;-o-transition:all .15s linear;-ms-transition:all .15s linear;-moz-transition:all .15s linear;-webkit-transition:all .15s linear}
+.grid span.name{float:left}
+.grid span.comments{float:right}

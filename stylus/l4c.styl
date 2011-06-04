@@ -330,4 +330,50 @@ footer
 			font-size 1.2em
 
 #content
-	display none
+	//outline 1px solid red
+
+.grid
+	text-align center
+	clearfix()
+
+	li
+		display inline-block
+		height 220px
+		margin 20px
+		width 200px
+	
+	span.img
+		display inline-block
+	
+		a, img
+			display inline-block
+			//outline 1px solid red
+			position relative
+			vertical-align middle
+		
+		img
+			border 4px solid #fff
+			transition()
+
+		&:hover
+			img
+				border-color #ccc
+			
+			span.icon
+				opacity 1
+		
+	span.icon
+		background rgba(#FF9933, 0.8) url(images/icon_zoom.png) no-repeat center
+		bottom 4px
+		height 36px
+		opacity 0
+		position absolute
+		right 4px
+		width 36px
+		transition()
+	
+	span.name
+		float left
+	
+	span.comments
+		float right
