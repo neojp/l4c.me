@@ -81,7 +81,7 @@ header
 				border-radius( 5px )
 			
 			> a:hover,
-			&.menu-selected > a
+			&.active > a
 				background #0a93ca
 			
 	
@@ -222,6 +222,7 @@ footer
 	height 45px
 	line-height 45px
 	margin 0 0 25px
+	position relative
 	
 	h1
 		color #0a93ca
@@ -232,11 +233,8 @@ footer
 
 	ul
 		float left
-		//height 28px
-		//line-height 28px
 		list-style none
 		margin 0
-		//padding 6px 0 0
 		padding 0
 		clearfix()
 		
@@ -253,22 +251,27 @@ footer
 			color #0a93ca
 			border-bottom 2px solid #84c9e4
 
-		a.active
+		li.active a
 			color #ffae5e
 			border-color #ffd6ae
 
-	#upload
-		float right
-		margin 0
-		
-		a
-			background #ff9933
-			color #fff
-			display inline-block
-			font-size 22px
-			font-weight bold
-			padding 0 24px
-			border-radius( 5px )
+		#upload
+			background none
+			margin 0
+			padding 0
+			position absolute
+			right 0
+			top 0
+			
+			a
+				background #ff9933
+				border 0
+				color #fff
+				display inline-block
+				font-size 22px
+				font-weight bold
+				padding 0 24px
+				border-radius( 5px )
 
 .pagination
 	font-weight bold
@@ -276,12 +279,12 @@ footer
 	line-height 30px
 	text-align center
 
-	li, a
+	li, span, a
 		display inline-block
 		height 30px
 		vertical-align middle
 	
-	li
+	li, span
 		padding-left 1px
 	
 		&:first-child
@@ -333,6 +336,9 @@ footer
 	//outline 1px solid red
 
 .grid
+	list-style none
+	margin 20px auto 0
+	padding 0
 	text-align center
 	clearfix()
 
@@ -341,8 +347,9 @@ footer
 		height 220px
 		margin 20px
 		width 200px
+		vertical-align middle
 	
-	span.img
+	div.img
 		display inline-block
 	
 		a, img
@@ -353,15 +360,9 @@ footer
 		
 		img
 			border 4px solid #fff
+			display inline-block
 			transition()
 
-		&:hover
-			img
-				border-color #ccc
-			
-			span.icon
-				opacity 1
-		
 	span.icon
 		background rgba(#FF9933, 0.8) url(images/icon_zoom.png) no-repeat center
 		bottom 4px
@@ -372,8 +373,32 @@ footer
 		width 36px
 		transition()
 	
-	span.name
-		float left
+	div.info
+		padding 5px 0 0 0
+		clearfix()
+
+		span.photo-name,
+		a.comments
+			display inline-block
+			vertical-align middle
 	
-	span.comments
-		float right
+	a.comments
+		ir()
+		background url(images/icon_comments.png) no-repeat center
+		border-left 1px solid #ccc
+		height 18px
+		margin-left 5px
+		opacity 0
+		width 0
+		transition()
+	
+	li:hover
+		.img img
+			border-color #ccc
+
+		span.icon
+			opacity 1
+		
+		a.comments
+			opacity 1
+			width 35px

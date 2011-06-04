@@ -3,7 +3,7 @@ html( lang="es" )
 	head
 		meta( charset="utf-8" )
 		title L4C.me
-		link( rel="stylesheet", href="l4c.css")
+		link( rel="stylesheet", href="/l4c.css")
 		meta( name="description", value="L4C" )
 	
 	body
@@ -18,7 +18,7 @@ html( lang="es" )
 				#nav-aside.clearfix
 					nav
 						ul.menu
-							li.menu-selected
+							li.active
 								a( href="/" ) Inicio
 							li
 								a( href="/subir/" ) Subir
@@ -29,6 +29,8 @@ html( lang="es" )
 							li
 								a( href="/blog/" ) Blog
 					
+					hr.hidden
+
 					aside
 						p Hola 
 							a.username( href="/perfil/" ) hCant&eacute;
@@ -37,6 +39,8 @@ html( lang="es" )
 							|  o 
 							a.logout( href="/logout/" ) salir
 		
+		hr.hidden
+
 		section#inner
 			#wrap.wrap
 				
@@ -44,8 +48,12 @@ html( lang="es" )
 					a.more( href="/concursos/" ) Leer m&aacute;s
 					a.close Cerrar [x]
 			
-				!= body
+				hr.hidden
 
+				!= body
+		
+		hr.hidden
+		
 		footer
 			ul
 				li#claborg

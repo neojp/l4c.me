@@ -1,7 +1,7 @@
 nav#breadcrumb
 	h1 Galeria
 	ul
-		li
+		li.active
 			a( href="/galeria/" ) M&aacute;s recientes
 		li
 			a( href="/galeria/mas-vistas/" ) Mas vistas
@@ -9,9 +9,9 @@ nav#breadcrumb
 			a( href="/galeria/usuarios/" ) Galer&iacute;as de Usuarios
 		li
 			a( href="/galeria/categorias/" ) Categorias
-			
-	p#upload
-		a( href="/subir/" ) Sube una foto
+		
+		li#upload
+			a( href="/subir/" ) Sube una foto
 
 hr
 
@@ -20,17 +20,24 @@ hr
 #content
 	ul.grid
 		- var a = _.range(1,5), length = 3*4+1;
+		- var u = ['freddier', 'hCant&eacute;', 'neojp', 'maikel'];
+
 		- _.each( _.range(1, length), function(i){
 			li
-				span.img
+				div.img
 					a
 						- rand = Math.floor(Math.random() * 4) + 1;
 						img( src= "/images/img_" + rand + ".jpg" )
 						span.icon
 				
-				span.name Flores por 
-					strong hCant&eacute;
-				a.comments Comentarios
+				div.info
+					span.photo-name
+						a.photo Flores 
+						span.by por 
+						strong.username
+							a= u[ Math.floor(Math.random() * u.length) ]
+					
+					a.comments Comentarios
 
 		- });
 
