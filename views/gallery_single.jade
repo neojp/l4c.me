@@ -1,0 +1,86 @@
+nav#breadcrumb
+	#upload
+		a( href="/subir/" ) Sube una foto
+
+#content-sidebar-wrap
+	#content
+		nav.pagination
+			span
+				a.prev( href ) Anterior
+			
+			span
+				a.next( href ) Siguiente
+		
+		div.img
+			a
+				img( src= "/images/image_medium.jpg" )
+					span.icon-zoom
+					span.icon-edit
+		
+		div.img-info
+			h1 Libros y Letras
+			p Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat mattis eros. Nullam malesuada erat ut turpis. Suspendisse urna nibh, viverra non, semper suscipit, posuere a, pede.
+
+		hr
+
+		div#comments
+			h2 Comentarios
+			form
+				input( type="hidden", name="img_id", value="1" )
+
+				p
+					label Nombre
+						br
+						input( type="text", name="name" )
+				
+				p
+					label Email
+						br
+						input( type="email", name="email" )
+				
+				p
+					label Comentario
+						br
+						textarea( name="comment" )
+				
+				p
+					button( type="submit" ) Comentar
+
+	
+	#sidebar
+		.widget
+			h2 Otras fotos de 
+				a( href ) hCant&eacute; 
+				a.icon-rss( href ) [RSS]
+			
+			ul.grid
+				- for ( i in _.range(1,7) )
+					li
+						a( href )
+							img( src="/images/image_thumb.jpg" )
+			
+			p.alignright Ver 
+				a( href ) galer&iacute;a completa
+	
+		.widget
+			h2 Sobre fotograf&iacute;a: 
+				small
+					a( href ) (Editar)
+			
+			p.tags Tags: 
+				a( href ) Guatemala
+				|  
+				a( href ) fotograf&iacute;a
+				|  
+				a( href ) libro
+				| 
+				a( href ) textos
+			
+			p.info Ha sido vista 
+				strong 408 veces. 
+				| &nbsp; Publicada hace 
+				strong 1 d&iacute;a.
+
+hr
+
+!= partial('_pagination')

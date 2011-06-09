@@ -7,7 +7,6 @@ p{margin:0 0 1em}
 label{cursor:pointer;font-weight:bold}
 input,textarea{border:3px double #bbb;font:12px/14px "saxMonoRegular","Courier New",Courier,monospace;margin:5px;padding:5px;rgba(102,102,102,0.1)}
 input:focus,textarea:focus,input:active,textarea:active{border-color:#ffa500;outline:0}
-textarea{bottom:0;left:0;overflow:auto;position:absolute;resize:none;right:0;top:1.5em;}
 button{border:3px double #ffa500;color:#fff;cursor:pointer;font-size:12px;font-weight:bold;outline:0;padding:5px 25px;#d98c00#ffae1a}
 .ir{background-repeat:no-repeat;height:100%;direction:ltr;display:block;overflow:hidden;text-align:left;text-indent:-999em;width:100%}
 .hidden{display:none;visibility:hidden}
@@ -19,12 +18,13 @@ button{border:3px double #ffa500;color:#fff;cursor:pointer;font-size:12px;font-w
 .clearfix:after{clear:both}
 .clear{display:block;clear:both;height:0;overflow:hidden;visibility:hidden}
 .aligncenter{text-align:center}
-.alignleft{float:left}
-.alignright{float:right}
+.alignleft{text-align:left}
+.alignright{text-align:right}
 .alignjustify{text-align:justify}
 body{background:#242c33;color:#333;font-size:12px;font-family:Helvetica,Arial,sans-serif;margin:0;min-width:1000px;padding:0}
 a{text-decoration:none}
 hr{background:url("images/bg_hr.png") repeat-x left bottom;border:0;clear:both;margin:25px 0;height:1px;overflow:hidden;width:100%}
+h1,h2,h3,h4,h5,h6{color:#0a92ca}
 .wrap{margin:0 auto;position:relative;min-width:1000px;width:90%}
 header{background:#00b8f4;color:#fff;height:60px;}
 header #logo{height:49px;left:13px;margin:0;position:absolute;top:5px;width:96px;}
@@ -72,8 +72,8 @@ footer #p3 a{background-image:url("http://www.cristalab.com/images/icons/p3.png"
 #breadcrumb ul li:first-child{background:none;padding-left:10px}
 #breadcrumb ul a{color:#0a93ca;border-bottom:2px solid #84c9e4}
 #breadcrumb ul li.active a{color:#ffae5e;border-color:#ffd6ae}
-#breadcrumb ul #upload{background:none;margin:0;padding:0;position:absolute;right:0;top:0;}
-#breadcrumb ul #upload a{background:#f93;border:0;color:#fff;display:inline-block;font-size:22px;font-weight:bold;padding:0 24px;border-radius:5px;-o-border-radius:5px;-ms-border-radius:5px;-moz-border-radius:5px;-webkit-border-radius:5px;-webkit-background-clip:padding-box}
+#upload{background:none;margin:0;padding:0;position:absolute;right:0;top:0;}
+#upload a{background:#f93;border:0;color:#fff;display:inline-block;font-size:22px;font-weight:bold;padding:0 24px;border-radius:5px;-o-border-radius:5px;-ms-border-radius:5px;-moz-border-radius:5px;-webkit-border-radius:5px;-webkit-background-clip:padding-box}
 .pagination{font-weight:bold;height:30px;line-height:30px;text-align:center;}
 .pagination li,.pagination span,.pagination a{display:inline-block;height:30px;vertical-align:middle}
 .pagination li,.pagination span{padding-left:1px;}
@@ -94,7 +94,7 @@ footer #p3 a{background-image:url("http://www.cristalab.com/images/icons/p3.png"
 .grid div.img{display:inline-block;}
 .grid div.img a,.grid div.img img{display:inline-block;position:relative;vertical-align:middle}
 .grid div.img img{border:4px solid #fff;display:inline-block;transition:all .15s linear;-o-transition:all .15s linear;-ms-transition:all .15s linear;-moz-transition:all .15s linear;-webkit-transition:all .15s linear}
-.grid span.icon{background:rgba(255,153,51,0.8) url("images/icon_zoom.png") no-repeat center;bottom:4px;height:36px;opacity:0;position:absolute;right:4px;width:36px;transition:all .15s linear;-o-transition:all .15s linear;-ms-transition:all .15s linear;-moz-transition:all .15s linear;-webkit-transition:all .15s linear}
+.grid span.icon-zoom{background:rgba(255,153,51,0.8) url("images/icon_zoom.png") no-repeat center;bottom:4px;height:36px;opacity:0;position:absolute;right:4px;width:36px;transition:all .15s linear;-o-transition:all .15s linear;-ms-transition:all .15s linear;-moz-transition:all .15s linear;-webkit-transition:all .15s linear}
 .grid div.info{padding:5px 0 0 0;zoom:1;}
 .grid div.info:before,.grid div.info:after{content:"\0020";display:block;height:0;visibility:hidden}
 .grid div.info:after{clear:both}
@@ -103,3 +103,24 @@ footer #p3 a{background-image:url("http://www.cristalab.com/images/icons/p3.png"
 .grid li:hover .img img{border-color:#ccc}
 .grid li:hover span.icon{opacity:1}
 .grid li:hover a.comments{opacity:1;width:35px}
+#content-sidebar-wrap{margin:0 auto;zoom:1;}
+#content-sidebar-wrap:before,#content-sidebar-wrap:after{content:"\0020";display:block;height:0;visibility:hidden}
+#content-sidebar-wrap:after{clear:both}
+#content-sidebar-wrap #content{float:left;width:600px}
+#content-sidebar-wrap .pagination{margin-bottom:10px;text-align:right}
+#content-sidebar-wrap .img-info{padding-bottom:15px;}
+#content-sidebar-wrap .img-info p{font-size:1.2em}
+#content-sidebar-wrap #sidebar{float:right;padding-right:14px;width:336px;}
+#content-sidebar-wrap #sidebar a{border-bottom:2px solid #80c4e0;color:#0a92ca}
+#content-sidebar-wrap #sidebar .icon-rss{background-repeat:no-repeat;height:100%;direction:ltr;display:block;overflow:hidden;text-align:left;text-indent:-999em;width:100%;background:url("images/icon_rss.png") no-repeat;border:0;float:right;height:22px;width:22px;transition:all .15s linear;-o-transition:all .15s linear;-ms-transition:all .15s linear;-moz-transition:all .15s linear;-webkit-transition:all .15s linear;}
+#content-sidebar-wrap #sidebar .icon-rss:hover{opacity:.85}
+#content-sidebar-wrap #sidebar .grid{list-style:none;margin:0;padding:0;}
+#content-sidebar-wrap #sidebar .grid li{float:left;height:75px;margin:0;padding:0 0 18px 18px;width:100px;}
+#content-sidebar-wrap #sidebar .grid li:nth-child(3n+1){clear:left;padding-left:0}
+#content-sidebar-wrap #sidebar .grid a{background:#000;border:0;}
+#content-sidebar-wrap #sidebar .grid a:hover img{opacity:.75}
+#content-sidebar-wrap #sidebar .grid a,#content-sidebar-wrap #sidebar .grid img{display:block}
+#content-sidebar-wrap #sidebar .grid img{transition:all .15s linear;-o-transition:all .15s linear;-ms-transition:all .15s linear;-moz-transition:all .15s linear;-webkit-transition:all .15s linear}
+#content-sidebar-wrap #sidebar .tags{color:#0a92ca}
+#content-sidebar-wrap #sidebar .info{font-style:italic;color:#999}
+#content-sidebar-wrap #sidebar .edit-link{color:#f93}

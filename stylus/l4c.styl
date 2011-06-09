@@ -28,6 +28,9 @@ hr
 	overflow hidden
 	width 100%
 
+h1, h2, h3, h4, h5, h6
+	color #0a92ca
+
 .wrap
 	margin 0 auto
 	position relative
@@ -255,23 +258,23 @@ footer
 			color #ffae5e
 			border-color #ffd6ae
 
-		#upload
-			background none
-			margin 0
-			padding 0
-			position absolute
-			right 0
-			top 0
-			
-			a
-				background #ff9933
-				border 0
-				color #fff
-				display inline-block
-				font-size 22px
-				font-weight bold
-				padding 0 24px
-				border-radius( 5px )
+#upload
+	background none
+	margin 0
+	padding 0
+	position absolute
+	right 0
+	top 0
+	
+	a
+		background #ff9933
+		border 0
+		color #fff
+		display inline-block
+		font-size 22px
+		font-weight bold
+		padding 0 24px
+		border-radius( 5px )
 
 .pagination
 	font-weight bold
@@ -363,7 +366,7 @@ footer
 			display inline-block
 			transition()
 
-	span.icon
+	span.icon-zoom
 		background rgba(#FF9933, 0.8) url(images/icon_zoom.png) no-repeat center
 		bottom 4px
 		height 36px
@@ -402,3 +405,81 @@ footer
 		a.comments
 			opacity 1
 			width 35px
+
+#content-sidebar-wrap
+	margin 0 auto
+	clearfix()
+
+	#content
+		float left
+		width 600px
+	
+	.pagination
+		margin-bottom 10px
+		text-align right
+	
+	.img-info
+		padding-bottom 15px
+
+		p
+			font-size 1.2em
+	
+	#sidebar
+		float right
+		padding-right 14px
+		width 336px
+
+		a
+			border-bottom 2px solid #80c4e0
+			color #0a92ca
+
+		.icon-rss
+			ir()
+			background url(images/icon_rss.png) no-repeat
+			border 0
+			float right
+			height 22px
+			width 22px
+			transition()
+
+			&:hover
+				opacity 0.85
+		
+		.grid
+			list-style none
+			margin 0
+			padding 0
+
+			li
+				float left
+				height 75px
+				margin 0
+				padding 0 0 18px 18px
+				width 100px
+
+				&:nth-child( 3n+1 )
+					clear left
+					padding-left 0
+			
+			a
+				background #000
+				border 0
+
+				&:hover img
+					opacity 0.75
+			
+			a, img
+				display block
+			
+			img
+				transition()
+		
+		.tags
+			color #0a92ca
+
+		.info
+			font-style italic
+			color #999
+		
+		.edit-link
+			color #FF9933

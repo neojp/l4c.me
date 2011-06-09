@@ -2,8 +2,8 @@
 var express = require('express'),
     _ = underscore = require('underscore'),
     sys = require('sys'),
-    app     = module.exports = express.createServer();
-
+    app     = module.exports = express.createServer(),
+    options = { locals: { _: underscore, sys: sys } };
 
 
 // Configuration
@@ -21,8 +21,12 @@ app.configure(function(){
 
 
 // Routes
+app.get('/single/', function(req, res){
+  res.render('gallery_single', options);
+})
+
 app.all('*', function(req, res){
-  res.render('gallery', { locals: { _: underscore, sys: sys }});
+  res.render('gallery', options);
 });
 
 // Only listen on $ node app.js
