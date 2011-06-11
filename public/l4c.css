@@ -65,15 +65,15 @@ footer #p3 a{background-image:url("http://www.cristalab.com/images/icons/p3.png"
 #message a.close{background-repeat:no-repeat;height:100%;direction:ltr;display:block;overflow:hidden;text-align:left;text-indent:-999em;width:100%;background-image:url("images/icon_message_close.png");height:22px;position:absolute;margin-top:-11px;right:10px;top:50%;width:22px}
 #breadcrumb{height:45px;line-height:45px;margin:0 0 25px;position:relative;}
 #breadcrumb h1{color:#0a93ca;float:left;font-size:2em;margin:0 30px 0 0}
-#breadcrumb ul{float:left;list-style:none;margin:0;padding:0;zoom:1;}
+#breadcrumb ul{list-style:none;margin:0;padding:0;zoom:1;}
 #breadcrumb ul:before,#breadcrumb ul:after{content:"\0020";display:block;height:0;visibility:hidden}
 #breadcrumb ul:after{clear:both}
 #breadcrumb ul li{background:url("images/sep_blue.png") no-repeat left center;float:left;padding:0 10px 0 17px;}
 #breadcrumb ul li:first-child{background:none;padding-left:10px}
 #breadcrumb ul a{color:#0a93ca;border-bottom:2px solid #84c9e4}
 #breadcrumb ul li.active a{color:#ffae5e;border-color:#ffd6ae}
-#upload{background:none;margin:0;padding:0;position:absolute;right:0;top:0;}
-#upload a{background:#f93;border:0;color:#fff;display:inline-block;font-size:22px;font-weight:bold;padding:0 24px;border-radius:5px;-o-border-radius:5px;-ms-border-radius:5px;-moz-border-radius:5px;-webkit-border-radius:5px;-webkit-background-clip:padding-box}
+#upload{background:none;float:right !important;height:45px;line-height:45px;margin:0;padding:0 !important;}
+#upload a{background:#f93;border:0 !important;color:#fff !important;display:inline-block;font-size:22px;font-weight:bold;padding:0 24px;border-radius:5px;-o-border-radius:5px;-ms-border-radius:5px;-moz-border-radius:5px;-webkit-border-radius:5px;-webkit-background-clip:padding-box}
 .pagination{font-weight:bold;height:30px;line-height:30px;text-align:center;}
 .pagination li,.pagination span,.pagination a{display:inline-block;height:30px;vertical-align:middle}
 .pagination li,.pagination span{padding-left:1px;}
