@@ -1,10 +1,13 @@
-
+body
+	font 12px/1.25 Helvetica, Arial, sans-serif;
+	margin 0
+	padding 0
 a
 	color inherit
 	//display inline-block
 	cursor pointer
 	//padding 5px
-	text-decoration underline
+	text-decoration none
 
 	&:focus, &:hover, &:active
 		text-decoration none
@@ -12,53 +15,55 @@ a
 p
 	margin 0 0 1em
 
+h1, h2, h3, h4, h5, h6
+	margin 0 0 10px
+
+h1
+	font-size 2em
+
 label
 	cursor pointer
 	font-weight bold
 
 input, textarea
-	border 3px double #bbb
-	font 12px/14px 'saxMonoRegular', 'Courier New', Courier, monospace;
-	margin 5px
+	border 2px solid #ccc
+	font 12px/1 Helvetica, Arial, sans-serif;
+	margin 0 0 15px
 	padding 5px
+	width 160px
 	border-radius()
-	box-shadow( inset 1px 1px 5px rgba(#666, 0.1) )
+	box-shadow( inset 1px 1px 5px rgba(#ccc, 0.2) )
+	transition()
 
-	&:focus, &:active
-		border-color orange
-		outline 0
-
-/*
 textarea
-	bottom 0
-	left 0
-	overflow auto
-	position absolute
+	height 115px
 	resize none
-	right 0
-	top 1.5em
-	transition(all .150s linear)
-*/
+	width 260px
+
+
+
+
 
 button
-	border 3px double orange
-	color #fff
+	border 0
 	cursor pointer
-	font-size 12px
-	font-weight bold
-	outline 0
-	padding 5px 25px
-	text-shadow()
-	gradient( lighten(orange, 10%), darken(orange, 15%) )
-	border-radius()
-	box-shadow()
-	transition(all .150s linear)
-	
-	&:hover
-		gradient( lighten(orange, 20%), darken(orange, 15%) )
+	overflow visible // removes extra side padding in IE
+	padding 0
+	position relative
+	transition()
 
-	&:focus, &:active
-		gradient( darken(orange, 15%), lighten(orange, 10%) )
-	
-	&:hover, &:focus, &:active
-		box-shadow(0 0 10px rgba(#000, 0.450))
+	// overrides extra padding in Firefox
+	&::-moz-focus-inner
+		border none
+
+	span
+		display block
+		position relative
+		white-space nowrap
+
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+	// Safari and Google Chrome only - fix margins
+	button span {
+		margin-top: -1px;
+	}
+}

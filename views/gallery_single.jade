@@ -1,85 +1,79 @@
-#upload
-	a( href="/subir/" ) Sube una foto
-
 #content-sidebar-wrap
 	#content
 		nav.pagination
 			span
-				a.prev( href ) Anterior
+				a.prev( href="/single/" ) Anterior
 			
 			span
-				a.next( href ) Siguiente
+				a.next( href="/single/" ) Siguiente
 		
-		div.img
-			a
-				img( src= "/images/image_medium.jpg" )
-					span.icon-zoom
-					span.icon-edit
+		#img
+			.img
+				a( href="/fullsize/" )
+					img( src= "/images/image_medium.jpg", width=600, height=450 )
+				.icons
+					a.icon-zoom( href="/fullsize/" )
+					a.icon-edit( href="/edit/" )
 		
-		div.img-info
+		.img-info
 			h1 Libros y Letras
 			p Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat mattis eros. Nullam malesuada erat ut turpis. Suspendisse urna nibh, viverra non, semper suscipit, posuere a, pede.
 
 		hr
 
-		div#comments
-			h2 Comentarios
-			form
-				input( type="hidden", name="img_id", value="1" )
-
-				p
-					label Nombre
-						br
-						input( type="text", name="name" )
-				
-				p
-					label Email
-						br
-						input( type="email", name="email" )
-				
-				p
-					label Comentario
-						br
-						textarea( name="comment" )
-				
-				p
-					button( type="submit" ) Comentar
+		a#comentarios
+		
+		!= partial('_comments', { locals: { img_id: 1337 } })
 
 	
 	#sidebar
+		#upload
+			a( href="/subir/" ) Sube una foto
+
 		.widget
 			h2 Otras fotos de 
-				a( href ) hCant&eacute; 
-				a.icon-rss( href ) [RSS]
+				a( href="/perfil/hcante/" ) hCant&eacute; 
+				a.icon-rss( href="/feed/perfil/hcante/" ) [RSS]
 			
 			ul.grid
 				- for ( i in _.range(1,7) )
 					li
-						a( href )
+						a( href="/single/" )
 							img( src="/images/image_thumb.jpg" )
+							span.icon-zoom
 			
-			p.alignright Ver 
-				a( href ) galer&iacute;a completa
+			p.alignright
+				a( href="/perfil/hcante/" ) Ver galer&iacute;a completa
 	
 		.widget
 			h2 Sobre fotograf&iacute;a: 
 				small
-					a( href ) (Editar)
+					a( href="/editar/" ) (Editar)
 			
-			p.tags Tags: 
-				a( href ) Guatemala
-				|  
-				a( href ) fotograf&iacute;a
-				|  
-				a( href ) libro
-				| 
-				a( href ) textos
+			.widget-content
+				p.tags Tags: 
+					a( href="/tag/guatemala/" ) Guatemala
+					|  
+					a( href="/tag/fotografia/" ) fotograf&iacute;a
+					|  
+					a( href="/tag/libro/" ) libro
+					| 
+					a( href="/tag/textos/" ) textos
+				
+				p.info Ha sido vista 
+					strong 408 veces. 
+					| &nbsp; Publicada hace 
+					strong 1 d&iacute;a.
+
+		.widget
+			h2 Otras im&aacute;genes en L4C.me
 			
-			p.info Ha sido vista 
-				strong 408 veces. 
-				| &nbsp; Publicada hace 
-				strong 1 d&iacute;a.
-
-hr
-
-!= partial('_pagination')
+			ul.grid
+				- for ( i in _.range(1,7) )
+					li
+						a( href="/single/" )
+							img( src="/images/image_thumb.jpg" )
+							span.icon-zoom
+			
+			p.alignright
+				a( href="/" ) Ver m&aacute;s

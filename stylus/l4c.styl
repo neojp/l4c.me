@@ -3,21 +3,14 @@
 	@import 'fonts/stylesheet.css';
 */
 }
-@import "reset"
 @import "classes"
+@import "reset"
 //@import "boilerplate"
 
 body
 	background #242c33
 	color #333
-	font-size 12px
-	font-family Helvetica, Arial, sans-serif
-	margin 0
 	min-width 1000px
-	padding 0
-
-a
-	text-decoration none
 
 hr
 	background url(images/bg_hr.png) repeat-x left bottom
@@ -30,6 +23,30 @@ hr
 
 h1, h2, h3, h4, h5, h6
 	color #0a92ca
+
+input, textarea
+	&:focus, &:active
+		border-color #FF9933
+		outline 0
+
+button
+	background #FF9933 url(images/icon_comments_white.png) no-repeat 90% 50%
+	color #fff
+	height 25px
+	padding 0 35px 0 10px
+	border-radius()
+
+	&:after
+		content: "|"
+		font-size 16px
+		color #FFC993
+		height 20px
+		margin-left 8px
+		overflow hidden
+		width 0
+	
+	&:hover
+		background-color lighten( #ff9933, 10% )
 
 .wrap
 	margin 0 auto
@@ -82,6 +99,7 @@ header
 				padding 0 10px
 				text-decoration none
 				border-radius( 5px )
+				transition()
 			
 			> a:hover,
 			&.active > a
@@ -260,14 +278,10 @@ footer
 
 #upload
 	background none
-	float right !important
 	height 45px
 	line-height 45px
 	margin 0
 	padding 0 !important
-	//position absolute
-	//right 0
-	//top 0
 	
 	a
 		background #ff9933
@@ -278,6 +292,18 @@ footer
 		font-weight bold
 		padding 0 24px
 		border-radius( 5px )
+		transition()
+
+		&:hover
+			background-color lighten( #ff9933, 10% )
+
+#breadcrumb #upload
+	float right !important
+
+#sidebar #upload
+	float none !important
+	margin 0 -10px 40px 0
+	text-align right
 
 .pagination
 	font-weight bold
@@ -402,7 +428,7 @@ footer
 		.img img
 			border-color #ccc
 
-		span.icon
+		span.icon-zoom
 			opacity 1
 		
 		a.comments
@@ -411,18 +437,67 @@ footer
 
 #content-sidebar-wrap
 	margin 0 auto
+	width 1000px
 	clearfix()
 
 	#content
 		float left
+		padding-left 10px
 		width 600px
 	
 	.pagination
+		padding-top 15px
 		margin-bottom 10px
 		text-align right
+		
+		a
+			vertical-align bottom
+	
+	/*
+	.pagination
+		padding-top 20px
+		text-align right
+
+		&, a
+			height 25px
+			line-height 25px
+		
+		.prev, .next
+			border-radius 0
+	*/
+
+	#img
+		margin-bottom 15px
+		text-align center
+		
+		.img
+			display inline-block
+			position relative
+
+		img
+			vertical-align bottom
+		
+		.icons
+			bottom 0
+			position absolute
+			right 0
+
+			a
+				background rgba(#FF9933, 0.8) none no-repeat center center
+				display inline-block
+				height 25px
+				margin-left 5px
+				vertical-align bottom
+				width 30px
+			
+			.icon-zoom
+				background-image url(images/icon_zoom.png)
+			
+			.icon-edit
+				background-image url(images/icon_edit.png)
 	
 	.img-info
-		padding-bottom 15px
+		//padding-bottom 15px
 
 		p
 			font-size 1.2em
@@ -456,13 +531,14 @@ footer
 			li
 				float left
 				height 75px
-				margin 0
-				padding 0 0 18px 18px
+				margin 0 0 18px 18px
+				padding 0
+				position relative
 				width 100px
 
 				&:nth-child( 3n+1 )
 					clear left
-					padding-left 0
+					margin-left 0
 			
 			a
 				background #000
@@ -476,6 +552,15 @@ footer
 			
 			img
 				transition()
+			
+			.icon-zoom
+				background-color transparent
+				bottom auto
+				height 100%
+				left 0
+				right auto
+				top 0
+				width 100%
 		
 		.tags
 			color #0a92ca
@@ -486,3 +571,40 @@ footer
 		
 		.edit-link
 			color #FF9933
+
+
+.widget
+	margin-bottom 2.5em
+
+.widget-content
+	border 2px solid #E8E8E8
+	background #f6f6f6
+	padding 20px
+	border-radius()
+		
+
+div.comments
+	padding 0 15px
+
+	form
+		background #F7F7F7
+		border 2px solid #FBE3CC
+		padding 25px 30px 15px
+		border-radius()
+	
+		input, textarea
+			margin 0
+		
+		p
+			font-size 1.2em
+		
+		label
+			color #666
+			font-weight normal
+	
+	.col-1
+		float left
+	
+	.col-2
+		float right
+	

@@ -25,19 +25,20 @@ hr
 		- _.each( _.range(1, length), function(i){
 			li
 				div.img
-					a
+					a( href="/single/" )
 						- rand = Math.floor(Math.random() * 4) + 1;
 						img( src= "/images/img_" + rand + ".jpg" )
 						span.icon-zoom
 				
 				div.info
 					span.photo-name
-						a.photo Flores 
+						a.photo( href="/single/" ) Flores 
 						span.by por 
 						strong.username
-							a= u[ Math.floor(Math.random() * u.length) ]
+							- var user = u[ Math.floor(Math.random() * u.length) ];
+							a( href="/perfil/" + user.toLowerCase() + "/" )= user
 					
-					a.comments Comentarios
+					a.comments( href="/single/#comentarios" ) Comentarios
 
 		- });
 
