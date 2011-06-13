@@ -24,6 +24,10 @@ hr
 h1, h2, h3, h4, h5, h6
 	color #0a92ca
 
+a
+	border-bottom 2px solid #80c4e0
+	color #0a92ca
+
 input, textarea
 	&:focus, &:active
 		border-color #FF9933
@@ -54,10 +58,16 @@ button
 	min-width 1000px
 	width 90%
 
+.wrap, #container
+	max-width 1250px
+
 header
 	background #00b8f4
-	color #fff
 	height 60px
+
+	&, a
+		border 0
+		color #fff
 
 	#logo
 		height 49px
@@ -150,9 +160,12 @@ header
 
 footer
 	background #242c33
-	color #fff
 	padding 13px
 	text-align center
+
+	&, a
+		border 0
+		color #fff
 
 	ul
 		height 37px
@@ -223,6 +236,10 @@ footer
 	border-radius( 5px )
 	clearfix()
 	//text-shadow( 1px 1px 5px rgba(#000, 0.15) )
+
+	a
+		border 0
+		color #fff
 
 	a.more
 		border-bottom 2px solid #fff
@@ -330,6 +347,7 @@ footer
 	a
 		background #999
 		color #fff
+		border 0
 		padding 0 8px
 
 		transition()
@@ -381,6 +399,10 @@ footer
 		width 200px
 		vertical-align middle
 	
+	a
+		color inherit
+		border 0
+	
 	div.img
 		display inline-block
 	
@@ -406,6 +428,7 @@ footer
 		transition()
 	
 	div.info
+		color #333
 		padding 5px 0 0 0
 		clearfix()
 
@@ -435,10 +458,16 @@ footer
 			opacity 1
 			width 35px
 
-#content-sidebar-wrap
+#container
 	margin 0 auto
 	position relative
 	width 1000px
+
+body.liquid, body.gallery
+	#container
+		width auto
+
+#content-sidebar-wrap
 	clearfix()
 
 	#content
@@ -466,52 +495,12 @@ footer
 		.prev, .next
 			border-radius 0
 	*/
-
-	#img
-		margin-bottom 15px
-		text-align center
-		
-		.img
-			display inline-block
-			position relative
-
-		img
-			vertical-align bottom
-		
-		.icons
-			bottom 0
-			position absolute
-			right 0
-
-			a
-				background rgba(#FF9933, 0.8) none no-repeat center center
-				display inline-block
-				height 25px
-				margin-left 5px
-				vertical-align bottom
-				width 30px
-			
-			.icon-zoom
-				background-image url(images/icon_zoom.png)
-			
-			.icon-edit
-				background-image url(images/icon_edit.png)
-	
-	.img-info
-		//padding-bottom 15px
-
-		p
-			font-size 1.2em
 	
 
 	#sidebar
 		float right
 		padding-right 14px
 		width 336px
-
-		a
-			border-bottom 2px solid #80c4e0
-			color #0a92ca
 
 		.icon-rss
 			ir()
@@ -564,26 +553,67 @@ footer
 				top 0
 				width 100%
 		
-		.tags
-			color #0a92ca
+.tags
+	color #0a92ca
 
-		.info
-			font-style italic
-			color #999
-		
-		.edit-link
-			color #FF9933
+.info
+	font-style italic
+	color #999
+
+.edit-link
+	border 0
+	color #FF9933
 
 
 .widget
 	margin-bottom 2.5em
 
 .widget-content
-	border 2px solid #E8E8E8
 	background #f6f6f6
+	border 2px solid #E8E8E8
 	padding 20px
 	border-radius()
+
+
+#img
+	margin-bottom 15px
+	text-align center
+
+	a
+		border 0
+	
+	.img
+		display inline-block
+		position relative
+
+	img
+		vertical-align bottom
+	
+	.icons
+		bottom 0
+		position absolute
+		right 0
+
+		a
+			background rgba(#FF9933, 0.8) none no-repeat center center
+			display inline-block
+			height 25px
+			margin-left 5px
+			vertical-align bottom
+			width 30px
 		
+		.icon-zoom
+			background-image url(images/icon_zoom.png)
+		
+		.icon-edit
+			background-image url(images/icon_edit.png)
+
+.img-info
+	//padding-bottom 15px
+
+	p
+		font-size 1.2em
+
 
 #social-bar
 	background url(images/social.png) no-repeat
@@ -621,3 +651,16 @@ div.comments
 	.col-2
 		float right
 	
+body.sizes
+	#container
+		width 970px
+	
+	#breadcrumb
+		margin-bottom 10px
+
+		ul
+			float right
+			font-size 1.2em
+	
+	.img-info
+		padding 10px 15px

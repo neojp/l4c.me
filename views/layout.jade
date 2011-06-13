@@ -6,7 +6,7 @@ html( lang="es" )
 		link( rel="stylesheet", href="/l4c.css")
 		meta( name="description", value="L4C" )
 	
-	body
+	body( class= body_class )
 		script document.body.className += ' js-enable ';
 		
 		header
@@ -50,7 +50,8 @@ html( lang="es" )
 			
 				hr.hidden
 
-				!= body
+				#container.clearfix
+					!= body
 		
 		hr.hidden
 		

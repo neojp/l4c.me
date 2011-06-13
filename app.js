@@ -3,7 +3,7 @@ var express = require('express'),
     _ = underscore = require('underscore'),
     sys = require('sys'),
     app     = module.exports = express.createServer(),
-    options = { locals: { _: underscore, sys: sys } };
+    options = { locals: { _: underscore, sys: sys, body_class: '' } };
 
 
 // Configuration
@@ -21,11 +21,18 @@ app.configure(function(){
 
 
 // Routes
+app.get('/fullsize/', function(req, res){
+  options.locals.body_class = 'sizes';
+  res.render('gallery_single_large', options);
+});
+
 app.get('/single/', function(req, res){
+  options.locals.body_class = 'single';
   res.render('gallery_single', options);
 })
 
 app.all('*', function(req, res){
+  options.locals.body_class = 'gallery liquid';
   res.render('gallery', options);
 });
 
