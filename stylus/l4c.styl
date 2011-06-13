@@ -45,7 +45,7 @@ button
 		overflow hidden
 		width 0
 	
-	&:hover
+	&:hover, &:focus
 		background-color lighten( #ff9933, 10% )
 
 .wrap
@@ -437,6 +437,7 @@ footer
 
 #content-sidebar-wrap
 	margin 0 auto
+	position relative
 	width 1000px
 	clearfix()
 
@@ -502,6 +503,7 @@ footer
 		p
 			font-size 1.2em
 	
+
 	#sidebar
 		float right
 		padding-right 14px
@@ -582,6 +584,17 @@ footer
 	padding 20px
 	border-radius()
 		
+
+#social-bar
+	background url(images/social.png) no-repeat
+	font-size 10px
+	height 145px
+	left -55px
+	position absolute
+	text-align right
+	top 55px
+	width 50px
+
 
 div.comments
 	padding 0 15px

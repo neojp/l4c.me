@@ -33,7 +33,7 @@ h1,h2,h3,h4,h5,h6{color:#0a92ca}
 input:focus,textarea:focus,input:active,textarea:active{border-color:#f93;outline:0}
 button{background:#f93 url("images/icon_comments_white.png") no-repeat 90% 50%;color:#fff;height:25px;padding:0 35px 0 10px;border-radius:5px;-o-border-radius:5px;-ms-border-radius:5px;-moz-border-radius:5px;-webkit-border-radius:5px;-webkit-background-clip:padding-box;}
 button:after{content:"|";font-size:16px;color:#ffc993;height:20px;margin-left:8px;overflow:hidden;width:0}
-button:hover{background-color:#ffa852}
+button:hover,button:focus{background-color:#ffa852}
 .wrap{margin:0 auto;position:relative;min-width:1000px;width:90%}
 header{background:#00b8f4;color:#fff;height:60px;}
 header #logo{height:49px;left:13px;margin:0;position:absolute;top:5px;width:96px;}
@@ -115,7 +115,7 @@ footer #p3 a{background-image:url("http://www.cristalab.com/images/icons/p3.png"
 .grid li:hover .img img{border-color:#ccc}
 .grid li:hover span.icon-zoom{opacity:1}
 .grid li:hover a.comments{opacity:1;width:35px}
-#content-sidebar-wrap{margin:0 auto;width:1000px;zoom:1;}
+#content-sidebar-wrap{margin:0 auto;position:relative;width:1000px;zoom:1;}
 #content-sidebar-wrap:before,#content-sidebar-wrap:after{content:"\0020";display:block;height:0;visibility:hidden}
 #content-sidebar-wrap:after{clear:both}
 #content-sidebar-wrap #content{float:left;padding-left:10px;width:600px}
@@ -146,6 +146,7 @@ footer #p3 a{background-image:url("http://www.cristalab.com/images/icons/p3.png"
 #content-sidebar-wrap #sidebar .edit-link{color:#f93}
 .widget{margin-bottom:2.5em}
 .widget-content{border:2px solid #e8e8e8;background:#f6f6f6;padding:20px;border-radius:5px;-o-border-radius:5px;-ms-border-radius:5px;-moz-border-radius:5px;-webkit-border-radius:5px;-webkit-background-clip:padding-box}
+#social-bar{background:url("images/social.png") no-repeat;font-size:10px;height:145px;left:-55px;position:absolute;text-align:right;top:55px;width:50px}
 div.comments{padding:0 15px;}
 div.comments form{background:#f7f7f7;border:2px solid #fbe3cc;padding:25px 30px 15px;border-radius:5px;-o-border-radius:5px;-ms-border-radius:5px;-moz-border-radius:5px;-webkit-border-radius:5px;-webkit-background-clip:padding-box;}
 div.comments form input,div.comments form textarea{margin:0}
