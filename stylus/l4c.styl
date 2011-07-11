@@ -12,6 +12,9 @@ body
 	color #333
 	min-width 1000px
 
+#overflow
+	overflow hidden
+
 hr
 	background url(images/bg_hr.png) repeat-x left bottom
 	border 0
@@ -292,6 +295,9 @@ footer
 		li.active a
 			color #ffae5e
 			border-color #ffd6ae
+
+body.upload
+	background url(images/bg.png) no-repeat 50% 50%
 
 #upload
 	background none
@@ -664,3 +670,115 @@ body.sizes
 	
 	.img-info
 		padding 10px 15px
+
+body.upload
+	#inner
+		background url(images/bg_upload.png) no-repeat center bottom
+	
+	#content-sidebar-wrap #content
+		float none
+		margin 40px auto
+		width 520px
+
+		form p
+			clearfix()
+
+	label
+		color #0A92CA
+		float left
+		font-size 1.2em
+		margin-right 20px
+		text-align right
+		width 95px
+		
+		em
+			color #999
+			display block
+			font-size 0.8em
+			font-weight normal
+	
+	input, textarea
+		float left
+	
+	input
+		width 235px
+	
+	textarea
+		height 135px
+		width 380px
+
+	#upload-placeholder-container,
+	#upload-file-container
+		color #0A92CA
+		//font-size 14px
+		margin-bottom 1em
+		padding-left 115px
+		clearfix()
+
+		label
+			margin-left -115px
+		
+		p
+			font-size 1.2em
+
+	#upload-placeholder
+		border 2px dashed #FF9933
+		color #999
+		display block
+		font-size 18px !important
+		padding 45px
+		text-align center
+		width 270px
+		border-radius()
+	
+	#upload-file-container
+		input
+			float none
+	
+	.help
+		background url(images/icon_help.png) no-repeat
+		cursor pointer
+		display inline-block
+		height 18px
+		margin 5px 0 0 10px
+		position relative
+		width 18px
+
+		&:hover .popup
+			left -15px
+			bottom 25px
+			opacity 1
+	
+		.popup
+			background #FF9933
+			bottom -9999px
+			color #fff
+			cursor default
+			font-style italic
+			font-size 0.9em
+			left -9999px
+			opacity 0
+			padding 5px
+			position absolute
+			width 125px
+			border-radius()
+			transition()
+			transition-property( opacity )
+	
+	p.buttons
+		background url(images/bg_shadow.png) no-repeat center top
+		margin 25px 0 0
+		padding 40px 0 0
+		text-align center
+
+		button
+			background-image url(images/icon_submit.png)
+			background-position 80% 50%
+			height 45px
+			font-size 24px
+			padding 0 35px 0 0
+			width 155px
+
+			&:after
+				content ""
+				display none

@@ -29,6 +29,7 @@ button::-moz-focus-inner{border:none}
 button span{display:block;position:relative;white-space:nowrap}
 @media screen and (-webkit-min-device-pixel-ratio:0){button span{margin-top:-1px}
 }body{background:#242c33;color:#333;min-width:1000px}
+#overflow{overflow:hidden}
 hr{background:url("images/bg_hr.png") repeat-x left bottom;border:0;clear:both;margin:25px 0;height:1px;overflow:hidden;width:100%}
 h1,h2,h3,h4,h5,h6{color:#0a92ca}
 a{border-bottom:2px solid #80c4e0;color:#0a92ca}
@@ -87,6 +88,7 @@ footer #p3 a{background-image:url("http://www.cristalab.com/images/icons/p3.png"
 #breadcrumb ul li:first-child{background:none;padding-left:10px}
 #breadcrumb ul a{color:#0a93ca;border-bottom:2px solid #84c9e4}
 #breadcrumb ul li.active a{color:#ffae5e;border-color:#ffd6ae}
+body.upload{background:url("images/bg.png") no-repeat 50% 50%}
 #upload{background:none;height:45px;line-height:45px;margin:0;padding:0 !important;}
 #upload a{background:#f93;border:0 !important;color:#fff !important;display:inline-block;font-size:22px;font-weight:bold;padding:0 24px;border-radius:5px;-o-border-radius:5px;-ms-border-radius:5px;-moz-border-radius:5px;-webkit-border-radius:5px;-webkit-background-clip:padding-box;transition:all .15s linear;-o-transition:all .15s linear;-ms-transition:all .15s linear;-moz-transition:all .15s linear;-webkit-transition:all .15s linear;}
 #upload a:hover{background-color:#ffa852}
@@ -167,3 +169,26 @@ body.sizes #container{width:970px}
 body.sizes #breadcrumb{margin-bottom:10px;}
 body.sizes #breadcrumb ul{float:right;font-size:1.2em}
 body.sizes .img-info{padding:10px 15px}
+body.upload #inner{background:url("images/bg_upload.png") no-repeat center bottom}
+body.upload #content-sidebar-wrap #content{float:none;margin:40px auto;width:520px;}
+body.upload #content-sidebar-wrap #content form p{zoom:1;}
+body.upload #content-sidebar-wrap #content form p:before,body.upload #content-sidebar-wrap #content form p:after{content:"\0020";display:block;height:0;visibility:hidden}
+body.upload #content-sidebar-wrap #content form p:after{clear:both}
+body.upload label{color:#0a92ca;float:left;font-size:1.2em;margin-right:20px;text-align:right;width:95px;}
+body.upload label em{color:#999;display:block;font-size:.8em;font-weight:normal}
+body.upload input,body.upload textarea{float:left}
+body.upload input{width:235px}
+body.upload textarea{height:135px;width:380px}
+body.upload #upload-placeholder-container,body.upload #upload-file-container{color:#0a92ca;margin-bottom:1em;padding-left:115px;zoom:1;}
+body.upload #upload-placeholder-container:before,body.upload #upload-file-container:before,body.upload #upload-placeholder-container:after,body.upload #upload-file-container:after{content:"\0020";display:block;height:0;visibility:hidden}
+body.upload #upload-placeholder-container:after,body.upload #upload-file-container:after{clear:both}
+body.upload #upload-placeholder-container label,body.upload #upload-file-container label{margin-left:-115px}
+body.upload #upload-placeholder-container p,body.upload #upload-file-container p{font-size:1.2em}
+body.upload #upload-placeholder{border:2px dashed #f93;color:#999;display:block;font-size:18px !important;padding:45px;text-align:center;width:270px;border-radius:5px;-o-border-radius:5px;-ms-border-radius:5px;-moz-border-radius:5px;-webkit-border-radius:5px;-webkit-background-clip:padding-box}
+body.upload #upload-file-container input{float:none}
+body.upload .help{background:url("images/icon_help.png") no-repeat;cursor:pointer;display:inline-block;height:18px;margin:5px 0 0 10px;position:relative;width:18px;}
+body.upload .help:hover .popup{left:-15px;bottom:25px;opacity:1}
+body.upload .help .popup{background:#f93;bottom:-9999px;color:#fff;cursor:default;font-style:italic;font-size:.9em;left:-9999px;opacity:0;padding:5px;position:absolute;width:125px;border-radius:5px;-o-border-radius:5px;-ms-border-radius:5px;-moz-border-radius:5px;-webkit-border-radius:5px;-webkit-background-clip:padding-box;transition:all .15s linear;-o-transition:all .15s linear;-ms-transition:all .15s linear;-moz-transition:all .15s linear;-webkit-transition:all .15s linear;transition-property:opacity;-o-transition-property:opacity;-ms-transition-property:opacity;-moz-transition-property:opacity;-webkit-transition-property:opacity}
+body.upload p.buttons{background:url("images/bg_shadow.png") no-repeat center top;margin:25px 0 0;padding:40px 0 0;text-align:center;}
+body.upload p.buttons button{background-image:url("images/icon_submit.png");background-position:80% 50%;height:45px;font-size:24px;padding:0 35px 0 0;width:155px;}
+body.upload p.buttons button:after{content:"";display:none}

@@ -31,6 +31,11 @@ app.get('/single/', function(req, res){
   res.render('gallery_single', options);
 })
 
+app.get('/upload/', function(req, res){
+  options.locals.body_class = 'upload';
+  res.render('gallery_upload', options);
+})
+
 app.all('*', function(req, res){
   options.locals.body_class = 'gallery liquid';
   res.render('gallery', options);
