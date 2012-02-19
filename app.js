@@ -24,24 +24,21 @@
   });
 
   middleware = {
-    sort: function(req, res, next) {
-      if (!_.include(['ultimas', 'top', 'galeria'], req.params.sort)) {
-        return next('route');
-      }
-    },
-    hmvc: function(req, res, next, path) {
-      var callback, route;
-      route = app.match.get(path);
-      route = _.filter(route, function(i) {
-        return i.path === path;
-      });
-      route = _.first(route);
-      callback = _.last(route.callbacks);
-      if (_.isFunction(callback)) {
-        return callback(req, res);
-      } else {
-        return next('route');
-      }
+    hmvc: function(path) {
+      return function(req, res, next) {
+        var callback, route;
+        route = app.match.get(path);
+        route = _.filter(route, function(i) {
+          return i.path === path;
+        });
+        route = _.first(route);
+        callback = _.last(route.callbacks);
+        if (_.isFunction(callback)) {
+          return callback(req, res);
+        } else {
+          return next('route');
+        }
+      };
     },
     paged: function(path) {
       return function(req, res, next) {
@@ -56,7 +53,7 @@
         }
         page = parseInt(req.param('page', 1));
         if (page === 1) return res.redirect(redirection, 301);
-        return middleware.hmvc(req, res, next, path);
+        return middleware.hmvc(path)(req, res, next);
       };
     },
     remove_trailing_slash: function(req, res, next) {
@@ -69,6 +66,31 @@
       return next();
     }
   };
+
+  app.param('page', function(req, res, next, id) {
+    if (id.match(/[0-9]+/)) {
+      req.param.page = parseInt(req.param.page);
+      return next();
+    } else {
+      return next(404);
+    }
+  });
+
+  app.param('size', function(req, res, next, id) {
+    if (id === 'p' || id === 'm' || id === 'o') {
+      return next();
+    } else {
+      return next('route');
+    }
+  });
+
+  app.param('slug', function(req, res, next, id) {
+    if (id !== 'editar') {
+      return next();
+    } else {
+      return next('route');
+    }
+  });
 
   app.param('sort', function(req, res, next, id) {
     if (id === 'ultimas' || id === 'top' || id === 'galeria') {
@@ -83,15 +105,6 @@
       return next();
     } else {
       return next('route');
-    }
-  });
-
-  app.param('page', function(req, res, next, id) {
-    if (id.match(/[0-9]+/)) {
-      req.param.page = parseInt(req.param.page);
-      return next();
-    } else {
-      return next(404);
     }
   });
 
@@ -234,6 +247,12 @@
 
   app.get('/logout', function(req, res) {
     return res.send("GET /perfil", {
+      'Content-Type': 'text/plain'
+    });
+  });
+
+  app.get('/tweets', function(req, res) {
+    return res.send("GET /tweets", {
       'Content-Type': 'text/plain'
     });
   });

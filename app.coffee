@@ -20,11 +20,7 @@ app.configure ->
 
 # Middleware
 middleware =
-	sort: (req, res, next) ->
-		next('route') if not _.include ['ultimas', 'top', 'galeria'], req.params.sort
-	
-
-	hmvc: (req, res, next, path) ->
+	hmvc: (path) -> (req, res, next) ->
 		route = app.match.get(path)
 		route = _.filter route, (i) -> i.path == path
 		route = _.first route
@@ -48,7 +44,7 @@ middleware =
 		if page == 1
 			return res.redirect redirection, 301
 		
-		middleware.hmvc(req, res, next, path)
+		middleware.hmvc(path)(req, res, next)
 	
 
 	remove_trailing_slash: (req, res, next) ->
@@ -62,24 +58,40 @@ middleware =
 
 
 # Route Params
-app.param 'sort', (req, res, next, id) ->
-	if id in ['ultimas', 'top', 'galeria']
-		next()
-	else
-		return next('route')
-
-app.param 'user', (req, res, next, id) ->
-	if id not in ['ultimas', 'top', 'galeria', 'pag']
-		next()
-	else
-		return next('route')
-
 app.param 'page', (req, res, next, id) ->
 	if id.match /[0-9]+/
 		req.param.page = parseInt req.param.page
 		next()
 	else
 		return next(404)
+
+
+app.param 'size', (req, res, next, id) ->
+	if id in ['p', 'm', 'o']
+		next()
+	else
+		return next('route')
+
+
+app.param 'slug', (req, res, next, id) ->
+	if id not in ['editar']
+		next()
+	else
+		return next('route')
+
+
+app.param 'sort', (req, res, next, id) ->
+	if id in ['ultimas', 'top', 'galeria']
+		next()
+	else
+		return next('route')
+
+
+app.param 'user', (req, res, next, id) ->
+	if id not in ['ultimas', 'top', 'galeria', 'pag']
+		next()
+	else
+		return next('route')
 
 
 # Routes
@@ -190,6 +202,10 @@ app.post '/registro', (req, res) ->
 
 app.get '/logout', (req, res) ->
 	res.send "GET /perfil", 'Content-Type': 'text/plain'
+
+
+app.get '/tweets', (req, res) ->
+	res.send "GET /tweets", 'Content-Type': 'text/plain'
 
 
 # app.all '*', (req, res) ->
