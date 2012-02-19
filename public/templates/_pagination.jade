@@ -1,38 +1,29 @@
 nav.pagination
+	- var className = "";
 	span
-		a.prev.disabled( href ) Anterior
+		- if (page > 2)
+			a.prev( href= "#{path}/pag/#{page-1}" ) Anterior
+		- if (page == 2)
+			a.prev( href= path ) Anterior
+		- if (page == 1)
+			a.prev.disabled Anterior
 	
 	- _.each( _.range(1,6), function(i){
 		span
-			a( href, class= (i == 1) ? 'active' : '' )= i
+			- className = (i == page) ? "active" : "";
+			a( href= "#{path}/pag/#{i}", class= className )= i
 	- });
 
 	span.sep ...
 
 	span
-		a( href ) 255
+		- className = (255 == page) ? "active" : "";
+		a( href= "#{path}/pag/255", class= className ) 255
 	span
-		a( href ) 256
+		- className = (256 == page) ? "active" : "";
+		a( href= "#{path}/pag/256", class= className ) 256
 	span
-		a.next( href ) Siguiente
-
-- /*
-nav.pagination
-	ul
-		li
-			a.prev.disabled Anterior
-		
-		- _.each( _.range(1,6), function(i){
-			li
-				a( class= (i == 1) ? 'active' : '' )= i
-		- });
-
-		li.sep ...
-
-		li
-			a 255
-		li
-			a 256
-		li
-			a.next Siguiente
-- */
+		- if (page < 256)
+			a.next( href= "#{path}/pag/#{page+1}" ) Siguiente
+		- else
+			a.next.disabled Siguiente

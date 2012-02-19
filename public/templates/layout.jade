@@ -23,24 +23,34 @@ html( lang="es" )
 							ul.menu
 								li.active
 									a( href="/" ) Inicio
+								
+									li
+										a( href="/fotos/publicar" ) Subir
+								
+								- if (user)
+									li
+										a( href="/fotos/" + user.username ) Mis Fotos
+								
 								li
-									a( href="/upload/" ) Subir
-								li
-									a( href="/fotos/" ) Fotos
-								li
-									a( href="/galeria/" ) Galeria
-								li
-									a( href="/blog/" ) Blog
+									a( href="/fotos" ) Galeria
 						
 						hr.hidden
 
-						aside
-							p Hola 
-								a.username( href="/perfil/" ) hCant&eacute;
-								|, puedes editar tu 
-								a.profile( href="/perfil/" ) perfil
-								|  o 
-								a.logout( href="/logout/" ) salir
+						- if (user)
+							aside
+								p Hola 
+									a.username( href="/perfil/" )= user.username
+									|, puedes editar tu 
+									a.profile( href="/perfil/" ) perfil
+									|  o 
+									a.logout( href="/logout/" ) salir
+						- else
+							aside
+								form( method="post", action="/login" )
+									p
+										input( type="text", name="username", placeholder="Username", tabindex="1" )
+										input( type="password", name="password", placeholder="Password", tabindex="2" )
+										button( type="submit", tabindex="3" ) Submit
 			
 			hr.hidden
 
