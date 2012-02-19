@@ -59,8 +59,9 @@
     remove_trailing_slash: function(req, res, next) {
       var url;
       url = req.originalUrl;
-      if (url.length > 1 && url.charAt(url.length - 1) === '/') {
-        url = url.substring(0, url.length - 1);
+      length(url.length);
+      if (length > 1 && url.charAt(length - 1) === '/') {
+        url = url.substring(0, length - 1);
         return res.redirect(url, 301);
       }
       return next();

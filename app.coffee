@@ -49,9 +49,10 @@ middleware =
 
 	remove_trailing_slash: (req, res, next) ->
 		url = req.originalUrl
+		length url.length
 		
-		if url.length > 1 && url.charAt(url.length - 1) == '/'
-			url = url.substring 0, url.length - 1
+		if length > 1 && url.charAt(length - 1) == '/'
+			url = url.substring 0, length - 1
 			return res.redirect url, 301
 		
 		next()
