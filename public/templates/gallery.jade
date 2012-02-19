@@ -1,0 +1,47 @@
+nav#breadcrumb
+	h1 Galeria
+	ul
+		li.active
+			a( href="/galeria/" ) M&aacute;s recientes
+		li
+			a( href="/galeria/mas-vistas/" ) Mas vistas
+		li
+			a( href="/galeria/usuarios/" ) Galer&iacute;as de Usuarios
+		li
+			a( href="/galeria/categorias/" ) Categorias
+		
+		li#upload
+			a( href="/upload/" ) Sube una foto
+
+hr
+
+!= partial('_pagination')
+
+#content
+	ul.grid
+		- var a = _.range(1,5), length = 3*4+1;
+		- var u = ['freddier', 'hCant&eacute;', 'neojp', 'maikel'];
+
+		- _.each( _.range(1, length), function(i){
+			li
+				div.img
+					a( href="/single/" )
+						- rand = Math.floor(Math.random() * 4) + 1;
+						img( src= "/images/img_" + rand + ".jpg" )
+						span.icon-zoom
+				
+				div.info
+					span.photo-name
+						a.photo( href="/single/" ) Flores 
+						span.by por 
+						strong.username
+							- var user = u[ Math.floor(Math.random() * u.length) ];
+							a( href="/perfil/" + user.toLowerCase() + "/" )= user
+					
+					a.comments( href="/single/#comentarios" ) Comentarios
+
+		- });
+
+hr
+
+!= partial('_pagination')

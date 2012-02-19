@@ -1,0 +1,50 @@
+#content-sidebar-wrap
+	nav#breadcrumb
+		h1 Subir una foto
+		ul			
+			li#upload
+				a( href="/upload/" ) Sube una foto
+
+	hr
+
+	#content
+		form( method="post", action="#" )
+			p
+				label( for="upload-title" ) Titulo 
+					em (requerido)
+				
+				input#upload-title( type="text", name="title" )
+			
+			#upload-placeholder-container
+				label Fotografia
+				p#upload-placeholder Arrastra una foto ac&aacute; para publicarla autom&aacute;ticamente
+				p No est&aacute; funcionando?
+					br
+					| Tambien puedes usar el 
+					a( href="#upload-file-container" ) cargador b&aacute;sico
+			
+			#upload-file-container
+				p
+					input#upload-file( type="file", name="file", accept="jpg,gif,png,bmp" )
+					br
+					| Puedes usar el 
+					a( href="#upload-placeholder-container" ) cargador avanzado
+					em &nbsp;con "Drag &amp; Drop"
+			
+			p
+				label( for="upload-description" ) Descripci&oacute;n 
+					em Es opcional, pero nos gusta saber que tienes para decir
+				
+				textarea#upload-description( name="description" )
+			
+			p
+				label( for="upload-tags" ) Tags 
+					em Separalos con espacios, NO uses comas
+				
+				input#upload-tags( type="text", name="tags" )
+
+				span.help
+					span.popup Los tags son palabras clave que identifican la imagen.
+			
+			p.buttons
+				button( type="submit" ) Subir

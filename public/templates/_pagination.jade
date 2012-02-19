@@ -1,0 +1,38 @@
+nav.pagination
+	span
+		a.prev.disabled( href ) Anterior
+	
+	- _.each( _.range(1,6), function(i){
+		span
+			a( href, class= (i == 1) ? 'active' : '' )= i
+	- });
+
+	span.sep ...
+
+	span
+		a( href ) 255
+	span
+		a( href ) 256
+	span
+		a.next( href ) Siguiente
+
+- /*
+nav.pagination
+	ul
+		li
+			a.prev.disabled Anterior
+		
+		- _.each( _.range(1,6), function(i){
+			li
+				a( class= (i == 1) ? 'active' : '' )= i
+		- });
+
+		li.sep ...
+
+		li
+			a 255
+		li
+			a 256
+		li
+			a.next Siguiente
+- */

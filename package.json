@@ -1,0 +1,13 @@
+{
+  "name": "l4c",
+  "version": "0.0.1",
+  "private": true,
+  "author": "Joan Piedra <@neojp>",
+  "engines": { "node": "0.6" },
+  "dependencies": {
+    "express": ">= 2.4.7",
+    "jade": ">= 0",
+    "stylus": ">= 0",
+    "underscore": ">= 0"
+  }
+}
