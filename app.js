@@ -188,11 +188,9 @@
   app.get('/fotos/pag/:page?', middleware.paged('/fotos'));
 
   app.get('/fotos', function(req, res) {
-    res.send("GET /fotos", {
+    return res.send("GET /fotos", {
       'Content-Type': 'text/plain'
     });
-    res.local('body_class', 'gallery liquid');
-    return res.render('gallery');
   });
 
   app.get('/tags/:tag/pag/:page?', middleware.paged('/tags/:tag'));

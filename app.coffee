@@ -161,8 +161,8 @@ app.get '/fotos/:sort', (req, res, next) ->
 app.get '/fotos/pag/:page?', middleware.paged('/fotos')
 app.get '/fotos', (req, res) ->
 	res.send "GET /fotos", 'Content-Type': 'text/plain'
-	res.local 'body_class', 'gallery liquid'
-	res.render 'gallery'
+	# res.local 'body_class', 'gallery liquid'
+	# res.render 'gallery'
 
 
 app.get '/tags/:tag/pag/:page?', middleware.paged('/tags/:tag')
