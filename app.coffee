@@ -10,7 +10,7 @@ app.configure ->
 	app.set 'view engine', 'jade'
 	app.set 'strict routing', true
 
-	app.use express.favicon()
+	# app.use express.favicon()
 	app.use express.bodyParser()
 	app.use express.logger( format: ':status ":method :url"' )
 	
