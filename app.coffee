@@ -49,7 +49,7 @@ middleware =
 
 	remove_trailing_slash: (req, res, next) ->
 		url = req.originalUrl
-		length url.length
+		length = url.length
 		
 		if length > 1 && url.charAt(length - 1) == '/'
 			url = url.substring 0, length - 1
@@ -161,8 +161,8 @@ app.get '/fotos/:sort', (req, res, next) ->
 app.get '/fotos/pag/:page?', middleware.paged('/fotos')
 app.get '/fotos', (req, res) ->
 	res.send "GET /fotos", 'Content-Type': 'text/plain'
-	# res.local 'body_class', 'gallery liquid'
-	# res.render 'gallery'
+	res.local 'body_class', 'gallery liquid'
+	res.render 'gallery'
 
 
 app.get '/tags/:tag/pag/:page?', middleware.paged('/tags/:tag')

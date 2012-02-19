@@ -57,9 +57,9 @@
       };
     },
     remove_trailing_slash: function(req, res, next) {
-      var url;
+      var length, url;
       url = req.originalUrl;
-      length(url.length);
+      length = url.length;
       if (length > 1 && url.charAt(length - 1) === '/') {
         url = url.substring(0, length - 1);
         return res.redirect(url, 301);
@@ -188,9 +188,11 @@
   app.get('/fotos/pag/:page?', middleware.paged('/fotos'));
 
   app.get('/fotos', function(req, res) {
-    return res.send("GET /fotos", {
+    res.send("GET /fotos", {
       'Content-Type': 'text/plain'
     });
+    res.local('body_class', 'gallery liquid');
+    return res.render('gallery');
   });
 
   app.get('/tags/:tag/pag/:page?', middleware.paged('/tags/:tag'));
