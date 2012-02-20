@@ -20,18 +20,23 @@ html( lang="es" )
 					
 					#nav-aside.clearfix
 						nav
+							- var className = '';
 							ul.menu
-								li.active
+								- className = (url == '/') ? 'active' : '';
+								li( class= className )
 									a( href="/" ) Inicio
 								
-									li
-										a( href="/fotos/publicar" ) Subir
+								- className = (url == '/fotos/publicar') ? 'active' : '';
+								li( class= className )
+									a( href="/fotos/publicar" ) Subir
 								
 								- if (user)
-									li
+									- className = url.indexOf('/fotos/' + user.username) != -1 ? 'active' : '';
+									li( class= className )
 										a( href="/fotos/" + user.username ) Mis Fotos
 								
-								li
+								- className = ((url !== '/' && url !== '/fotos/publicar') && (user && url.indexOf('/fotos/' + user.username) == -1)) ? 'active' : '';
+								li( class= className )
 									a( href="/fotos" ) Galeria
 						
 						hr.hidden

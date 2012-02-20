@@ -1,0 +1,22 @@
+nav#breadcrumb
+	h1 Galeria
+	ul
+		- var className = '';
+		
+		- className = (sort == 'ultimas') ? 'active' : '';
+		li( class= className )
+			a( href="/fotos" ) M&aacute;s recientes
+		
+		- className = (sort == 'top') ? 'active' : '';
+		li( class= className )
+			a( href="/fotos/top" ) Mas vistas
+		
+		- className = (sort == 'galeria') ? 'active' : '';
+		li( class= className )
+			a( href="/fotos/galeria" ) Galer&iacute;as de Usuarios
+
+		li( class='' )
+			a( href="/tags" ) Categorias
+		
+		li#upload
+			a( href="/fotos/publicar" ) Sube una foto

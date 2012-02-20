@@ -5,6 +5,7 @@ app = module.exports = express.createServer()
 passport = require('passport')
 LocalStrategy = require('passport-local').Strategy
 
+
 # Passport configuration
 users = [
 		id: 1337
@@ -46,17 +47,16 @@ passport.use new LocalStrategy (username, password, next) ->
 			next null, false
 
 
-# Configuration
+# Express configuration
 app.configure ->
 	app.set 'views', __dirname + '/public/templates'
 	app.set 'view engine', 'jade'
 	app.set 'strict routing', true
 
+	app.use express.favicon()
 	oneYear = 31556926000; # 1 year on milliseconds
 	app.use express.static( __dirname + '/public', maxAge: oneYear )
 	app.use express.logger( format: ':status ":method :url"' )
-
-	# app.use express.favicon()
 
 	app.use express.cookieParser()
 	app.use express.bodyParser()
@@ -96,8 +96,8 @@ middleware =
 	
 
 	paged: (path) -> (req, res, next) ->
-		redirection = path + ''
-		path_vars = _.filter path.split('/'), (i) -> i.charAt(0) == ':'
+		redirection = path.replace '?', ''
+		path_vars = _.filter redirection.split('/'), (i) -> i.charAt(0) == ':'
 
 		for path_var, i of path_vars
 			redirection = redirection.replace i, req.params[ i.substring(1) ]
@@ -106,6 +106,7 @@ middleware =
 		res.local 'page', page
 		
 		if page == 1
+			console.log redirection
 			return res.redirect redirection, 301
 		
 		middleware.hmvc(path)(req, res, next)
@@ -190,20 +191,95 @@ app.all '*', middleware.remove_trailing_slash, (req, res, next) ->
 	res.locals
 		_: underscore
 		body_class: ''
+		url: req.originalUrl
 		user: if req.isAuthenticated() then req.user else null
-		page: parseInt req.param 'page', 1
+		page: 1
 	
 	res.locals helpers
-
 	next('route')
 
 
-app.get '/', middleware.hmvc('/fotos')
+app.get '/', middleware.hmvc('/fotos/:sort?')
 
 
 app.get '/fotos/:user/:slug', (req, res) ->
-	res.local 'body_class', 'single'
+	res.locals
+		body_class: 'single'
+		photo:
+			user: req.param 'user'
+			slug: req.param 'slug'
+
 	res.render 'gallery_single'
+
+
+app.get '/fotos/:user/:slug/sizes/:size', (req, res) ->
+	res.local 'body_class', 'sizes'
+	res.render 'gallery_single_large'
+
+
+app.get '/fotos/:user', (req, res) ->
+	res.local 'body_class', 'gallery liquid'
+	res.render 'gallery'
+
+
+app.get '/fotos/:sort/pag/:page?', middleware.paged('/fotos/:sort?')
+app.get '/fotos/ultimas', (req, res) -> res.redirect '/fotos', 301
+app.get '/fotos/:sort?', (req, res, next) ->
+	sort = req.param 'sort', 'ultimas'
+	
+	res.locals
+		sort: sort
+		path: "/fotos/#{sort}"
+		body_class: "gallery liquid #{sort}"
+	
+	res.render 'gallery'
+
+
+app.get '/tags/:tag/pag/:page?', middleware.paged('/tags/:tag')
+app.get '/tags/:tag', (req, res) ->
+	tag = req.params.tag
+	page = parseInt req.param 'page', 1
+
+	res.send "GET /tags/#{tag}/pag/#{page}", 'Content-Type': 'text/plain'
+
+
+app.get '/tags', (req, res) ->
+	res.send "GET /tags", 'Content-Type': 'text/plain'
+
+
+app.get '/login', (req, res) ->
+	if (req.isAuthenticated())
+		return res.redirect '/'
+	
+	res.render 'login'
+
+
+app.post '/login', passport.authenticate('local', failureRedirect: '/login'), (req, res) ->
+	flash = req.flash('auth_redirect')
+	url = if _.size flash then _.first flash else '/'
+	res.redirect url
+
+
+app.get '/logout', (req, res) ->
+	req.logout()
+	res.redirect '/'
+
+
+app.get '/registro', (req, res) ->
+	res.send "GET /registro", 'Content-Type': 'text/plain'
+
+
+app.post '/registro', (req, res) ->
+	res.send "POST /registro", 'Content-Type': 'text/plain'
+
+
+# Logged in user routes
+app.get '/fotos/publicar', middleware.auth, (req, res) ->
+	res.render 'gallery_upload'
+
+
+app.post '/fotos/publicar', middleware.auth, (req, res) ->
+	res.send "POST /fotos/publicar", 'Content-Type': 'text/plain'
 
 
 app.get '/fotos/:user/:slug/editar', middleware.auth, (req, res) ->
@@ -224,89 +300,12 @@ app.delete '/fotos/:user/:slug', middleware.auth, (req, res) ->
 	res.send "DELETE /fotos/#{user}/#{slug}", 'Content-Type': 'text/plain'
 
 
-app.get '/fotos/:user/:slug/sizes/:size', (req, res) ->
-	res.local 'body_class', 'sizes'
-	res.render 'gallery_single_large'
-
-
-app.get '/fotos/:user', (req, res) ->
-	res.local 'body_class', 'gallery liquid'
-	res.render 'gallery'
-
-
-app.get '/fotos/publicar', middleware.auth, (req, res) ->
-	res.render 'gallery_upload'
-
-
-app.post '/fotos/publicar', middleware.auth, (req, res) ->
-	res.send "POST /fotos/publicar", 'Content-Type': 'text/plain'
-
-
-app.get '/fotos/:sort/pag/:page?', middleware.paged('/fotos/:sort')
-app.get '/fotos/:sort', (req, res, next) ->
-	sort = req.params.sort
-	res.locals
-		sort: sort
-		path: "/fotos/#{sort}"
-		body_class: "gallery liquid #{sort}"
-	
-	res.render 'gallery'
-
-
-app.get '/fotos/pag/:page?', middleware.paged('/fotos')
-app.get '/fotos', (req, res) ->
-	res.local 'path', '/fotos'
-	# res.send "GET /fotos", 'Content-Type': 'text/plain'
-	res.local 'body_class', 'gallery liquid'
-	res.render 'gallery'
-
-
-app.get '/tags/:tag/pag/:page?', middleware.paged('/tags/:tag')
-app.get '/tags/:tag', (req, res) ->
-	tag = req.params.tag
-	page = parseInt req.param 'page', 1
-
-	res.send "GET /tags/#{tag}/pag/#{page}", 'Content-Type': 'text/plain'
-
-
-app.get '/tags', (req, res) ->
-	res.send "GET /tags", 'Content-Type': 'text/plain'
-
-
 app.get '/perfil', middleware.auth, (req, res) ->
 	res.send "GET /perfil", 'Content-Type': 'text/plain'
 
 
 app.put '/perfil', middleware.auth, (req, res) ->
 	res.send "PUT /perfil", 'Content-Type': 'text/plain'
-
-
-app.get '/login', (req, res) ->
-	if (req.isAuthenticated())
-		return res.redirect '/'
-	
-	res.render 'login'
-	# res.send "GET /login", 'Content-Type': 'text/plain'
-
-
-app.post '/login', passport.authenticate('local', failureRedirect: '/login'), (req, res) ->
-	flash = req.flash('auth_redirect')
-	url = if _.size flash then _.first flash else '/'
-	res.redirect url
-
-
-app.get '/logout', (req, res) ->
-	req.logout()
-	res.redirect '/'
-	# res.send "GET /perfil", 'Content-Type': 'text/plain'
-
-
-app.get '/registro', (req, res) ->
-	res.send "GET /registro", 'Content-Type': 'text/plain'
-
-
-app.post '/registro', (req, res) ->
-	res.send "POST /registro", 'Content-Type': 'text/plain'
 
 
 app.get '/tweets', middleware.auth, (req, res) ->

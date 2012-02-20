@@ -1,0 +1,10 @@
+!= partial('_breadcrumb')
+
+hr
+
+nav#content
+	ul
+		- for (i in tags)
+			- tag = tags[i]
+			li
+				a( href="/tags/#{tag.slug}" )= tag.name

@@ -66,6 +66,7 @@
     app.set('views', __dirname + '/public/templates');
     app.set('view engine', 'jade');
     app.set('strict routing', true);
+    app.use(express.favicon());
     oneYear = 31556926000;
     app.use(express.static(__dirname + '/public', {
       maxAge: oneYear
@@ -109,8 +110,8 @@
     paged: function(path) {
       return function(req, res, next) {
         var i, page, path_var, path_vars, redirection;
-        redirection = path + '';
-        path_vars = _.filter(path.split('/'), function(i) {
+        redirection = path.replace('?', '');
+        path_vars = _.filter(redirection.split('/'), function(i) {
           return i.charAt(0) === ':';
         });
         for (path_var in path_vars) {
@@ -119,7 +120,10 @@
         }
         page = parseInt(req.param('page', 1));
         res.local('page', page);
-        if (page === 1) return res.redirect(redirection, 301);
+        if (page === 1) {
+          console.log(redirection);
+          return res.redirect(redirection, 301);
+        }
         return middleware.hmvc(path)(req, res, next);
       };
     },
@@ -199,45 +203,25 @@
     res.locals({
       _: underscore,
       body_class: '',
+      url: req.originalUrl,
       user: req.isAuthenticated() ? req.user : null,
-      page: parseInt(req.param('page', 1))
+      page: 1
     });
     res.locals(helpers);
     return next('route');
   });
 
-  app.get('/', middleware.hmvc('/fotos'));
+  app.get('/', middleware.hmvc('/fotos/:sort?'));
 
   app.get('/fotos/:user/:slug', function(req, res) {
-    res.local('body_class', 'single');
+    res.locals({
+      body_class: 'single',
+      photo: {
+        user: req.param('user'),
+        slug: req.param('slug')
+      }
+    });
     return res.render('gallery_single');
-  });
-
-  app.get('/fotos/:user/:slug/editar', middleware.auth, function(req, res) {
-    var slug, user;
-    user = req.param('user');
-    slug = req.param('slug');
-    return res.send("PUT /fotos/" + user + "/" + slug + "/editar", {
-      'Content-Type': 'text/plain'
-    });
-  });
-
-  app.put('/fotos/:user/:slug', middleware.auth, function(req, res) {
-    var slug, user;
-    user = req.param('user');
-    slug = req.param('slug');
-    return res.send("PUT /fotos/" + user + "/" + slug, {
-      'Content-Type': 'text/plain'
-    });
-  });
-
-  app["delete"]('/fotos/:user/:slug', middleware.auth, function(req, res) {
-    var slug, user;
-    user = req.param('user');
-    slug = req.param('slug');
-    return res.send("DELETE /fotos/" + user + "/" + slug, {
-      'Content-Type': 'text/plain'
-    });
   });
 
   app.get('/fotos/:user/:slug/sizes/:size', function(req, res) {
@@ -250,34 +234,20 @@
     return res.render('gallery');
   });
 
-  app.get('/fotos/publicar', middleware.auth, function(req, res) {
-    return res.render('gallery_upload');
+  app.get('/fotos/:sort/pag/:page?', middleware.paged('/fotos/:sort?'));
+
+  app.get('/fotos/ultimas', function(req, res) {
+    return res.redirect('/fotos', 301);
   });
 
-  app.post('/fotos/publicar', middleware.auth, function(req, res) {
-    return res.send("POST /fotos/publicar", {
-      'Content-Type': 'text/plain'
-    });
-  });
-
-  app.get('/fotos/:sort/pag/:page?', middleware.paged('/fotos/:sort'));
-
-  app.get('/fotos/:sort', function(req, res, next) {
+  app.get('/fotos/:sort?', function(req, res, next) {
     var sort;
-    sort = req.params.sort;
+    sort = req.param('sort', 'ultimas');
     res.locals({
       sort: sort,
       path: "/fotos/" + sort,
       body_class: "gallery liquid " + sort
     });
-    return res.render('gallery');
-  });
-
-  app.get('/fotos/pag/:page?', middleware.paged('/fotos'));
-
-  app.get('/fotos', function(req, res) {
-    res.local('path', '/fotos');
-    res.local('body_class', 'gallery liquid');
     return res.render('gallery');
   });
 
@@ -294,18 +264,6 @@
 
   app.get('/tags', function(req, res) {
     return res.send("GET /tags", {
-      'Content-Type': 'text/plain'
-    });
-  });
-
-  app.get('/perfil', middleware.auth, function(req, res) {
-    return res.send("GET /perfil", {
-      'Content-Type': 'text/plain'
-    });
-  });
-
-  app.put('/perfil', middleware.auth, function(req, res) {
-    return res.send("PUT /perfil", {
       'Content-Type': 'text/plain'
     });
   });
@@ -337,6 +295,55 @@
 
   app.post('/registro', function(req, res) {
     return res.send("POST /registro", {
+      'Content-Type': 'text/plain'
+    });
+  });
+
+  app.get('/fotos/publicar', middleware.auth, function(req, res) {
+    return res.render('gallery_upload');
+  });
+
+  app.post('/fotos/publicar', middleware.auth, function(req, res) {
+    return res.send("POST /fotos/publicar", {
+      'Content-Type': 'text/plain'
+    });
+  });
+
+  app.get('/fotos/:user/:slug/editar', middleware.auth, function(req, res) {
+    var slug, user;
+    user = req.param('user');
+    slug = req.param('slug');
+    return res.send("PUT /fotos/" + user + "/" + slug + "/editar", {
+      'Content-Type': 'text/plain'
+    });
+  });
+
+  app.put('/fotos/:user/:slug', middleware.auth, function(req, res) {
+    var slug, user;
+    user = req.param('user');
+    slug = req.param('slug');
+    return res.send("PUT /fotos/" + user + "/" + slug, {
+      'Content-Type': 'text/plain'
+    });
+  });
+
+  app["delete"]('/fotos/:user/:slug', middleware.auth, function(req, res) {
+    var slug, user;
+    user = req.param('user');
+    slug = req.param('slug');
+    return res.send("DELETE /fotos/" + user + "/" + slug, {
+      'Content-Type': 'text/plain'
+    });
+  });
+
+  app.get('/perfil', middleware.auth, function(req, res) {
+    return res.send("GET /perfil", {
+      'Content-Type': 'text/plain'
+    });
+  });
+
+  app.put('/perfil', middleware.auth, function(req, res) {
+    return res.send("PUT /perfil", {
       'Content-Type': 'text/plain'
     });
   });
