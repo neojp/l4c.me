@@ -1,5 +1,5 @@
 (function() {
-  var CommentSchema, Email, LocalStrategy, ObjectId, Photo, PhotoSchema, Schema, Tag, TagSchema, Url, User, UserSchema, app, express, helpers, middleware, mongoose, mongooseTypes, passport, underscore, users, _;
+  var CommentSchema, Email, LocalStrategy, ObjectId, Photo, PhotoSchema, Schema, Tag, TagSchema, Url, User, UserSchema, app, express, helpers, middleware, mongoose, mongooseTypes, passport, underscore, _;
 
   express = require('express');
 
@@ -134,26 +134,6 @@
   passport = require('passport');
 
   LocalStrategy = require('passport-local').Strategy;
-
-  users = [
-    {
-      id: 1337,
-      username: 'neojp',
-      password: 'password'
-    }, {
-      id: 666,
-      username: 'freddier',
-      password: 'password'
-    }, {
-      id: 161803399,
-      username: 'maikel',
-      password: 'password'
-    }, {
-      id: 123,
-      username: 'leonidas',
-      password: 'password'
-    }
-  ];
 
   passport.serializeUser(function(user, next) {
     return next(null, user.username);
