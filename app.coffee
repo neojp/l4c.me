@@ -1,12 +1,109 @@
 # Module dependencies
-express = require('express')
-_ = underscore = require('underscore')
+express = require 'express'
+_ = underscore = require 'underscore'
 app = module.exports = express.createServer()
-passport = require('passport')
-LocalStrategy = require('passport-local').Strategy
+
+
+# Mongoose configuration
+mongoose = require 'mongoose'
+mongooseTypes = require 'mongoose-types'
+mongooseTypes.loadTypes mongoose
+mongoose.connect 'mongodb://localhost/l4c'
+Schema = mongoose.Schema
+ObjectId = Schema.ObjectId
+Email = mongoose.SchemaTypes.Email
+Url = mongoose.SchemaTypes.Url
+
+UserSchema = new Schema
+	_photos: [
+		type: ObjectId
+		ref: 'Photo'
+	]
+	clab: String
+	created_at:
+		default: Date.now
+		type: Date
+	email:
+		lowercase: true
+		required: true
+		type: Email,
+		unique: true
+	password:
+		required: true
+		type: String
+	username:
+		lowercase: true
+		required: true
+		type: String
+		unique: true
+
+
+CommentSchema = new Schema
+	_user: [
+		type: ObjectId
+		ref: 'User'
+		required: true
+	]
+	body:
+		type: String
+		required: true
+	created_at:
+		default: Date.now
+		type: Date
+
+
+PhotoSchema = new Schema
+	_tags: [
+		type: ObjectId
+		ref: 'Tag'
+	]
+	_user: [
+		type: ObjectId
+		ref: 'User'
+		required: true
+	]
+	comments: [ CommentSchema ]
+	created_at:
+		default: Date.now
+		required: true
+		type: Date
+	description: String
+	name:
+		required: true
+		type: String
+	sizes:
+		m: String
+		s: String
+		o: String
+	slug:
+		required: true
+		type: String
+		unique: true
+	views:
+		default: 0
+		type: Number
+
+
+TagSchema = new Schema
+	count:
+		default: 0
+		type: Number
+	name:
+		lowercase: true
+		type: String
+		required: true
+		unique: true
+
+
+Photo = mongoose.model 'Photo', PhotoSchema
+Tag = mongoose.model 'Tag', TagSchema
+User  = mongoose.model 'User', UserSchema
 
 
 # Passport configuration
+passport = require 'passport'
+LocalStrategy = require('passport-local').Strategy
+
 users = [
 		id: 1337
 		username: 'neojp',
@@ -27,24 +124,25 @@ users = [
 
 
 passport.serializeUser (user, next) ->
-	next null, user.id
+	next null, user.username
 
 
-passport.deserializeUser (id, next) ->
-	user = _.filter users, (i) -> i.id == id
-	if _.size user
-		next null, _.first user
-	else
-		next null, false
+passport.deserializeUser (username, next) ->
+	model = mongoose.model('User')
+	model.findOne username: username, (err, doc) ->
+		return next null, false if err
+		next null, doc
 
 
 passport.use new LocalStrategy (username, password, next) ->
-	process.nextTick () ->
-		user = _.filter users, (i) -> i.username == username && i.password == password
-		if _.size user
-			next null, _.first user
-		else
-			next null, false
+	model = mongoose.model 'User'
+	console.log 'local strategy', username, password, model
+	model.findOne
+			username: username
+			password: password
+		, (err, doc) ->
+			return next err, false if err
+			next null, doc
 
 
 # Express configuration
@@ -78,7 +176,6 @@ middleware =
 		if req.isAuthenticated()
 			return next()
 		
-		# console.log req.originalUrl
 		req.flash 'auth_redirect', req.originalUrl
 		res.redirect('/login')
 	
@@ -106,7 +203,6 @@ middleware =
 		res.local 'page', page
 		
 		if page == 1
-			console.log redirection
 			return res.redirect redirection, 301
 		
 		middleware.hmvc(path)(req, res, next)
@@ -266,11 +362,23 @@ app.get '/logout', (req, res) ->
 
 
 app.get '/registro', (req, res) ->
-	res.send "GET /registro", 'Content-Type': 'text/plain'
+	res.render 'register'
 
 
 app.post '/registro', (req, res) ->
-	res.send "POST /registro", 'Content-Type': 'text/plain'
+	d = req.body
+	model = mongoose.model 'User'
+	
+	u = new model
+	u.clab = d.clab
+	u.email = d.email
+	u.password = d.password
+	u.username = d.username
+	u.save (err) ->
+		throw new Error err if err
+		res.redirect "/perfil"
+
+	# res.send "POST /registro \n #{req.body}", 'Content-Type': 'text/plain'
 
 
 # Logged in user routes

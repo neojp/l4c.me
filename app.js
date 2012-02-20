@@ -1,11 +1,135 @@
 (function() {
-  var LocalStrategy, app, express, helpers, middleware, passport, underscore, users, _;
+  var CommentSchema, Email, LocalStrategy, ObjectId, Photo, PhotoSchema, Schema, Tag, TagSchema, Url, User, UserSchema, app, express, helpers, middleware, mongoose, mongooseTypes, passport, underscore, users, _;
 
   express = require('express');
 
   _ = underscore = require('underscore');
 
   app = module.exports = express.createServer();
+
+  mongoose = require('mongoose');
+
+  mongooseTypes = require('mongoose-types');
+
+  mongooseTypes.loadTypes(mongoose);
+
+  mongoose.connect('mongodb://localhost/l4c');
+
+  Schema = mongoose.Schema;
+
+  ObjectId = Schema.ObjectId;
+
+  Email = mongoose.SchemaTypes.Email;
+
+  Url = mongoose.SchemaTypes.Url;
+
+  UserSchema = new Schema({
+    _photos: [
+      {
+        type: ObjectId,
+        ref: 'Photo'
+      }
+    ],
+    clab: String,
+    created_at: {
+      "default": Date.now,
+      type: Date
+    },
+    email: {
+      lowercase: true,
+      required: true,
+      type: Email,
+      unique: true
+    },
+    password: {
+      required: true,
+      type: String
+    },
+    username: {
+      lowercase: true,
+      required: true,
+      type: String,
+      unique: true
+    }
+  });
+
+  CommentSchema = new Schema({
+    _user: [
+      {
+        type: ObjectId,
+        ref: 'User',
+        required: true
+      }
+    ],
+    body: {
+      type: String,
+      required: true
+    },
+    created_at: {
+      "default": Date.now,
+      type: Date
+    }
+  });
+
+  PhotoSchema = new Schema({
+    _tags: [
+      {
+        type: ObjectId,
+        ref: 'Tag'
+      }
+    ],
+    _user: [
+      {
+        type: ObjectId,
+        ref: 'User',
+        required: true
+      }
+    ],
+    comments: [CommentSchema],
+    created_at: {
+      "default": Date.now,
+      required: true,
+      type: Date
+    },
+    description: String,
+    name: {
+      required: true,
+      type: String
+    },
+    sizes: {
+      m: String,
+      s: String,
+      o: String
+    },
+    slug: {
+      required: true,
+      type: String,
+      unique: true
+    },
+    views: {
+      "default": 0,
+      type: Number
+    }
+  });
+
+  TagSchema = new Schema({
+    count: {
+      "default": 0,
+      type: Number
+    },
+    name: {
+      lowercase: true,
+      type: String,
+      required: true,
+      unique: true
+    }
+  });
+
+  Photo = mongoose.model('Photo', PhotoSchema);
+
+  Tag = mongoose.model('Tag', TagSchema);
+
+  User = mongoose.model('User', UserSchema);
 
   passport = require('passport');
 
@@ -32,32 +156,30 @@
   ];
 
   passport.serializeUser(function(user, next) {
-    return next(null, user.id);
+    return next(null, user.username);
   });
 
-  passport.deserializeUser(function(id, next) {
-    var user;
-    user = _.filter(users, function(i) {
-      return i.id === id;
+  passport.deserializeUser(function(username, next) {
+    var model;
+    model = mongoose.model('User');
+    return model.findOne({
+      username: username
+    }, function(err, doc) {
+      if (err) return next(null, false);
+      return next(null, doc);
     });
-    if (_.size(user)) {
-      return next(null, _.first(user));
-    } else {
-      return next(null, false);
-    }
   });
 
   passport.use(new LocalStrategy(function(username, password, next) {
-    return process.nextTick(function() {
-      var user;
-      user = _.filter(users, function(i) {
-        return i.username === username && i.password === password;
-      });
-      if (_.size(user)) {
-        return next(null, _.first(user));
-      } else {
-        return next(null, false);
-      }
+    var model;
+    model = mongoose.model('User');
+    console.log('local strategy', username, password, model);
+    return model.findOne({
+      username: username,
+      password: password
+    }, function(err, doc) {
+      if (err) return next(err, false);
+      return next(null, doc);
     });
   }));
 
@@ -120,10 +242,7 @@
         }
         page = parseInt(req.param('page', 1));
         res.local('page', page);
-        if (page === 1) {
-          console.log(redirection);
-          return res.redirect(redirection, 301);
-        }
+        if (page === 1) return res.redirect(redirection, 301);
         return middleware.hmvc(path)(req, res, next);
       };
     },
@@ -288,14 +407,21 @@
   });
 
   app.get('/registro', function(req, res) {
-    return res.send("GET /registro", {
-      'Content-Type': 'text/plain'
-    });
+    return res.render('register');
   });
 
   app.post('/registro', function(req, res) {
-    return res.send("POST /registro", {
-      'Content-Type': 'text/plain'
+    var d, model, u;
+    d = req.body;
+    model = mongoose.model('User');
+    u = new model;
+    u.clab = d.clab;
+    u.email = d.email;
+    u.password = d.password;
+    u.username = d.username;
+    return u.save(function(err) {
+      if (err) throw new Error(err);
+      return res.redirect("/perfil");
     });
   });
 
