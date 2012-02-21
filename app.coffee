@@ -262,26 +262,32 @@ app.post '/fotos/publicar', middleware.auth, (req, res, next) ->
 	user = req.user
 	name = req.body.name
 	description = req.body.description
-	tags = req.body.tags
+
+	extensions =
+		'image/jpeg': 'jpg'
+		'image/pjpeg': 'jpg'
+		'image/gif': 'gif'
+		'image/png': 'png'
+
 	file = req.files.file
+	file_ext = extensions[file.type]
+
 
 	photo = new model.photo
 	photo.name = name
 	photo.description = description if description && description != ''
+	photo.ext = file_ext
 	photo._user = user._id
 	photo.save (err) ->
 		return next err if err
 
-		res.redirect "/fotos/#{user.username}/#{photo.slug}"
+		# redirect
+		photo.set_slug (photo_slug) ->
+			res.redirect "/fotos/#{user.username}/#{photo_slug}"
 
-		extensions =
-			'image/jpeg': 'jpg'
-			'image/pjpeg': 'jpg'
-			'image/gif': 'gif'
-			'image/png': 'png'
-		
+
+		# image upload & manipulation
 		id = photo._id
-		file_ext = extensions[file.type]
 		file_path = "public/uploads/#{id}_o.#{file_ext}"
 		
 		# move file from /tmp to /public/uploads
@@ -303,18 +309,57 @@ app.post '/fotos/publicar', middleware.auth, (req, res, next) ->
 					width: 190
 				t:
 					action: 'crop'
-					height: 100
-					width: 75
+					height: 75
+					width: 100
 		
-			# resize image 4 times async, no need to wait for a callback
+			# resize image 4 times async, save filename once it's done
 			for size, i of sizes
-				im[i.action]
-					dstPath: "public/uploads/#{id}_#{size}.#{file_ext}"
-					format: file_ext
-					height: i.height
-					srcPath: file_path
-					width: i.width
-				, (err, stdout, stderr) ->
+				filename = "#{id}_#{size}.#{file_ext}"
+				((size, i, filename) ->
+					im[i.action]
+						dstPath: "public/uploads/#{filename}"
+						format: file_ext
+						height: i.height
+						srcPath: file_path
+						width: i.width
+					, (err, stdout, stderr) ->
+						# photo.sizes[size] = filename
+						# photo.save()
+				)(size, i, filename)
+		
+
+		# tags
+		tags = []
+		tag_list = req.body.tags.split ' '
+		tags_count = tag_list.length
+
+		for tag, i in tag_list
+			tag_name = tag.toLowerCase()
+
+			((tag_name, i) ->
+				model.tag.findOne name: tag_name, (err, tag) ->
+					return next err if err
+
+					if tag
+						tag.count = tag.count + 1
+						tag.save (err) ->
+							tags.push tag
+
+							if i == tags_count - 1
+								photo._tags = _.pluck tags, '_id'
+								photo.save()
+					else
+						tag = new model.tag
+						tag.name = tag_name
+						tag.count = 1
+						tag.save (err) ->
+							tags.push tag
+
+							if i == tags_count - 1
+								photo._tags = _.pluck tags, '_id'
+								photo.save()
+			)(tag_name, i)
+
 
 
 app.get '/fotos/:user/:slug/editar', middleware.auth, (req, res) ->

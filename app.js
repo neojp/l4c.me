@@ -285,31 +285,33 @@ app.get('/fotos/publicar', middleware.auth, function(req, res) {
 });
 
 app.post('/fotos/publicar', middleware.auth, function(req, res, next) {
-  var description, file, name, photo, tags, user;
+  var description, extensions, file, file_ext, name, photo, user;
   user = req.user;
   name = req.body.name;
   description = req.body.description;
-  tags = req.body.tags;
+  extensions = {
+    'image/jpeg': 'jpg',
+    'image/pjpeg': 'jpg',
+    'image/gif': 'gif',
+    'image/png': 'png'
+  };
   file = req.files.file;
+  file_ext = extensions[file.type];
   photo = new model.photo;
   photo.name = name;
   if (description && description !== '') photo.description = description;
+  photo.ext = file_ext;
   photo._user = user._id;
   return photo.save(function(err) {
-    var extensions, file_ext, file_path, id;
+    var file_path, i, id, tag, tag_list, tag_name, tags, tags_count, _len, _results;
     if (err) return next(err);
-    res.redirect("/fotos/" + user.username + "/" + photo.slug);
-    extensions = {
-      'image/jpeg': 'jpg',
-      'image/pjpeg': 'jpg',
-      'image/gif': 'gif',
-      'image/png': 'png'
-    };
+    photo.set_slug(function(photo_slug) {
+      return res.redirect("/fotos/" + user.username + "/" + photo_slug);
+    });
     id = photo._id;
-    file_ext = extensions[file.type];
     file_path = "public/uploads/" + id + "_o." + file_ext;
-    return fs.rename(file.path, "" + __dirname + "/" + file_path, function(err) {
-      var i, size, sizes, _results;
+    fs.rename(file.path, "" + __dirname + "/" + file_path, function(err) {
+      var filename, i, size, sizes, _results;
       if (err) return next(err);
       sizes = {
         l: {
@@ -329,23 +331,63 @@ app.post('/fotos/publicar', middleware.auth, function(req, res, next) {
         },
         t: {
           action: 'crop',
-          height: 100,
-          width: 75
+          height: 75,
+          width: 100
         }
       };
       _results = [];
       for (size in sizes) {
         i = sizes[size];
-        _results.push(im[i.action]({
-          dstPath: "public/uploads/" + id + "_" + size + "." + file_ext,
-          format: file_ext,
-          height: i.height,
-          srcPath: file_path,
-          width: i.width
-        }, function(err, stdout, stderr) {}));
+        filename = "" + id + "_" + size + "." + file_ext;
+        _results.push((function(size, i, filename) {
+          return im[i.action]({
+            dstPath: "public/uploads/" + filename,
+            format: file_ext,
+            height: i.height,
+            srcPath: file_path,
+            width: i.width
+          }, function(err, stdout, stderr) {});
+        })(size, i, filename));
       }
       return _results;
     });
+    tags = [];
+    tag_list = req.body.tags.split(' ');
+    tags_count = tag_list.length;
+    _results = [];
+    for (i = 0, _len = tag_list.length; i < _len; i++) {
+      tag = tag_list[i];
+      tag_name = tag.toLowerCase();
+      _results.push((function(tag_name, i) {
+        return model.tag.findOne({
+          name: tag_name
+        }, function(err, tag) {
+          if (err) return next(err);
+          if (tag) {
+            tag.count = tag.count + 1;
+            return tag.save(function(err) {
+              tags.push(tag);
+              if (i === tags_count - 1) {
+                photo._tags = _.pluck(tags, '_id');
+                return photo.save();
+              }
+            });
+          } else {
+            tag = new model.tag;
+            tag.name = tag_name;
+            tag.count = 1;
+            return tag.save(function(err) {
+              tags.push(tag);
+              if (i === tags_count - 1) {
+                photo._tags = _.pluck(tags, '_id');
+                return photo.save();
+              }
+            });
+          }
+        });
+      })(tag_name, i));
+    }
+    return _results;
   });
 });
 

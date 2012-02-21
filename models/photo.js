@@ -1,40 +1,45 @@
-var ObjectId, Schema, comment, helper, middleware, model, mongoose, photo;
+var ObjectId, Schema, comment, helper, methods, model, mongoose, photo, underscore, _;
 
 mongoose = require('mongoose');
 
 helper = require('../helpers');
 
+_ = underscore = require('underscore');
+
 Schema = mongoose.Schema;
 
 ObjectId = Schema.ObjectId;
 
-middleware = {
-  pre_slug: function(next) {
-    var doc, i, new_slug, slug, _ref;
+methods = {
+  set_slug: function(next) {
+    var doc, i, new_slug, slug;
     doc = this;
-    slug = (_ref = doc.slug) != null ? _ref : helper.slugify(doc.name);
+    slug = helper.slugify(doc.name);
     new_slug = slug + '';
     i = 1;
     return model.count({
-      slug: slug
+      slug: new_slug
     }, function(err, count) {
       var slug_lookup;
-      if (!count) {
-        doc.slug = slug;
-        return next();
+      if (count === 0) {
+        doc.slug = new_slug;
+        return next(new_slug);
+      } else {
+        slug_lookup = function(err, count) {
+          if (count === 0) {
+            doc.slug = new_slug;
+            return doc.save(function() {
+              return next(new_slug);
+            });
+          }
+          i++;
+          new_slug = "" + slug + "-" + i;
+          return model.count({
+            slug: new_slug
+          }, slug_lookup);
+        };
+        return slug_lookup(err, count);
       }
-      slug_lookup = function(err, count) {
-        if (!count) {
-          doc.slug = new_slug;
-          return next();
-        }
-        i++;
-        new_slug = "" + slug + "-" + i;
-        return model.count({
-          slug: new_slug
-        }, slug_lookup);
-      };
-      return slug_lookup(err, count);
     });
   }
 };
@@ -76,6 +81,10 @@ photo = new Schema({
     type: Date
   },
   description: String,
+  ext: {
+    type: String,
+    "enum": ['gif', 'jpg', 'png']
+  },
   name: {
     required: true,
     type: String
@@ -90,6 +99,11 @@ photo = new Schema({
   }
 });
 
-photo.pre('save', middleware.pre_slug);
+photo.pre('save', function(next) {
+  if (_.isUndefined(this.slug)) this.slug = this._id;
+  return next();
+});
+
+photo.methods.set_slug = methods.set_slug;
 
 module.exports = model = mongoose.model('photo', photo);

@@ -1,31 +1,33 @@
 mongoose = require 'mongoose'
 helper = require '../helpers'
+_ = underscore = require 'underscore'
 
 Schema = mongoose.Schema
 ObjectId = Schema.ObjectId
 
-middleware = 
-	pre_slug: (next) ->
+methods =
+	set_slug: (next) ->
 		doc = this
-		slug = doc.slug ? helper.slugify doc.name
+		slug = helper.slugify doc.name
 		new_slug = slug + ''
 		i = 1
 
-		model.count slug: slug, (err, count) ->
-			if !count
-				doc.slug = slug
-				return next()
+		model.count slug: new_slug, (err, count) ->
+			if count == 0
+				doc.slug = new_slug
+				return next new_slug
 			
-			slug_lookup = (err, count) ->
-				if !count
-					doc.slug = new_slug
-					return next()
+			else
+				slug_lookup = (err, count) ->
+					if count == 0
+						doc.slug = new_slug
+						return doc.save () -> next new_slug
+					
+					i++
+					new_slug = "#{slug}-#{i}"
+					model.count slug: new_slug, slug_lookup
 				
-				i++
-				new_slug = "#{slug}-#{i}"
-				model.count slug: new_slug, slug_lookup
-			
-			slug_lookup err, count
+				slug_lookup err, count
 
 
 comment = new Schema
@@ -56,6 +58,9 @@ photo = new Schema
 		required: true
 		type: Date
 	description: String
+	ext:
+		type: String
+		enum: ['gif', 'jpg', 'png']
 	name:
 		required: true
 		type: String
@@ -73,6 +78,13 @@ photo = new Schema
 		default: 0
 		type: Number
 
-photo.pre 'save', middleware.pre_slug
+# photo.pre 'save', middleware.pre_slug
+photo.pre 'save', (next) ->
+	if _.isUndefined this.slug
+		this.slug = this._id
+	
+	next()
+
+photo.methods.set_slug = methods.set_slug
 
 module.exports = model = mongoose.model 'photo', photo
