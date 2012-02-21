@@ -1,130 +1,27 @@
 # Module dependencies
 express = require 'express'
 _ = underscore = require 'underscore'
+helper = require './helpers'
 app = module.exports = express.createServer()
-
 
 # Mongoose configuration
 mongoose = require 'mongoose'
-mongooseTypes = require 'mongoose-types'
-mongooseTypes.loadTypes mongoose
 mongoose.connect 'mongodb://localhost/l4c'
-Schema = mongoose.Schema
-ObjectId = Schema.ObjectId
-Email = mongoose.SchemaTypes.Email
-Url = mongoose.SchemaTypes.Url
-
-UserSchema = new Schema
-	_photos: [
-		type: ObjectId
-		ref: 'Photo'
-	]
-	clab: String
-	created_at:
-		default: Date.now
-		type: Date
-	email:
-		lowercase: true
-		required: true
-		type: Email,
-		unique: true
-	password:
-		required: true
-		type: String
-	username:
-		lowercase: true
-		required: true
-		type: String
-		unique: true
-
-
-CommentSchema = new Schema
-	_user: [
-		type: ObjectId
-		ref: 'User'
-		required: true
-	]
-	body:
-		type: String
-		required: true
-	created_at:
-		default: Date.now
-		type: Date
-
-
-PhotoSchema = new Schema
-	_tags: [
-		type: ObjectId
-		ref: 'Tag'
-	]
-	_user: [
-		type: ObjectId
-		ref: 'User'
-		required: true
-	]
-	comments: [ CommentSchema ]
-	created_at:
-		default: Date.now
-		required: true
-		type: Date
-	description: String
-	name:
-		required: true
-		type: String
-	sizes:
-		m: String
-		s: String
-		o: String
-	slug:
-		required: true
-		type: String
-		unique: true
-	views:
-		default: 0
-		type: Number
-
-
-TagSchema = new Schema
-	count:
-		default: 0
-		type: Number
-	name:
-		lowercase: true
-		type: String
-		required: true
-		unique: true
-
-
-Photo = mongoose.model 'Photo', PhotoSchema
-Tag = mongoose.model 'Tag', TagSchema
-User  = mongoose.model 'User', UserSchema
+model = require './models'
 
 
 # Passport configuration
 passport = require 'passport'
 LocalStrategy = require('passport-local').Strategy
 
-
 passport.serializeUser (user, next) ->
 	next null, user.username
 
-
 passport.deserializeUser (username, next) ->
-	model = mongoose.model('User')
-	model.findOne username: username, (err, doc) ->
-		return next null, false if err
-		next null, doc
-
+	model.user.deserialize username, next
 
 passport.use new LocalStrategy (username, password, next) ->
-	model = mongoose.model 'User'
-	console.log 'local strategy', username, password, model
-	model.findOne
-			username: username
-			password: password
-		, (err, doc) ->
-			return next err, false if err
-			next null, doc
+	model.user.login username, password, next
 
 
 # Express configuration
@@ -160,6 +57,12 @@ middleware =
 		
 		req.flash 'auth_redirect', req.originalUrl
 		res.redirect('/login')
+	
+	err: (err, req, res, next) ->
+		if !err && flash = req.flash('err')
+			return next flash, req, res, next
+		
+		next err, req, res, next
 	
 
 	hmvc: (path) -> (req, res, next) ->
@@ -201,32 +104,6 @@ middleware =
 		next()
 
 
-# Helpers
-helpers =
-	slugify: (str) ->
-		str = str.replace /^\s+|\s+$/g, ''
-		str = str.toLowerCase()
-
-		# remove accents, swap ñ for n, etc
-		from = "àáäâèéëêìíïîòóöôùúüûñç®©·/_,:;"
-		to   = "aaaaeeeeiiiioooouuuuncrc------"
-
-		for i, character of from.split ''
-			str = str.replace new RegExp(character, 'g'), to.charAt i
-		
-		# trademark sign
-		str = str.replace new RegExp('™', 'g'), 'tm'
-
-		# remove invalid chars
-		str = str.replace /[^a-z0-9 -]/g, ''
-
-		# collapse whitespace and replace by -
-		str = str.replace /\s+/g, '-'
-		
-		# collapse dashes
-		str = str.replace /-+/g, '-'
-
-
 # Route Params
 app.param 'page', (req, res, next, id) ->
 	if id.match /[0-9]+/
@@ -237,7 +114,7 @@ app.param 'page', (req, res, next, id) ->
 
 
 app.param 'size', (req, res, next, id) ->
-	if id in ['p', 'm', 'o']
+	if id in ['p', 'm', 'l', 'o']
 		next()
 	else
 		return next('route')
@@ -269,11 +146,12 @@ app.all '*', middleware.remove_trailing_slash, (req, res, next) ->
 	res.locals
 		_: underscore
 		body_class: ''
+		document_title: 'L4C.me'
 		url: req.originalUrl
 		user: if req.isAuthenticated() then req.user else null
 		page: 1
 	
-	res.locals helpers
+	res.locals helper
 	next('route')
 
 
@@ -291,12 +169,25 @@ app.get '/fotos/:user/:slug', (req, res) ->
 
 
 app.get '/fotos/:user/:slug/sizes/:size', (req, res) ->
-	res.local 'body_class', 'sizes'
+	res.locals
+		body_class: 'sizes'
+		photo:
+			user: req.param 'user'
+			slug: req.param 'slug'
+		size: req.param 'size'
+	
 	res.render 'gallery_single_large'
 
 
+app.get '/fotos/:user/pag/:page?', middleware.paged('/fotos/:user')
 app.get '/fotos/:user', (req, res) ->
-	res.local 'body_class', 'gallery liquid'
+	user = req.param 'user'
+
+	res.locals
+		body_class: 'gallery liquid'
+		path: "/fotos/#{user}"
+		sort: null
+
 	res.render 'gallery'
 
 
@@ -306,9 +197,9 @@ app.get '/fotos/:sort?', (req, res, next) ->
 	sort = req.param 'sort', 'ultimas'
 	
 	res.locals
-		sort: sort
-		path: "/fotos/#{sort}"
 		body_class: "gallery liquid #{sort}"
+		path: "/fotos/#{sort}"
+		sort: sort
 	
 	res.render 'gallery'
 
@@ -325,42 +216,39 @@ app.get '/tags', (req, res) ->
 	res.send "GET /tags", 'Content-Type': 'text/plain'
 
 
-app.get '/login', (req, res) ->
+app.get '/login', (req, res, next) ->
 	if (req.isAuthenticated())
 		return res.redirect '/'
 	
 	res.render 'login'
 
 
-app.post '/login', passport.authenticate('local', failureRedirect: '/login'), (req, res) ->
+app.post '/login', passport.authenticate('local', failureRedirect: '/login'), (req, res, next) ->
 	flash = req.flash('auth_redirect')
 	url = if _.size flash then _.first flash else '/'
 	res.redirect url
 
 
-app.get '/logout', (req, res) ->
+app.get '/logout', (req, res, next) ->
 	req.logout()
 	res.redirect '/'
 
 
-app.get '/registro', (req, res) ->
+app.get '/registro', (req, res, next) ->
 	res.render 'register'
 
 
-app.post '/registro', (req, res) ->
+app.post '/registro', (req, res, next) ->
 	d = req.body
-	model = mongoose.model 'User'
 	
-	u = new model
-	u.clab = d.clab
+	u = new model.user
+	u.clab = d.clab  if d.clab_boolean == 'yes'
 	u.email = d.email
 	u.password = d.password
 	u.username = d.username
 	u.save (err) ->
-		throw new Error err if err
-		res.redirect "/perfil"
-
-	# res.send "POST /registro \n #{req.body}", 'Content-Type': 'text/plain'
+		return next err if err
+		passport.authenticate('local', successRedirect: '/perfil', failureRedirect: '/')(req, res)
 
 
 # Logged in user routes
@@ -368,8 +256,20 @@ app.get '/fotos/publicar', middleware.auth, (req, res) ->
 	res.render 'gallery_upload'
 
 
-app.post '/fotos/publicar', middleware.auth, (req, res) ->
-	res.send "POST /fotos/publicar", 'Content-Type': 'text/plain'
+app.post '/fotos/publicar', middleware.auth, (req, res, next) ->
+	user = req.user
+	name = req.body.name
+	description = req.body.description
+	tags = req.body.tags
+	file = req.files.file
+
+	photo = new model.photo
+	photo.name = name
+	photo.description = description if description && description != ''
+	photo._user = user._id
+	photo.save (err) ->
+		return next err if err
+		res.redirect "/fotos/#{user.username}/#{photo.slug}"
 
 
 app.get '/fotos/:user/:slug/editar', middleware.auth, (req, res) ->

@@ -12,6 +12,7 @@
     "passport": ">= 0",
     "passport-local": ">= 0",
     "mongoose": ">= 0",
-    "mongoose-types": ">= 0"
+    "mongoose-types": ">= 0",
+    "imagemagick": ">= 0"
   }
 }
