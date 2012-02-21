@@ -2,3 +2,4 @@
 .nodester.rc
 Thumbs.db
 node_modules
+public/uploads/*

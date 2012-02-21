@@ -80,13 +80,6 @@ photo = new Schema({
     required: true,
     type: String
   },
-  sizes: {
-    l: String,
-    m: String,
-    s: String,
-    t: String,
-    o: String
-  },
   slug: {
     type: String,
     unique: true

@@ -3,6 +3,8 @@ express = require 'express'
 _ = underscore = require 'underscore'
 helper = require './helpers'
 app = module.exports = express.createServer()
+im = require 'imagemagick'
+fs = require 'fs'
 
 # Mongoose configuration
 mongoose = require 'mongoose'
@@ -269,7 +271,50 @@ app.post '/fotos/publicar', middleware.auth, (req, res, next) ->
 	photo._user = user._id
 	photo.save (err) ->
 		return next err if err
+
 		res.redirect "/fotos/#{user.username}/#{photo.slug}"
+
+		extensions =
+			'image/jpeg': 'jpg'
+			'image/pjpeg': 'jpg'
+			'image/gif': 'gif'
+			'image/png': 'png'
+		
+		id = photo._id
+		file_ext = extensions[file.type]
+		file_path = "public/uploads/#{id}_o.#{file_ext}"
+		
+		# move file from /tmp to /public/uploads
+		fs.rename file.path, "#{__dirname}/#{file_path}", (err) ->
+			return next err if err
+
+			sizes =
+				l:
+					action: 'resize'
+					height: 728
+					width: 970
+				m:
+					action: 'resize'
+					height: 450
+					width: 600
+				s:
+					action: 'crop'
+					height: 190
+					width: 190
+				t:
+					action: 'crop'
+					height: 100
+					width: 75
+		
+			# resize image 4 times async, no need to wait for a callback
+			for size, i of sizes
+				im[i.action]
+					dstPath: "public/uploads/#{id}_#{size}.#{file_ext}"
+					format: file_ext
+					height: i.height
+					srcPath: file_path
+					width: i.width
+				, (err, stdout, stderr) ->
 
 
 app.get '/fotos/:user/:slug/editar', middleware.auth, (req, res) ->

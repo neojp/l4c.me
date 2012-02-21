@@ -59,12 +59,12 @@ photo = new Schema
 	name:
 		required: true
 		type: String
-	sizes:
-		l: String
-		m: String
-		s: String
-		t: String
-		o: String
+	# sizes:
+	# 	l: String
+	# 	m: String
+	# 	s: String
+	# 	t: String
+	# 	o: String
 	slug:
 		# required: true
 		type: String

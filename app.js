@@ -1,4 +1,4 @@
-var LocalStrategy, app, express, helper, middleware, model, mongoose, passport, underscore, _;
+var LocalStrategy, app, express, fs, helper, im, middleware, model, mongoose, passport, underscore, _;
 
 express = require('express');
 
@@ -7,6 +7,10 @@ _ = underscore = require('underscore');
 helper = require('./helpers');
 
 app = module.exports = express.createServer();
+
+im = require('imagemagick');
+
+fs = require('fs');
 
 mongoose = require('mongoose');
 
@@ -292,8 +296,56 @@ app.post('/fotos/publicar', middleware.auth, function(req, res, next) {
   if (description && description !== '') photo.description = description;
   photo._user = user._id;
   return photo.save(function(err) {
+    var extensions, file_ext, file_path, id;
     if (err) return next(err);
-    return res.redirect("/fotos/" + user.username + "/" + photo.slug);
+    res.redirect("/fotos/" + user.username + "/" + photo.slug);
+    extensions = {
+      'image/jpeg': 'jpg',
+      'image/pjpeg': 'jpg',
+      'image/gif': 'gif',
+      'image/png': 'png'
+    };
+    id = photo._id;
+    file_ext = extensions[file.type];
+    file_path = "public/uploads/" + id + "_o." + file_ext;
+    return fs.rename(file.path, "" + __dirname + "/" + file_path, function(err) {
+      var i, size, sizes, _results;
+      if (err) return next(err);
+      sizes = {
+        l: {
+          action: 'resize',
+          height: 728,
+          width: 970
+        },
+        m: {
+          action: 'resize',
+          height: 450,
+          width: 600
+        },
+        s: {
+          action: 'crop',
+          height: 190,
+          width: 190
+        },
+        t: {
+          action: 'crop',
+          height: 100,
+          width: 75
+        }
+      };
+      _results = [];
+      for (size in sizes) {
+        i = sizes[size];
+        _results.push(im[i.action]({
+          dstPath: "public/uploads/" + id + "_" + size + "." + file_ext,
+          format: file_ext,
+          height: i.height,
+          srcPath: file_path,
+          width: i.width
+        }, function(err, stdout, stderr) {}));
+      }
+      return _results;
+    });
   });
 });
 
