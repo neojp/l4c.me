@@ -240,6 +240,14 @@ app.get('/tags', function(req, res) {
   });
 });
 
+app.get('/feed/:user', function(req, res) {
+  var user;
+  user = req.param('user');
+  return res.send("GET /feed/" + user, {
+    'Content-Type': 'text/plain'
+  });
+});
+
 app.get('/login', function(req, res, next) {
   if (req.isAuthenticated()) return res.redirect('/');
   return res.render('login');

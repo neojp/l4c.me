@@ -218,6 +218,11 @@ app.get '/tags', (req, res) ->
 	res.send "GET /tags", 'Content-Type': 'text/plain'
 
 
+app.get '/feed/:user', (req, res) ->
+	user = req.param 'user'
+	res.send "GET /feed/#{user}", 'Content-Type': 'text/plain'
+
+
 app.get '/login', (req, res, next) ->
 	if (req.isAuthenticated())
 		return res.redirect '/'
