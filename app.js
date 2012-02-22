@@ -1,4 +1,4 @@
-var LocalStrategy, app, express, fs, helper, im, middleware, model, mongoose, passport, underscore, _;
+var LocalStrategy, app, express, fs, helper, im, middleware, model, moment, mongoose, passport, underscore, _;
 
 express = require('express');
 
@@ -11,6 +11,10 @@ app = module.exports = express.createServer();
 im = require('imagemagick');
 
 fs = require('fs');
+
+moment = require('moment');
+
+moment.lang('es');
 
 mongoose = require('mongoose');
 
@@ -171,14 +175,27 @@ app.all('*', middleware.remove_trailing_slash, function(req, res, next) {
 app.get('/', middleware.hmvc('/fotos/:sort?'));
 
 app.get('/fotos/:user/:slug', function(req, res) {
-  res.locals({
-    body_class: 'single',
-    photo: {
-      user: req.param('user'),
-      slug: req.param('slug')
-    }
+  var slug, user;
+  slug = req.param('slug');
+  user = req.param('user');
+  return model.photo.findOne({
+    slug: slug
+  }).populate('_user').run(function(err, photo) {
+    var locals;
+    if (err) res.send("NOT FOUND 404 /fotos/" + user + "/" + slug, 404);
+    photo.views += 1;
+    photo.save();
+    locals = {
+      body_class: 'single',
+      created_at: moment(photo.created_at).fromNow(true),
+      slug: slug,
+      photo: photo,
+      user: user
+    };
+    return res.render('gallery_single', {
+      locals: locals
+    });
   });
-  return res.render('gallery_single');
 });
 
 app.get('/fotos/:user/:slug/sizes/:size', function(req, res) {

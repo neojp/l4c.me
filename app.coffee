@@ -6,6 +6,9 @@ app = module.exports = express.createServer()
 im = require 'imagemagick'
 fs = require 'fs'
 
+moment = require 'moment'
+moment.lang 'es'
+
 # Mongoose configuration
 mongoose = require 'mongoose'
 mongoose.connect 'mongodb://localhost/l4c'
@@ -161,13 +164,27 @@ app.get '/', middleware.hmvc('/fotos/:sort?')
 
 
 app.get '/fotos/:user/:slug', (req, res) ->
-	res.locals
-		body_class: 'single'
-		photo:
-			user: req.param 'user'
-			slug: req.param 'slug'
+	slug = req.param 'slug'
+	user = req.param 'user'
 
-	res.render 'gallery_single'
+	model.photo
+		.findOne( slug: slug )
+		.populate('_user')
+		.run (err, photo) ->
+			if err
+				res.send "NOT FOUND 404 /fotos/#{user}/#{slug}", 404
+
+			photo.views += 1
+			photo.save()
+
+			locals =
+				body_class: 'single'
+				created_at: moment(photo.created_at).fromNow(true)
+				slug: slug
+				photo: photo
+				user: user
+			
+			res.render 'gallery_single', locals: locals
 
 
 app.get '/fotos/:user/:slug/sizes/:size', (req, res) ->
@@ -277,7 +294,6 @@ app.post '/fotos/publicar', middleware.auth, (req, res, next) ->
 	file = req.files.file
 	file_ext = extensions[file.type]
 
-
 	photo = new model.photo
 	photo.name = name
 	photo.description = description if description && description != ''
@@ -294,7 +310,8 @@ app.post '/fotos/publicar', middleware.auth, (req, res, next) ->
 		# image upload & manipulation
 		id = photo._id
 		file_path = "public/uploads/#{id}_o.#{file_ext}"
-		
+
+
 		# move file from /tmp to /public/uploads
 		fs.rename file.path, "#{__dirname}/#{file_path}", (err) ->
 			return next err if err

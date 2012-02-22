@@ -9,10 +9,12 @@
     "jade": ">= 0",
     "stylus": ">= 0",
     "underscore": ">= 0",
+    "underscore.string": ">= 0",
     "passport": ">= 0",
     "passport-local": ">= 0",
     "mongoose": ">= 0",
     "mongoose-types": ">= 0",
-    "imagemagick": ">= 0"
+    "imagemagick": ">= 0",
+    "moment": ">= 0"
   }
 }

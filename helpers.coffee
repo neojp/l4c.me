@@ -1,4 +1,6 @@
 _ = underscore = require 'underscore'
+_.str = underscore.str = require 'underscore.string'
+
 
 module.exports =
 	slugify: (str) ->

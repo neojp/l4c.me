@@ -2,6 +2,8 @@ var underscore, _;
 
 _ = underscore = require('underscore');
 
+_.str = underscore.str = require('underscore.string');
+
 module.exports = {
   slugify: function(str) {
     var character, from, i, to, _ref;

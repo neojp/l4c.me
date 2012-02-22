@@ -2,22 +2,22 @@
 	#content
 		nav.pagination
 			span
-				a.prev( href="/fotos/#{photo.user}/#{photo.slug}" ) Anterior
+				a.prev( href="/fotos/#{user}/#{slug}" ) Anterior
 			
 			span
-				a.next( href="/fotos/#{photo.user}/#{photo.slug}" ) Siguiente
+				a.next( href="/fotos/#{user}/#{slug}" ) Siguiente
 		
 		#img
 			.img
-				a( href="/fotos/#{photo.user}/#{photo.slug}/sizes/o" )
-					img( src= "/images/image_medium.jpg", width=600, height=450 )
+				a( href="/fotos/#{user}/#{slug}/sizes/o" )
+					img( src= "/uploads/#{photo._id}_m.#{photo.ext}" )
 				.icons
-					a.icon-zoom( href="/fotos/#{photo.user}/#{photo.slug}/sizes/o" )
-					- // a.icon-edit( href="/fotos/#{photo.user}/#{photo.slug}/editar" )
+					a.icon-zoom( href="/fotos/#{user}/#{slug}/sizes/o" )
+					- // a.icon-edit( href="/fotos/#{user}/#{slug}/editar" )
 		
 		.img-info
-			h1 Libros y Letras
-			p Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat mattis eros. Nullam malesuada erat ut turpis. Suspendisse urna nibh, viverra non, semper suscipit, posuere a, pede.
+			h1= photo.name
+			p= photo.description
 		
 		#social-bar
 
@@ -25,7 +25,7 @@
 
 		a#comentarios
 		
-		!= partial('_comments', { locals: { img_id: 1337 } })
+		!= partial('_comments', { locals: { photo: photo } })
 
 	
 	#sidebar
@@ -34,23 +34,23 @@
 
 		.widget
 			h2 Otras fotos de 
-				a( href="/fotos/#{photo.user}" ) hCant&eacute; 
-				a.icon-rss( href="/feed/#{photo.user}" ) [RSS]
+				a( href="/fotos/#{user}" )= user
+				a.icon-rss( href="/feed/#{user}" ) [RSS]
 			
 			ul.grid
 				- for ( i in _.range(1,7) )
 					li
-						a( href="/fotos/#{photo.user}/#{photo.slug}" )
-							img( src="/images/image_thumb.jpg" )
+						a( href="/fotos/#{user}/#{slug}" )
+							img( src= "/uploads/#{photo._id}_t.#{photo.ext}" )
 							span.icon-zoom
 			
 			p.alignright
-				a( href="/fotos/hcante" ) Ver galer&iacute;a completa
+				a( href="/fotos/#{user}" ) Ver galer&iacute;a completa
 	
 		.widget
 			h2 Sobre fotograf&iacute;a: 
 				small
-					a.edit-link( href="/fotos/#{photo.user}/#{photo.slug}/editar" ) (Editar)
+					a.edit-link( href="/fotos/#{user}/#{slug}/editar" ) (Editar)
 			
 			.widget-content
 				p.tags Tags: 
@@ -63,9 +63,9 @@
 					a( href="/tags/textos" ) textos
 				
 				p.info Ha sido vista 
-					strong 408 veces. 
+					strong #{photo.views} veces. 
 					| &nbsp; Publicada hace 
-					strong 1 d&iacute;a.
+					strong= created_at
 
 		.widget
 			h2 Otras im&aacute;genes en L4C.me
@@ -73,8 +73,8 @@
 			ul.grid
 				- for ( i in _.range(1,7) )
 					li
-						a( href="/fotos/#{photo.user}/#{photo.slug}" )
-							img( src="/images/image_thumb.jpg" )
+						a( href="/fotos/#{user}/#{slug}" )
+							img( src= "/uploads/#{photo._id}_t.#{photo.ext}" )
 							span.icon-zoom
 			
 			p.alignright
