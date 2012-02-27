@@ -8,22 +8,26 @@ nav.pagination
 		- if (page == 1)
 			a.prev.disabled Anterior
 	
-	- _.each( _.range(1,6), function(i){
+	- _.each( _.range(1, pages + 1), function(i){
 		span
 			- className = (i == page) ? "active" : "";
 			a( href= "#{path}/pag/#{i}", class= className )= i
 	- });
 
-	span.sep ...
+	- /*
+	- if (page > 5)
+		span.sep ...
 
+		span
+			- className = ((pages - 1) == page) ? "active" : "";
+			a( href= "#{path}/pag/#{pages - 1}", class= className )= pages - 1
+		span
+			- className = (pages == page) ? "active" : "";
+			a( href= "#{path}/pag/#{pages}", class= className )= pages
+	- */
+	
 	span
-		- className = (255 == page) ? "active" : "";
-		a( href= "#{path}/pag/255", class= className ) 255
-	span
-		- className = (256 == page) ? "active" : "";
-		a( href= "#{path}/pag/256", class= className ) 256
-	span
-		- if (page < 256)
+		- if (page < pages)
 			a.next( href= "#{path}/pag/#{page+1}" ) Siguiente
 		- else
 			a.next.disabled Siguiente

@@ -1,20 +1,30 @@
-var LocalStrategy, app, express, fs, helper, im, middleware, model, moment, mongoose, passport, underscore, _;
+var LocalStrategy, app, error_handler, express, fs, helpers, http, im, invoke, l4c, middleware, model, mongo_session, mongoose, passport, underscore, _;
+
+http = require('http');
 
 express = require('express');
 
 _ = underscore = require('underscore');
 
-helper = require('./helpers');
+_.str = underscore.str = require('underscore.string');
+
+fs = require('fs');
+
+invoke = require('invoke');
 
 app = module.exports = express.createServer();
 
 im = require('imagemagick');
 
-fs = require('fs');
+l4c = require('./lib');
 
-moment = require('moment');
+helpers = l4c.helpers;
 
-moment.lang('es');
+error_handler = l4c.error_handler;
+
+middleware = l4c.middleware(app);
+
+mongo_session = require('connect-mongo');
 
 mongoose = require('mongoose');
 
@@ -51,72 +61,20 @@ app.configure(function() {
   app.use(express.logger({
     format: ':status ":method :url"'
   }));
-  app.use(express.cookieParser());
   app.use(express.bodyParser());
   app.use(express.methodOverride());
+  app.use(express.cookieParser(helpers.heart));
   app.use(express.session({
-    secret: '♥'
+    secret: helpers.heart,
+    store: new mongo_session({
+      url: 'mongodb://localhost/l4c/sessions'
+    })
   }));
   app.use(passport.initialize());
   app.use(passport.session());
-  return app.use(app.router);
+  app.use(app.router);
+  return app.use(error_handler);
 });
-
-middleware = {
-  auth: function(req, res, next) {
-    if (req.isAuthenticated()) return next();
-    req.flash('auth_redirect', req.originalUrl);
-    return res.redirect('/login');
-  },
-  err: function(err, req, res, next) {
-    var flash;
-    if (!err && (flash = req.flash('err'))) return next(flash, req, res, next);
-    return next(err, req, res, next);
-  },
-  hmvc: function(path) {
-    return function(req, res, next) {
-      var callback, route;
-      route = app.match.get(path);
-      route = _.filter(route, function(i) {
-        return i.path === path;
-      });
-      route = _.first(route);
-      callback = _.last(route.callbacks);
-      if (_.isFunction(callback)) {
-        return callback(req, res);
-      } else {
-        return next('route');
-      }
-    };
-  },
-  paged: function(path) {
-    return function(req, res, next) {
-      var i, page, path_var, path_vars, redirection;
-      redirection = path.replace('?', '');
-      path_vars = _.filter(redirection.split('/'), function(i) {
-        return i.charAt(0) === ':';
-      });
-      for (path_var in path_vars) {
-        i = path_vars[path_var];
-        redirection = redirection.replace(i, req.params[i.substring(1)]);
-      }
-      page = parseInt(req.param('page', 1));
-      res.local('page', page);
-      if (page === 1) return res.redirect(redirection, 301);
-      return middleware.hmvc(path)(req, res, next);
-    };
-  },
-  remove_trailing_slash: function(req, res, next) {
-    var length, url;
-    url = req.originalUrl;
-    length = url.length;
-    if (length > 1 && url.charAt(length - 1) === '/') {
-      url = url.substring(0, length - 1);
-      return res.redirect(url, 301);
-    }
-    return next();
-  }
-};
 
 app.param('page', function(req, res, next, id) {
   if (id.match(/[0-9]+/)) {
@@ -128,7 +86,7 @@ app.param('page', function(req, res, next, id) {
 });
 
 app.param('size', function(req, res, next, id) {
-  if (id === 'p' || id === 'm' || id === 'l' || id === 'o') {
+  if (id === 'p' || id === 'm' || id === 'g' || id === 'o') {
     return next();
   } else {
     return next('route');
@@ -144,7 +102,7 @@ app.param('slug', function(req, res, next, id) {
 });
 
 app.param('sort', function(req, res, next, id) {
-  if (id === 'ultimas' || id === 'top' || id === 'galeria') {
+  if (id === 'ultimas' || id === 'top') {
     return next();
   } else {
     return next('route');
@@ -160,34 +118,36 @@ app.param('user', function(req, res, next, id) {
 });
 
 app.all('*', middleware.remove_trailing_slash, function(req, res, next) {
+  console.log(req.originalUrl);
   res.locals({
     _: underscore,
     body_class: '',
     document_title: 'L4C.me',
-    url: req.originalUrl,
-    user: req.isAuthenticated() ? req.user : null,
-    page: 1
+    original_url: req.originalUrl,
+    logged_user: req.isAuthenticated() ? req.user : null,
+    page: 1,
+    helpers: helpers,
+    photos: []
   });
-  res.locals(helper);
   return next('route');
 });
 
 app.get('/', middleware.hmvc('/fotos/:sort?'));
 
-app.get('/fotos/:user/:slug', function(req, res) {
+app.get('/fotos/:user/:slug', function(req, res, next) {
   var slug, user;
   slug = req.param('slug');
   user = req.param('user');
   return model.photo.findOne({
     slug: slug
-  }).populate('_user').run(function(err, photo) {
+  }).populate('_user').populate('_tags').run(function(err, photo) {
     var locals;
-    if (err) res.send("NOT FOUND 404 /fotos/" + user + "/" + slug, 404);
+    if (err) return next(err);
+    if (photo === null) return next(404);
     photo.views += 1;
     photo.save();
     locals = {
       body_class: 'single',
-      created_at: moment(photo.created_at).fromNow(true),
       slug: slug,
       photo: photo,
       user: user
@@ -199,28 +159,71 @@ app.get('/fotos/:user/:slug', function(req, res) {
 });
 
 app.get('/fotos/:user/:slug/sizes/:size', function(req, res) {
-  res.locals({
-    body_class: 'sizes',
-    photo: {
-      user: req.param('user'),
-      slug: req.param('slug')
-    },
-    size: req.param('size')
+  var slug, user;
+  slug = req.param('slug');
+  user = req.param('user');
+  return model.photo.findOne({
+    slug: slug
+  }).populate('_user').populate('_tags').run(function(err, photo) {
+    var locals;
+    if (err) return next(err);
+    if (photo === null) return next(404);
+    photo.views += 1;
+    photo.save();
+    locals = {
+      body_class: 'single sizes',
+      photo: photo,
+      size: req.param('size'),
+      slug: slug,
+      user: user
+    };
+    return res.render('gallery_single_large', {
+      locals: locals
+    });
   });
-  return res.render('gallery_single_large');
 });
 
 app.get('/fotos/:user/pag/:page?', middleware.paged('/fotos/:user'));
 
-app.get('/fotos/:user', function(req, res) {
-  var user;
-  user = req.param('user');
-  res.locals({
-    body_class: 'gallery liquid',
-    path: "/fotos/" + user,
-    sort: null
+app.get('/fotos/:user', function(req, res, next) {
+  var page, per_page, photos, user, username;
+  username = req.param('user');
+  per_page = helpers.pagination;
+  page = req.param('page', 1);
+  user = null;
+  photos = null;
+  return invoke(function(data, callback) {
+    return model.user.findOne({
+      username: username
+    }, function(err, user) {
+      return callback(err, user);
+    });
+  }).then(function(data, callback) {
+    if (!data) return error_handler(404)(req, res);
+    user = data;
+    return model.photo.count({
+      _user: user._id
+    }, callback);
+  }).and(function(data, callback) {
+    return photos = model.photo.find({
+      _user: user._id
+    }).limit(per_page).skip(per_page * (page - 1)).desc('created_at').populate('_user').run(callback);
+  }).rescue(function(err) {
+    if (err) return next(err);
+  }).end(user, function(data) {
+    var count;
+    count = data[0];
+    photos = data[1];
+    res.locals({
+      body_class: 'gallery liquid',
+      pages: Math.ceil(count / per_page),
+      path: "/fotos/" + user.username,
+      photos: photos,
+      sort: null,
+      total: count
+    });
+    return res.render('gallery');
   });
-  return res.render('gallery');
 });
 
 app.get('/fotos/:sort/pag/:page?', middleware.paged('/fotos/:sort?'));
@@ -230,14 +233,65 @@ app.get('/fotos/ultimas', function(req, res) {
 });
 
 app.get('/fotos/:sort?', function(req, res, next) {
-  var sort;
+  var page, per_page, photos, query, sort;
   sort = req.param('sort', 'ultimas');
-  res.locals({
-    body_class: "gallery liquid " + sort,
-    path: "/fotos/" + sort,
-    sort: sort
+  page = req.param('page', 1);
+  per_page = helpers.pagination;
+  photos = null;
+  query = {};
+  return invoke(function(data, callback) {
+    return model.photo.count(query, callback);
+  }).and(function(data, callback) {
+    photos = model.photo.find(query).limit(per_page).skip(per_page * (page - 1)).populate('_user');
+    if (sort === 'ultimas') photos.desc('created_at');
+    if (sort === 'top') photos.desc('views', 'created_at');
+    return photos.run(callback);
+  }).rescue(function(err) {
+    if (err) return next(err);
+  }).end(null, function(data) {
+    var count;
+    count = data[0];
+    photos = data[1];
+    res.locals({
+      body_class: "gallery liquid " + sort,
+      pages: Math.ceil(count / per_page),
+      path: "/fotos/" + sort,
+      photos: photos,
+      sort: sort,
+      total: count
+    });
+    return res.render('gallery');
   });
-  return res.render('gallery');
+});
+
+app.get('/fotos/galeria/pag/:page?', middleware.paged('/fotos/galeria'));
+
+app.get('/fotos/galeria', function(req, res, next) {
+  var page, per_page, photos, query, sort;
+  sort = 'galeria';
+  page = req.param('page', 1);
+  per_page = helpers.pagination;
+  photos = null;
+  query = {};
+  return invoke(function(data, callback) {
+    return model.photo.count(query, callback);
+  }).and(function(data, callback) {
+    return model.photo.find(query).desc('created_at').limit(per_page).skip(per_page * (page - 1)).populate('_user').run(callback);
+  }).rescue(function(err) {
+    if (err) return next(err);
+  }).end(null, function(data) {
+    var count;
+    count = data[0];
+    photos = data[1];
+    res.locals({
+      body_class: "gallery liquid " + sort,
+      total: Math.ceil(count / per_page),
+      path: "/fotos/" + sort,
+      sort: sort,
+      photos: photos
+    });
+    return res.render('gallery');
+  });
 });
 
 app.get('/tags/:tag/pag/:page?', middleware.paged('/tags/:tag'));
@@ -292,12 +346,17 @@ app.post('/registro', function(req, res, next) {
   var d, u;
   d = req.body;
   u = new model.user;
-  if (d.clab_boolean === 'yes') u.clab = d.clab;
-  u.email = d.email;
-  u.password = d.password;
-  u.username = d.username;
-  return u.save(function(err) {
+  return invoke(function(data, callback) {
+    if (d.clab_boolean === 'yes') u.clab = d.clab;
+    u.email = d.email;
+    u.password = d.password;
+    u.username = d.username;
+    return u.save(function(err) {
+      return callback(err);
+    });
+  }).rescue(function(err) {
     if (err) return next(err);
+  }).end(null, function(data) {
     return passport.authenticate('local', {
       successRedirect: '/perfil',
       failureRedirect: '/'
@@ -310,118 +369,84 @@ app.get('/fotos/publicar', middleware.auth, function(req, res) {
 });
 
 app.post('/fotos/publicar', middleware.auth, function(req, res, next) {
-  var description, extensions, file, file_ext, name, photo, user;
+  var description, file, file_ext, file_path, name, photo, photo_tags, queue, tags, user;
   user = req.user;
   name = req.body.name;
   description = req.body.description;
-  extensions = {
-    'image/jpeg': 'jpg',
-    'image/pjpeg': 'jpg',
-    'image/gif': 'gif',
-    'image/png': 'png'
-  };
+  tags = _.str.trim(req.body.tags);
+  tags = tags.length > 0 ? tags.split(' ') : [];
   file = req.files.file;
-  file_ext = extensions[file.type];
+  file_ext = helpers.image.extensions[file.type];
+  file_path = "";
   photo = new model.photo;
-  photo.name = name;
-  if (description && description !== '') photo.description = description;
-  photo.ext = file_ext;
-  photo._user = user._id;
-  return photo.save(function(err) {
-    var file_path, i, id, tag, tag_list, tag_name, tags, tags_count, _len, _results;
+  photo_tags = [];
+  queue = invoke(function(data, callback) {
+    photo.name = name;
+    if (description && description !== '') photo.description = description;
+    photo.ext = file_ext;
+    photo._user = user._id;
+    return photo.save(function(err) {
+      console.log("photo create - " + name);
+      return callback(err);
+    });
+  }).then(function(data, callback) {
+    return photo.upload_photo(file, callback);
+  }).and(function(data, callback) {
+    return photo.resize_photos(callback);
+  });
+  if (tags.length > 0) {
+    queue.and(function(data, callback) {
+      return photo.set_tags(tags, callback);
+    });
+  }
+  return queue.then(function(data, callback) {
+    return photo.set_slug(function(photo_slug) {
+      console.log("photo set slug - " + photo_slug);
+      return callback(null, photo_slug);
+    });
+  }).rescue(function(err) {
+    console.log("photo error");
     if (err) return next(err);
-    photo.set_slug(function(photo_slug) {
-      return res.redirect("/fotos/" + user.username + "/" + photo_slug);
-    });
-    id = photo._id;
-    file_path = "public/uploads/" + id + "_o." + file_ext;
-    fs.rename(file.path, "" + __dirname + "/" + file_path, function(err) {
-      var filename, i, size, sizes, _results;
-      if (err) return next(err);
-      sizes = {
-        l: {
-          action: 'resize',
-          height: 728,
-          width: 970
-        },
-        m: {
-          action: 'resize',
-          height: 450,
-          width: 600
-        },
-        s: {
-          action: 'crop',
-          height: 190,
-          width: 190
-        },
-        t: {
-          action: 'crop',
-          height: 75,
-          width: 100
-        }
-      };
-      _results = [];
-      for (size in sizes) {
-        i = sizes[size];
-        filename = "" + id + "_" + size + "." + file_ext;
-        _results.push((function(size, i, filename) {
-          return im[i.action]({
-            dstPath: "public/uploads/" + filename,
-            format: file_ext,
-            height: i.height,
-            srcPath: file_path,
-            width: i.width
-          }, function(err, stdout, stderr) {});
-        })(size, i, filename));
-      }
-      return _results;
-    });
-    tags = [];
-    tag_list = req.body.tags.split(' ');
-    tags_count = tag_list.length;
-    _results = [];
-    for (i = 0, _len = tag_list.length; i < _len; i++) {
-      tag = tag_list[i];
-      tag_name = tag.toLowerCase();
-      _results.push((function(tag_name, i) {
-        return model.tag.findOne({
-          name: tag_name
-        }, function(err, tag) {
-          if (err) return next(err);
-          if (tag) {
-            tag.count = tag.count + 1;
-            return tag.save(function(err) {
-              tags.push(tag);
-              if (i === tags_count - 1) {
-                photo._tags = _.pluck(tags, '_id');
-                return photo.save();
-              }
-            });
-          } else {
-            tag = new model.tag;
-            tag.name = tag_name;
-            tag.count = 1;
-            return tag.save(function(err) {
-              tags.push(tag);
-              if (i === tags_count - 1) {
-                photo._tags = _.pluck(tags, '_id');
-                return photo.save();
-              }
-            });
-          }
-        });
-      })(tag_name, i));
-    }
-    return _results;
+  }).end(null, function(photo_slug) {
+    console.log("photo end - redirect");
+    return res.redirect("/fotos/" + user.username + "/" + photo_slug);
   });
 });
 
 app.get('/fotos/:user/:slug/editar', middleware.auth, function(req, res) {
-  var slug, user;
-  user = req.param('user');
+  var photo, slug, user, username;
   slug = req.param('slug');
-  return res.send("PUT /fotos/" + user + "/" + slug + "/editar", {
-    'Content-Type': 'text/plain'
+  username = req.param('user');
+  user = null;
+  photo = null;
+  return invoke(function(data, callback) {
+    return model.user.findOne({
+      username: username
+    }, function(err, user) {
+      return callback(err, user);
+    });
+  }).then(function(data, callback) {
+    if (!data) return error_handler(404)(req, res);
+    user = data;
+    return model.photo.findOne({
+      _user: user._id,
+      slug: slug
+    }).populate('_user').populate('_tags').run(callback);
+  }).then(function(data, callback) {
+    if (!data) photo.resize_photos(404.(req, res));
+    if (!_.isEqual(user._id, req.user._id)) return error_handler(403)(req, res);
+    return photo = data;
+  }).rescue(function(err) {
+    if (err) return next(err);
+  }).end(user, function(data) {
+    res.locals({
+      body_class: 'single edit',
+      path: "/fotos/" + user.username + "/" + photo.slug + "/editar",
+      photo: photo,
+      slug: slug,
+      user: username
+    });
+    return res.render('gallery_single');
   });
 });
 
@@ -460,6 +485,8 @@ app.get('/tweets', middleware.auth, function(req, res) {
     'Content-Type': 'text/plain'
   });
 });
+
+app.all('*', error_handler(404));
 
 if (!module.parent) {
   app.listen(3000);

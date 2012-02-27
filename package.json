@@ -6,6 +6,7 @@
   "engines": { "node": "0.6" },
   "dependencies": {
     "express": ">= 2.4.7",
+    "connect-mongo": ">= 0",
     "jade": ">= 0",
     "stylus": ">= 0",
     "underscore": ">= 0",
@@ -15,6 +16,8 @@
     "mongoose": ">= 0",
     "mongoose-types": ">= 0",
     "imagemagick": ">= 0",
-    "moment": ">= 0"
+    "moment": ">= 0",
+    "invoke": ">= 0",
+    "beautifyjs": ">= 0"
   }
 }

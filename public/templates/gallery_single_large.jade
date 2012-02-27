@@ -1,10 +1,12 @@
+- user = photo._user
+- username = user.username
+
 #content
 	p.nomargin
-		a( href="/fotos/#{photo.user}/#{photo.slug}" ) &laquo;&nbsp;Volver a la fotograf&iacute;a de hCante
+		a( href="/fotos/#{username}/#{photo.slug}" ) &laquo;&nbsp;Volver a la fotograf&iacute;a de #{username}
 	
 	nav#breadcrumb
-		h1 Libros y Letras
-
+		h1= photo.name
 		ul
 			- var className = '';
 		
@@ -16,32 +18,45 @@
 			li( class= className )
 				a( href="/fotos/#{photo.user}/#{photo.slug}/sizes/m" ) Mediana
 			
+			- className = (size == 'g') ? 'active' : '';
+			li( class= className )
+				a( href="/fotos/#{photo.user}/#{photo.slug}/sizes/g" ) Grande
+
 			- className = (size == 'o') ? 'active' : '';
 			li( class= className )
-				a( href="/fotos/#{photo.user}/#{photo.slug}/sizes/o" ) Grande
+				a( href="/fotos/#{photo.user}/#{photo.slug}/sizes/o" ) Original
 
 	#img
 		.img
-			img( src= "/images/image_large.jpg", width=970, height=728 )
+			- if (size == 'o')
+				img( src= "/uploads/#{photo._id}_o.jpg" )
+			- else
+				- size = (size == 'p') ? 's' : size;
+				- size = (size == 'g') ? 'l' : size;
+				- helper_image = helpers.image.sizes[size];
+				img( src= "/uploads/#{photo._id}_#{size}.jpg", width= helper_image.width, height= helper_image.height )
 			- //.icons
 			- //	a.icon-edit( href="/edit/" )
 	
 	.img-info
-		p Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat mattis eros. Nullam malesuada erat ut turpis. Suspendisse urna nibh, viverra non, semper suscipit, posuere a, pede.
+		p= photo.description
 	
-		p.tags Tags: 
-			a( href="/tag/guatemala" ) Guatemala
-			|  
-			a( href="/tag/fotografia" ) fotograf&iacute;a
-			|  
-			a( href="/tag/libro" ) libro
-			| 
-			a( href="/tag/textos" ) textos
+		- if (photo._tags.length > 0)
+			p.tags Tags: 
+				- _.each( photo._tags, function(tag) {
+
+					a( href="/tags/#{tag.name}" )= tag.name 
+					| 
+
+				- });
 		
 		p.info Ha sido vista 
-			strong 408 veces. 
+			- if (photo.views == 1)
+				strong #{photo.views} vez. 
+			- else
+				strong #{photo.views} veces. 
 			| &nbsp; Publicada hace 
-			strong 1 d&iacute;a. 
-		
+			strong= photo.pretty_date
+
 		p
 			a.edit-link( href="/fotos/#{photo.user}/#{photo.slug}/editar" ) (Editar)

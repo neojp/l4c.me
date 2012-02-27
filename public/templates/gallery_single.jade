@@ -53,19 +53,22 @@
 					a.edit-link( href="/fotos/#{user}/#{slug}/editar" ) (Editar)
 			
 			.widget-content
-				p.tags Tags: 
-					a( href="/tags/guatemala" ) Guatemala
-					|  
-					a( href="/tags/fotografia" ) fotograf&iacute;a
-					|  
-					a( href="/tags/libro" ) libro
-					| 
-					a( href="/tags/textos" ) textos
+				- if (photo._tags.length > 0)
+					p.tags Tags: 
+						- _.each( photo._tags, function(tag) {
+
+							a( href="/tags/#{tag.name}" )= tag.name 
+							| 
+
+						- });
 				
 				p.info Ha sido vista 
-					strong #{photo.views} veces. 
+					- if (photo.views == 1)
+						strong #{photo.views} vez. 
+					- else
+						strong #{photo.views} veces. 
 					| &nbsp; Publicada hace 
-					strong= created_at
+					strong= photo.pretty_date
 
 		.widget
 			h2 Otras im&aacute;genes en L4C.me

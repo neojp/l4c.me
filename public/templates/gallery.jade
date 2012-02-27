@@ -6,28 +6,27 @@ hr
 
 #content
 	ul.grid
-		- var a = _.range(1,5), length = 3*4+1;
-		- var u = ['freddier', 'hCanté', 'neojp', 'maikel'];
+		- size = helpers.image.sizes.s
+		- _.each( photos, function(photo) {
+			- user = photo._user;
+			- url = '/fotos/' + user.username + '/' + photo.slug;
 
-		- _.each( _.range(1, length), function(i){
-			- var user = u[ Math.floor(Math.random() * u.length) ];
-			- var user_slug = slugify(user);
-			
 			li
 				div.img
-					a( href= "/fotos/#{user_slug}/flores" )
-						- rand = Math.floor(Math.random() * 4) + 1;
-						img( src= "/images/img_#{rand}.jpg" )
+					a( href= url )
+						img( src= "/uploads/#{photo._id}_#{size.size}.#{photo.ext}", height= size.height, width= size.width )
 						span.icon-zoom
-				
+
 				div.info
 					span.photo-name
-						a.photo( href= "/fotos/#{user_slug}/flores" ) Flores 
-						span.by por 
+						//- a.photo( href= url )= photo.name.replace(/ /g, '&nbsp;') 
+						a.photo( href= url )= photo.views + ':  ' + photo.slug
+						br
+						span.by por&nbsp;
 						strong.username
-							a( href="/fotos/#{user_slug}/" )= user
-					
-					a.comments( href="/fotos/#{user_slug}/flores" ) Comentarios
+							a( href= "/fotos/#{user.username}" )= user.username
+
+					a.comments( href= url ) Comentarios
 
 		- });
 

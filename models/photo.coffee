@@ -1,6 +1,12 @@
 mongoose = require 'mongoose'
-helper = require '../helpers'
+helpers = require '../lib/helpers'
 _ = underscore = require 'underscore'
+im = require 'imagemagick'
+invoke = require 'invoke'
+moment = require 'moment'
+moment.lang 'es'
+model_tag = require './tag'
+fs = require 'fs'
 
 Schema = mongoose.Schema
 ObjectId = Schema.ObjectId
@@ -8,20 +14,24 @@ ObjectId = Schema.ObjectId
 methods =
 	set_slug: (next) ->
 		doc = this
-		slug = helper.slugify doc.name
+		slug = helpers.slugify doc.name
 		new_slug = slug + ''
 		i = 1
 
 		model.count slug: new_slug, (err, count) ->
 			if count == 0
 				doc.slug = new_slug
-				return next new_slug
+				doc.save (err) ->
+					return next err  if err
+					next new_slug
 			
 			else
 				slug_lookup = (err, count) ->
 					if count == 0
 						doc.slug = new_slug
-						return doc.save () -> next new_slug
+						return doc.save (err) ->
+							return next err  if err
+							next doc.slug
 					
 					i++
 					new_slug = "#{slug}-#{i}"
@@ -29,13 +39,109 @@ methods =
 				
 				slug_lookup err, count
 
+	# tags - create tag and update tags count
+	set_tags: (tags, next) ->
+		doc = this
+		queue = null
+		photo_tags = []
+
+		if _.isArray tags
+			tags = tags
+		else if _.isString tags
+			tags = _.str.trim tags
+			tags = if tags.length > 0 then tags.split(' ') else []
+		else if !tags.length
+			return next()
+
+		_.each tags, (tag, index) ->
+			console.log "each tags: ", tag
+			fn = (data, callback) ->
+				tag_name = helpers.slugify tag
+				model_tag.findOne name: tag_name, (err, tag) ->
+					return callback err  if err
+
+					if tag
+						console.log "tag update:start #{tag.name}"
+						tag.count = tag.count + 1
+						tag.save (err) ->
+							console.log "tag update:save #{tag.name}"
+							photo_tags.push tag
+							callback err
+					else
+						console.log "tag create:start #{tag_name}"
+						tag = new model_tag
+						tag.name = tag_name
+						tag.count = 1
+						tag.save (err) ->
+							console.log "tag create:save #{tag.name}"
+							photo_tags.push tag
+							callback err
+			
+			if !index
+				queue = invoke fn
+			else
+				queue.and fn
+
+		queue.then (data, callback) ->
+			return callback()  if !photo_tags.length
+
+			console.log "photo update tags"
+			photo_tags = _.sortBy photo_tags, (tag) -> tag.name
+			doc._tags = _.pluck photo_tags, '_id'
+			doc.save callback
+		
+		queue.rescue next
+		queue.end null, (data) -> next null, photo_tags
+
+	resize_photo: (size, next) ->
+		if _.isString size
+			size = helpers.image.sizes[size]
+		else if _.isObject size
+			size = size
+		else
+			return next new Error 'Image size required'
+
+		doc = this
+		path = "public/uploads/#{doc._id}_#{size.size}.#{doc.ext}"
+
+		im[size.action]
+			dstPath: path
+			format: doc.ext
+			height: size.height
+			srcPath: "public/uploads/#{doc._id}_o.#{doc.ext}"
+			width: size.width
+		, (err, stdout, stderr) ->
+			console.log "photo resize #{size.size}"
+			next err, path
+
+	resize_photos: (next) ->
+		doc = this
+		queue = invoke()
+		index = 0
+		
+		_.each helpers.image.sizes, (size, key) ->
+			if !index
+				queue = invoke (data, callback) -> doc.resize_photo size, callback
+			else
+				queue.and (data, callback) -> doc.resize_photo size, callback
+			
+			index++
+
+		queue.rescue next
+		queue.end null, (data) -> next(null, data)
+
+	upload_photo: (file, next) ->
+		doc = this
+		file_path = "public/uploads/#{doc._id}_o.#{doc.ext}"
+		fs.rename file.path, "#{__dirname}/../#{file_path}", (err) ->
+		# fs.rename file.path, file_path, (err) ->
+			console.log 'photo upload'
+			next err
 
 comment = new Schema
-	_user: [
+	_user:
 		type: ObjectId
 		ref: 'user'
-		required: true
-	]
 	body:
 		type: String
 		required: true
@@ -78,13 +184,20 @@ photo = new Schema
 		default: 0
 		type: Number
 
+# virtual: pretty_date
+photo.virtual('pretty_date').get () -> moment(this.created_at).fromNow(true)
+
 # photo.pre 'save', middleware.pre_slug
-photo.pre 'save', (next) ->
-	if _.isUndefined this.slug
-		this.slug = this._id
+# photo.pre 'save', (next) ->
+# 	if _.isUndefined this.slug
+# 		this.slug = this._id
 	
-	next()
+# 	next()
 
 photo.methods.set_slug = methods.set_slug
+photo.methods.set_tags = methods.set_tags
+photo.methods.resize_photo = methods.resize_photo
+photo.methods.resize_photos = methods.resize_photos
+photo.methods.upload_photo = methods.upload_photo
 
 module.exports = model = mongoose.model 'photo', photo

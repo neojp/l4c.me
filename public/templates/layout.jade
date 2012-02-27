@@ -23,29 +23,29 @@ html( lang="es" )
 						nav
 							- var className = '';
 							ul.menu
-								- className = (url == '/') ? 'active' : '';
+								- className = (original_url == '/') ? 'active' : '';
 								li( class= className )
 									a( href="/" ) Inicio
 								
-								- className = (url == '/fotos/publicar') ? 'active' : '';
+								- className = (original_url == '/fotos/publicar') ? 'active' : '';
 								li( class= className )
 									a( href="/fotos/publicar" ) Subir
 								
-								- if (user)
-									- className = url.indexOf('/fotos/' + user.username) != -1 ? 'active' : '';
+								- if (logged_user)
+									- className = original_url.indexOf('/fotos/' + logged_user.username) != -1 ? 'active' : '';
 									li( class= className )
-										a( href="/fotos/" + user.username ) Mis Fotos
+										a( href="/fotos/" + logged_user.username ) Mis Fotos
 								
-								- className = ((url !== '/' && url !== '/fotos/publicar') && (user && url.indexOf('/fotos/' + user.username) == -1)) ? 'active' : '';
+								- className = ((original_url !== '/' && original_url !== '/fotos/publicar') && (logged_user && original_url.indexOf('/fotos/' + logged_user.username) == -1)) ? 'active' : '';
 								li( class= className )
 									a( href="/fotos" ) Galeria
 						
 						hr.hidden
 
-						- if (user)
+						- if (logged_user)
 							aside
 								p Hola 
-									a.username( href="/perfil/" )= user.username
+									a.username( href= "/fotos/" + logged_user.username )= logged_user.username
 									|, puedes editar tu 
 									a.profile( href="/perfil/" ) perfil
 									|  o 
