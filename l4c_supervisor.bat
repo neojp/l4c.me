@@ -1,0 +1,1 @@
+supervisor --extensions node,js,coffee --watch .,lib,models --exec node app
