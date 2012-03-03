@@ -39,7 +39,7 @@
 			- //	a.icon-edit( href="/edit/" )
 	
 	.img-info
-		p= photo.description
+		!= helpers.markdown(photo.description)
 	
 		- if (photo._tags.length > 0)
 			p.tags Tags: 

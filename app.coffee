@@ -1,26 +1,16 @@
 # Module dependencies
-http = require 'http'
-fs = require 'fs'
-
 _ = underscore = require 'underscore'
 _.str = underscore.str = require 'underscore.string'
 invoke = require 'invoke'
-im = require 'imagemagick'
-
 express = require 'express'
-app = module.exports = express.createServer()
 
 
 # L4C library
-l4c = require './lib'
-helpers = l4c.helpers
-error_handler = l4c.error_handler
-middleware = l4c.middleware(app)
-
-
-# momentjs - pretty dates configuration
-# moment = require 'moment'
-# moment.lang 'es'
+app = module.exports = express.createServer()
+lib = require './lib'
+helpers = lib.helpers
+error_handler = lib.error_handler
+middleware = lib.middleware(app)
 
 
 # Mongoose configuration
@@ -167,16 +157,15 @@ app.get '/fotos/:user/:slug', (req, res, next) ->
 		next err
 
 	.end null, (data) ->
-		console.log data
-
 		res.locals
 			body_class: 'single'
 			photo: photo
 			photos:
 				from_user: data[0]
-				from_everyone: data[1]
+				from_all: data[1]
 			slug: slug
 			user: user
+			username: user.username
 		
 		res.render 'gallery_single'
 
@@ -320,10 +309,11 @@ app.get '/fotos/galeria', (req, res, next) ->
 
 		res.locals
 			body_class: "gallery liquid #{sort}"
-			total: Math.ceil count / per_page
+			pages: Math.ceil count / per_page
 			path: "/fotos/#{sort}"
-			sort: sort
 			photos: photos
+			sort: sort
+			total: count
 
 		res.render 'gallery'
 
@@ -419,6 +409,8 @@ app.post '/comment', (req, res, next) ->
 	.end null, (photo) ->
 		res.redirect "/fotos/#{photo._user.username}/#{photo.slug}#c#{_.last(photo.comments)._id}"
 
+
+app.get '/publicar', (req, res) -> res.redirect '/fotos/publicar'
 app.get '/fotos/publicar', middleware.auth, (req, res) ->
 	res.render 'gallery_upload'
 
@@ -527,7 +519,8 @@ app.delete '/fotos/:user/:slug', middleware.auth, (req, res) ->
 
 
 app.get '/perfil', middleware.auth, (req, res) ->
-	res.send "GET /perfil", 'Content-Type': 'text/plain'
+	res.redirect '/fotos/publicar'
+	# res.send "GET /perfil", 'Content-Type': 'text/plain'
 
 
 app.put '/perfil', middleware.auth, (req, res) ->

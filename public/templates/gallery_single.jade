@@ -2,18 +2,18 @@
 	#content
 		nav.pagination
 			span
-				a.prev( href="/fotos/#{user}/#{slug}" ) Anterior
+				a.prev( href="/fotos/#{username}/#{slug}" ) Anterior
 			
 			span
-				a.next( href="/fotos/#{user}/#{slug}" ) Siguiente
+				a.next( href="/fotos/#{username}/#{slug}" ) Siguiente
 		
 		#img
 			.img
-				a( href="/fotos/#{user}/#{slug}/sizes/o" )
+				a( href="/fotos/#{username}/#{slug}/sizes/o" )
 					img( src= "/uploads/#{photo._id}_m.#{photo.ext}" )
 				.icons
-					a.icon-zoom( href="/fotos/#{user}/#{slug}/sizes/o" )
-					- // a.icon-edit( href="/fotos/#{user}/#{slug}/editar" )
+					a.icon-zoom( href="/fotos/#{username}/#{slug}/sizes/o" )
+					- // a.icon-edit( href="/fotos/#{username}/#{slug}/editar" )
 		
 		.img-info
 			h1= photo.name
@@ -34,23 +34,26 @@
 
 		.widget
 			h2 Otras fotos de 
-				a( href="/fotos/#{user}" )= user
-				a.icon-rss( href="/feed/#{user}" ) [RSS]
+				a( href="/fotos/#{username}" )= user.username
+				a.icon-rss( href="/feed/#{username}" ) [RSS]
 			
+			- var from_user = photos.from_user.length ? photos.from_user : [photo];
 			ul.grid
-				- for ( i in _.range(1,7) )
+				- _.each(from_user, function(photo){
 					li
-						a( href="/fotos/#{user}/#{slug}" )
+						a( href="/fotos/#{username}/#{photo.slug}" )
 							img( src= "/uploads/#{photo._id}_t.#{photo.ext}" )
 							span.icon-zoom
-			
+				- });
+
+
 			p.alignright
-				a( href="/fotos/#{user}" ) Ver galer&iacute;a completa
+				a( href="/fotos/#{username}" ) Ver galer&iacute;a completa
 	
 		.widget
 			h2 Sobre fotograf&iacute;a: 
 				small
-					a.edit-link( href="/fotos/#{user}/#{slug}/editar" ) (Editar)
+					a.edit-link( href="/fotos/#{username}/#{slug}/editar" ) (Editar)
 			
 			.widget-content
 				- if (photo._tags.length > 0)
@@ -70,15 +73,17 @@
 					| &nbsp; Publicada hace 
 					strong= photo.pretty_date
 
-		.widget
-			h2 Otras im&aacute;genes en L4C.me
-			
-			ul.grid
-				- for ( i in _.range(1,7) )
-					li
-						a( href="/fotos/#{user}/#{slug}" )
-							img( src= "/uploads/#{photo._id}_t.#{photo.ext}" )
-							span.icon-zoom
-			
-			p.alignright
-				a( href="/fotos" ) Ver m&aacute;s
+		- if (photos.from_all.length)
+			.widget
+				h2 Otras im&aacute;genes en L4C.me
+				
+				ul.grid
+					- _.each(photos.from_all, function(photo){
+						li
+							a( href="/fotos/#{photo._user.username}/#{photo.slug}" )
+								img( src= "/uploads/#{photo._id}_t.#{photo.ext}" )
+								span.icon-zoom
+					- });
+				
+				p.alignright
+					a( href="/fotos" ) Ver m&aacute;s

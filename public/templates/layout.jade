@@ -17,7 +17,7 @@ html( lang="es" )
 				.wrap
 					p#logo
 						a( href="/", title="L4C.me" )
-							img( src="/images/logo.png", alt="", tabindex="-1", width="96", height="49" )
+							img( src="/images/logo.png", alt="", width="96", height="49" )
 					
 					#nav-aside.clearfix
 						nav
@@ -35,6 +35,11 @@ html( lang="es" )
 									- className = original_url.indexOf('/fotos/' + logged_user.username) != -1 ? 'active' : '';
 									li( class= className )
 										a( href="/fotos/" + logged_user.username ) Mis Fotos
+
+								- else
+									- className = original_url == '/registro' ? 'active' : '';
+									li( class= className )
+										a( href="/registro" ) Registro
 								
 								- className = ((original_url !== '/' && original_url !== '/fotos/publicar') && (logged_user && original_url.indexOf('/fotos/' + logged_user.username) == -1)) ? 'active' : '';
 								li( class= className )
@@ -54,9 +59,9 @@ html( lang="es" )
 							aside
 								form( method="post", action="/login" )
 									p
-										input( type="text", name="username", placeholder="Username", tabindex="1" )
-										input( type="password", name="password", placeholder="Password", tabindex="2" )
-										button( type="submit", tabindex="3" ) Submit
+										input( type="text", name="username", placeholder="Username" )
+										input( type="password", name="password", placeholder="Password" )
+										button( type="submit" ) Submit
 			
 			hr.hidden
 

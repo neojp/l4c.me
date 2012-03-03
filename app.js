@@ -1,8 +1,4 @@
-var LocalStrategy, app, error_handler, express, fs, helpers, http, im, invoke, l4c, middleware, model, mongo_session, mongoose, passport, underscore, _;
-
-http = require('http');
-
-fs = require('fs');
+var LocalStrategy, app, error_handler, express, helpers, invoke, lib, middleware, model, mongo_session, mongoose, passport, underscore, _;
 
 _ = underscore = require('underscore');
 
@@ -10,19 +6,17 @@ _.str = underscore.str = require('underscore.string');
 
 invoke = require('invoke');
 
-im = require('imagemagick');
-
 express = require('express');
 
 app = module.exports = express.createServer();
 
-l4c = require('./lib');
+lib = require('./lib');
 
-helpers = l4c.helpers;
+helpers = lib.helpers;
 
-error_handler = l4c.error_handler;
+error_handler = lib.error_handler;
 
-middleware = l4c.middleware(app);
+middleware = lib.middleware(app);
 
 mongo_session = require('connect-mongo');
 
@@ -166,16 +160,16 @@ app.get('/fotos/:user/:slug', function(req, res, next) {
   }).rescue(function(err) {
     return next(err);
   }).end(null, function(data) {
-    console.log(data);
     res.locals({
       body_class: 'single',
       photo: photo,
       photos: {
         from_user: data[0],
-        from_everyone: data[1]
+        from_all: data[1]
       },
       slug: slug,
-      user: user
+      user: user,
+      username: user.username
     });
     return res.render('gallery_single');
   });
@@ -308,10 +302,11 @@ app.get('/fotos/galeria', function(req, res, next) {
     photos = data[1];
     res.locals({
       body_class: "gallery liquid " + sort,
-      total: Math.ceil(count / per_page),
+      pages: Math.ceil(count / per_page),
       path: "/fotos/" + sort,
+      photos: photos,
       sort: sort,
-      photos: photos
+      total: count
     });
     return res.render('gallery');
   });
@@ -422,6 +417,10 @@ app.post('/comment', function(req, res, next) {
   });
 });
 
+app.get('/publicar', function(req, res) {
+  return res.redirect('/fotos/publicar');
+});
+
 app.get('/fotos/publicar', middleware.auth, function(req, res) {
   return res.render('gallery_upload');
 });
@@ -528,9 +527,7 @@ app["delete"]('/fotos/:user/:slug', middleware.auth, function(req, res) {
 });
 
 app.get('/perfil', middleware.auth, function(req, res) {
-  return res.send("GET /perfil", {
-    'Content-Type': 'text/plain'
-  });
+  return res.redirect('/fotos/publicar');
 });
 
 app.put('/perfil', middleware.auth, function(req, res) {
