@@ -1,8 +1,21 @@
 _ = underscore = require 'underscore'
 _.str = underscore.str = require 'underscore.string'
+gravatar = require 'gravatar'
+
+marked = require 'marked'
+marked.setOptions
+	gfm: true
+	pedantic: false
+	sanitize: true
+
+moment = require 'moment'
+moment.lang 'es'
 
 
 module.exports =
+	gravatar: (email, size) ->
+		gravatar.url email, { s: size }
+
 	heart: '♥'
 
 	image:
@@ -34,7 +47,12 @@ module.exports =
 				size: 't'
 				width: 100
 
-	pagination: 20,
+	markdown: marked
+
+	pagination: 20
+
+	pretty_date: (date) ->
+		moment(date).fromNow(true)
 
 	slugify: (str) ->
 		str = str.replace /^\s+|\s+$/g, ''

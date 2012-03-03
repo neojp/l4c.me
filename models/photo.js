@@ -1,6 +1,10 @@
-var ObjectId, Schema, comment, fs, helpers, im, invoke, methods, model, model_tag, moment, mongoose, photo, underscore, _;
+var Email, ObjectId, Schema, comment, fs, helpers, im, invoke, methods, model, model_tag, mongoose, mongooseTypes, photo, underscore, util, _;
 
 mongoose = require('mongoose');
+
+mongooseTypes = require('mongoose-types');
+
+mongooseTypes.loadTypes(mongoose);
 
 helpers = require('../lib/helpers');
 
@@ -10,17 +14,17 @@ im = require('imagemagick');
 
 invoke = require('invoke');
 
-moment = require('moment');
-
-moment.lang('es');
-
 model_tag = require('./tag');
 
 fs = require('fs');
 
+util = require('util');
+
 Schema = mongoose.Schema;
 
 ObjectId = Schema.ObjectId;
+
+Email = mongoose.SchemaTypes.Email;
 
 methods = {
   set_slug: function(next) {
@@ -75,10 +79,11 @@ methods = {
       var fn;
       console.log("each tags: ", tag);
       fn = function(data, callback) {
-        var tag_name;
-        tag_name = helpers.slugify(tag);
+        var name, slug;
+        name = tag;
+        slug = helpers.slugify(tag);
         return model_tag.findOne({
-          name: tag_name
+          slug: slug
         }, function(err, tag) {
           if (err) return callback(err);
           if (tag) {
@@ -90,9 +95,10 @@ methods = {
               return callback(err);
             });
           } else {
-            console.log("tag create:start " + tag_name);
+            console.log("tag create:start " + name);
             tag = new model_tag;
-            tag.name = tag_name;
+            tag.name = name;
+            tag.slug = slug;
             tag.count = 1;
             return tag.save(function(err) {
               console.log("tag create:save " + tag.name);
@@ -167,13 +173,27 @@ methods = {
     });
   },
   upload_photo: function(file, next) {
-    var doc, file_path;
+    var alternate_upload, doc, upload_path;
+    console.log('photo upload', file.path);
     doc = this;
-    file_path = "public/uploads/" + doc._id + "_o." + doc.ext;
-    return fs.rename(file.path, "" + __dirname + "/../" + file_path, function(err) {
-      console.log('photo upload');
+    upload_path = "" + __dirname + "/../public/uploads/" + doc._id + "_o." + doc.ext;
+    alternate_upload = function(path1, path2) {
+      var origin, upload;
+      origin = fs.createReadStream(path1);
+      upload = fs.createWriteStream(path2);
+      return util.pump(origin, upload, function(err) {
+        return fs.unlink(path1, function(err) {
+          return next(err);
+        });
+      });
+    };
+    return fs.rename(file.path, upload_path, function(err) {
+      if (err) return alternate_upload(file.path, upload_path);
       return next(err);
     });
+  },
+  pretty_date: function() {
+    return helpers.pretty_date(this.created_at);
   }
 };
 
@@ -189,8 +209,18 @@ comment = new Schema({
   created_at: {
     "default": Date.now,
     type: Date
+  },
+  guest: {
+    "default": true,
+    type: Boolean
+  },
+  user: {
+    name: String,
+    email: Email
   }
 });
+
+comment.virtual('pretty_date').get(methods.pretty_date);
 
 photo = new Schema({
   _tags: [
@@ -229,9 +259,7 @@ photo = new Schema({
   }
 });
 
-photo.virtual('pretty_date').get(function() {
-  return moment(this.created_at).fromNow(true);
-});
+photo.virtual('pretty_date').get(methods.pretty_date);
 
 photo.methods.set_slug = methods.set_slug;
 

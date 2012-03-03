@@ -1,7 +1,26 @@
-.comments
+#comments.comments
+	- _.each(photo.comments, function(comment, index, comments){
+		article.comment( id= "c#{comment._id}" )
+			p.comment-author
+				- if (!comment.guest)
+					| Por 
+					a( href="/fotos/#{comment._user.username}" )= comment._user.username
+				- else
+					= comment.user.name
+
+			p.gravatar
+				img( src= helpers.gravatar(comment._user.email, 50) )
+
+			p.comment-date Hace #{comment.pretty_date}
+
+			.comment-body!= helpers.markdown(comment.body)
+	- });
+
+
+#comments-form.comments
 	h2 Comentarios
-	form.clearfix
-		input( type="hidden", name="img_id", value= photo.slug )
+	form.clearfix( method="post", action="/comment" )
+		input( type="hidden", name="photo", value=photo.slug )
 
 		.col.col-1
 			p

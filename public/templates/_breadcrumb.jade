@@ -15,7 +15,8 @@ nav#breadcrumb
 		li( class= className )
 			a( href="/fotos/galeria" ) Galer&iacute;as de Usuarios
 
-		li( class='' )
+		- className = original_url.indexOf('/tags') == 0 ? 'active' : '';
+		li( class= className )
 			a( href="/tags" ) Categorias
 		
 		li#upload

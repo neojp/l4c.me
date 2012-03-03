@@ -1,7 +1,8 @@
 .comments
 	h2 Comentarios
 	form.clearfix
-		input( type="hidden", name="img_id", value= img_id )
+		input( type="hidden", name="photo", value=photo.slug )
+		input( type="hidden", name="user", value=session_user.slug )
 
 		.col.col-1
 			p

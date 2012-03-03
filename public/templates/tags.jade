@@ -8,3 +8,5 @@ nav#content
 			- tag = tags[i]
 			li
 				a( href="/tags/#{tag.slug}" )= tag.name
+				|  
+				small (#{tag.count})

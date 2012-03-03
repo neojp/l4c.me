@@ -12,6 +12,11 @@ tag = new Schema({
   name: {
     lowercase: true,
     type: String,
+    required: true
+  },
+  slug: {
+    lowercase: true,
+    type: String,
     required: true,
     unique: true
   }

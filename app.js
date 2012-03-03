@@ -2,19 +2,19 @@ var LocalStrategy, app, error_handler, express, fs, helpers, http, im, invoke, l
 
 http = require('http');
 
-express = require('express');
+fs = require('fs');
 
 _ = underscore = require('underscore');
 
 _.str = underscore.str = require('underscore.string');
 
-fs = require('fs');
-
 invoke = require('invoke');
 
-app = module.exports = express.createServer();
-
 im = require('imagemagick');
+
+express = require('express');
+
+app = module.exports = express.createServer();
 
 l4c = require('./lib');
 
@@ -49,14 +49,12 @@ passport.use(new LocalStrategy(function(username, password, next) {
 }));
 
 app.configure(function() {
-  var oneYear;
   app.set('views', __dirname + '/public/templates');
   app.set('view engine', 'jade');
   app.set('strict routing', true);
   app.use(express.favicon());
-  oneYear = 31556926000;
   app.use(express.static(__dirname + '/public', {
-    maxAge: oneYear
+    maxAge: 31556926000
   }));
   app.use(express.logger({
     format: ':status ":method :url"'
@@ -73,7 +71,10 @@ app.configure(function() {
   app.use(passport.initialize());
   app.use(passport.session());
   app.use(app.router);
-  return app.use(error_handler);
+  return app.use(express.errorHandler({
+    dumpExceptions: true,
+    showStack: true
+  }));
 });
 
 app.param('page', function(req, res, next, id) {
@@ -81,7 +82,7 @@ app.param('page', function(req, res, next, id) {
     req.param.page = parseInt(req.param.page);
     return next();
   } else {
-    return next(404);
+    return error_handler(404)(req, res);
   }
 });
 
@@ -118,16 +119,17 @@ app.param('user', function(req, res, next, id) {
 });
 
 app.all('*', middleware.remove_trailing_slash, function(req, res, next) {
-  console.log(req.originalUrl);
   res.locals({
     _: underscore,
     body_class: '',
     document_title: 'L4C.me',
-    original_url: req.originalUrl,
-    logged_user: req.isAuthenticated() ? req.user : null,
-    page: 1,
     helpers: helpers,
-    photos: []
+    logged_user: req.isAuthenticated() ? req.user : null,
+    original_url: req.originalUrl,
+    page: 1,
+    photos: [],
+    res: res,
+    sort: null
   });
   return next('route');
 });
@@ -135,26 +137,47 @@ app.all('*', middleware.remove_trailing_slash, function(req, res, next) {
 app.get('/', middleware.hmvc('/fotos/:sort?'));
 
 app.get('/fotos/:user/:slug', function(req, res, next) {
-  var slug, user;
+  var morephotos, myphotos, photo, slug, user, username;
   slug = req.param('slug');
-  user = req.param('user');
-  return model.photo.findOne({
-    slug: slug
-  }).populate('_user').populate('_tags').run(function(err, photo) {
-    var locals;
-    if (err) return next(err);
-    if (photo === null) return next(404);
-    photo.views += 1;
-    photo.save();
-    locals = {
-      body_class: 'single',
-      slug: slug,
-      photo: photo,
-      user: user
-    };
-    return res.render('gallery_single', {
-      locals: locals
+  username = req.param('user');
+  user = null;
+  photo = null;
+  myphotos = [];
+  morephotos = [];
+  return invoke(function(data, callback) {
+    return model.photo.findOne({
+      slug: slug
+    }).populate('_user').populate('_tags').populate('comments._user').run(function(err, data) {
+      if (err) return callback(err);
+      if (!data && data._user.username !== username) {
+        return error_handler(404)(req, res);
+      }
+      user = data._user;
+      photo = data;
+      photo.views += 1;
+      return photo.save(callback);
     });
+  }).then(function(data, callback) {
+    return model.photo.find({
+      _user: user._id
+    }).notEqualTo('_id', photo._id).desc('created_at').limit(6).run(callback);
+  }).and(function(data, callback) {
+    return model.photo.find().notEqualTo('_id', photo._id).desc('created_at').limit(6).run(callback);
+  }).rescue(function(err) {
+    return next(err);
+  }).end(null, function(data) {
+    console.log(data);
+    res.locals({
+      body_class: 'single',
+      photo: photo,
+      photos: {
+        from_user: data[0],
+        from_everyone: data[1]
+      },
+      slug: slug,
+      user: user
+    });
+    return res.render('gallery_single');
   });
 });
 
@@ -167,7 +190,7 @@ app.get('/fotos/:user/:slug/sizes/:size', function(req, res) {
   }).populate('_user').populate('_tags').run(function(err, photo) {
     var locals;
     if (err) return next(err);
-    if (photo === null) return next(404);
+    if (!photo) return error_handler(404)(req, res);
     photo.views += 1;
     photo.save();
     locals = {
@@ -306,8 +329,15 @@ app.get('/tags/:tag', function(req, res) {
 });
 
 app.get('/tags', function(req, res) {
-  return res.send("GET /tags", {
-    'Content-Type': 'text/plain'
+  var per_page;
+  per_page = helpers.pagination;
+  return model.tag.find({}, function(err, tags) {
+    res.locals({
+      body_class: "tags",
+      path: "/tags",
+      tags: tags
+    });
+    return res.render('tags');
   });
 });
 
@@ -364,6 +394,34 @@ app.post('/registro', function(req, res, next) {
   });
 });
 
+app.post('/comment', function(req, res, next) {
+  var comment;
+  comment = {
+    body: req.body.comment,
+    user: {
+      email: req.body.email,
+      name: req.body.name
+    }
+  };
+  if (req.user) {
+    delete comment.user;
+    comment._user = req.user._id;
+    comment.guest = false;
+  }
+  return invoke(function(data, callback) {
+    return model.photo.findOne({
+      slug: req.body.photo
+    }).populate('_user').run(function(err, photo) {
+      photo.comments.push(comment);
+      return photo.save(callback);
+    });
+  }).rescue(function(err) {
+    return next(err);
+  }).end(null, function(photo) {
+    return res.redirect("/fotos/" + photo._user.username + "/" + photo.slug + "#c" + (_.last(photo.comments)._id));
+  });
+});
+
 app.get('/fotos/publicar', middleware.auth, function(req, res) {
   return res.render('gallery_upload');
 });
@@ -390,16 +448,17 @@ app.post('/fotos/publicar', middleware.auth, function(req, res, next) {
       return callback(err);
     });
   }).then(function(data, callback) {
-    return photo.upload_photo(file, callback);
-  }).and(function(data, callback) {
-    return photo.resize_photos(callback);
+    return photo.upload_photo(file, function(err) {
+      if (err) return callback(err);
+      return photo.resize_photos(callback);
+    });
   });
   if (tags.length > 0) {
     queue.and(function(data, callback) {
       return photo.set_tags(tags, callback);
     });
   }
-  return queue.then(function(data, callback) {
+  return queue.and(function(data, callback) {
     return photo.set_slug(function(photo_slug) {
       console.log("photo set slug - " + photo_slug);
       return callback(null, photo_slug);
@@ -407,9 +466,9 @@ app.post('/fotos/publicar', middleware.auth, function(req, res, next) {
   }).rescue(function(err) {
     console.log("photo error");
     if (err) return next(err);
-  }).end(null, function(photo_slug) {
+  }).end(null, function(data) {
     console.log("photo end - redirect");
-    return res.redirect("/fotos/" + user.username + "/" + photo_slug);
+    return res.redirect("/fotos/" + user.username + "/" + photo.slug);
   });
 });
 

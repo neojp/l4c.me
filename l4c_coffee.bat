@@ -1,1 +1,1 @@
-coffee -wbc app lib/error_handler lib/helpers lib/index lib/middleware models/index models/photo models/tag models/user
+coffee -wbc app lib/ models/

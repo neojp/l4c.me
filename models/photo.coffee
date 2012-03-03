@@ -1,15 +1,18 @@
 mongoose = require 'mongoose'
+mongooseTypes = require 'mongoose-types'
+mongooseTypes.loadTypes mongoose
+
 helpers = require '../lib/helpers'
 _ = underscore = require 'underscore'
 im = require 'imagemagick'
 invoke = require 'invoke'
-moment = require 'moment'
-moment.lang 'es'
 model_tag = require './tag'
 fs = require 'fs'
+util = require 'util'
 
 Schema = mongoose.Schema
 ObjectId = Schema.ObjectId
+Email = mongoose.SchemaTypes.Email
 
 methods =
 	set_slug: (next) ->
@@ -56,8 +59,9 @@ methods =
 		_.each tags, (tag, index) ->
 			console.log "each tags: ", tag
 			fn = (data, callback) ->
-				tag_name = helpers.slugify tag
-				model_tag.findOne name: tag_name, (err, tag) ->
+				name = tag
+				slug = helpers.slugify tag
+				model_tag.findOne slug: slug, (err, tag) ->
 					return callback err  if err
 
 					if tag
@@ -68,9 +72,10 @@ methods =
 							photo_tags.push tag
 							callback err
 					else
-						console.log "tag create:start #{tag_name}"
+						console.log "tag create:start #{name}"
 						tag = new model_tag
-						tag.name = tag_name
+						tag.name = name
+						tag.slug = slug
 						tag.count = 1
 						tag.save (err) ->
 							console.log "tag create:save #{tag.name}"
@@ -131,12 +136,23 @@ methods =
 		queue.end null, (data) -> next(null, data)
 
 	upload_photo: (file, next) ->
+		console.log 'photo upload', file.path
+
 		doc = this
-		file_path = "public/uploads/#{doc._id}_o.#{doc.ext}"
-		fs.rename file.path, "#{__dirname}/../#{file_path}", (err) ->
-		# fs.rename file.path, file_path, (err) ->
-			console.log 'photo upload'
+		upload_path = "#{__dirname}/../public/uploads/#{doc._id}_o.#{doc.ext}"
+
+		alternate_upload = (path1, path2) ->
+			origin = fs.createReadStream path1
+			upload = fs.createWriteStream path2
+			util.pump origin, upload, (err) ->
+				fs.unlink path1, (err) -> next err
+
+		fs.rename file.path, upload_path, (err) ->
+			return alternate_upload file.path, upload_path if err
 			next err
+
+	pretty_date: () ->
+		helpers.pretty_date this.created_at
 
 comment = new Schema
 	_user:
@@ -148,6 +164,15 @@ comment = new Schema
 	created_at:
 		default: Date.now
 		type: Date
+	guest:
+		default: true
+		type: Boolean
+	user:
+		name: String
+		email: Email
+
+comment.virtual('pretty_date').get methods.pretty_date
+
 
 photo = new Schema
 	_tags: [
@@ -185,7 +210,8 @@ photo = new Schema
 		type: Number
 
 # virtual: pretty_date
-photo.virtual('pretty_date').get () -> moment(this.created_at).fromNow(true)
+photo.virtual('pretty_date').get methods.pretty_date
+
 
 # photo.pre 'save', middleware.pre_slug
 # photo.pre 'save', (next) ->
@@ -193,6 +219,7 @@ photo.virtual('pretty_date').get () -> moment(this.created_at).fromNow(true)
 # 		this.slug = this._id
 	
 # 	next()
+
 
 photo.methods.set_slug = methods.set_slug
 photo.methods.set_tags = methods.set_tags

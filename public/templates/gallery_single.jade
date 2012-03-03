@@ -17,7 +17,7 @@
 		
 		.img-info
 			h1= photo.name
-			p= photo.description
+			!= helpers.markdown(photo.description)
 		
 		#social-bar
 
@@ -25,7 +25,7 @@
 
 		a#comentarios
 		
-		!= partial('_comments', { locals: { photo: photo } })
+		!= partial('_comments', res.locals)
 
 	
 	#sidebar

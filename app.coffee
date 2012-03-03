@@ -1,12 +1,14 @@
 # Module dependencies
 http = require 'http'
-express = require 'express'
+fs = require 'fs'
+
 _ = underscore = require 'underscore'
 _.str = underscore.str = require 'underscore.string'
-fs = require 'fs'
 invoke = require 'invoke'
-app = module.exports = express.createServer()
 im = require 'imagemagick'
+
+express = require 'express'
+app = module.exports = express.createServer()
 
 
 # L4C library
@@ -44,30 +46,23 @@ passport.use new LocalStrategy (username, password, next) ->
 
 # Express configuration
 app.configure ->
-	# app.use express.errorHandler()
-
 	app.set 'views', __dirname + '/public/templates'
 	app.set 'view engine', 'jade'
 	app.set 'strict routing', true
 
 	app.use express.favicon()
-	oneYear = 31556926000; # 1 year on milliseconds
-	app.use express.static( __dirname + '/public', maxAge: oneYear )
+	app.use express.static( __dirname + '/public', maxAge: 31556926000 ) # 1 year on milliseconds
 	app.use express.logger( format: ':status ":method :url"' )
-
 	app.use express.bodyParser()
 	app.use express.methodOverride()
-
 	app.use express.cookieParser helpers.heart
 	app.use express.session( secret: helpers.heart, store: new mongo_session( url: 'mongodb://localhost/l4c/sessions' ))
-
 	app.use passport.initialize()
 	app.use passport.session()
 	
 	app.use app.router
-	app.use error_handler
-	# app.use express.errorHandler dumpExceptions: true, showStack: true
-	# app.use express.errorHandler()
+	# app.use error_handler
+	app.use express.errorHandler dumpExceptions: true, showStack: true
 
 
 # Route Params
@@ -76,7 +71,7 @@ app.param 'page', (req, res, next, id) ->
 		req.param.page = parseInt req.param.page
 		next()
 	else
-		return next(404)
+		return error_handler(404)(req, res)
 
 
 app.param 'size', (req, res, next, id) ->
@@ -109,17 +104,17 @@ app.param 'user', (req, res, next, id) ->
 
 # Routes
 app.all '*', middleware.remove_trailing_slash, (req, res, next) ->
-	console.log req.originalUrl
-
 	res.locals
 		_: underscore
 		body_class: ''
 		document_title: 'L4C.me'
-		original_url: req.originalUrl
-		logged_user: if req.isAuthenticated() then req.user else null
-		page: 1,
 		helpers: helpers
+		logged_user: if req.isAuthenticated() then req.user else null
+		original_url: req.originalUrl
+		page: 1
 		photos: []
+		res: res
+		sort: null
 	
 	# res.locals helpers
 	next('route')
@@ -130,27 +125,60 @@ app.get '/', middleware.hmvc('/fotos/:sort?')
 
 app.get '/fotos/:user/:slug', (req, res, next) ->
 	slug = req.param 'slug'
-	user = req.param 'user'
+	username = req.param 'user'
+	
+	user = null
+	photo = null
+	myphotos = []
+	morephotos = []
 
-	model.photo
-		.findOne( slug: slug )
-		.populate('_user')
-		.populate('_tags')
-		.run (err, photo) ->
-			return next err  if err
-			return next 404 if photo == null
+	invoke (data, callback) ->
+		model.photo
+			.findOne( slug: slug )
+			.populate('_user')
+			.populate('_tags')
+			.populate('comments._user')
+			.run (err, data) ->
+				return callback err  if err
+				return error_handler(404)(req, res)  if !data && data._user.username != username
 
-			photo.views += 1
-			photo.save()
+				user = data._user
+				photo = data
+				photo.views += 1
+				photo.save callback
 
-			locals =
-				body_class: 'single'
-				# created_at: moment(photo.created_at).fromNow(true)
-				slug: slug
-				photo: photo
-				user: user
-			
-			res.render 'gallery_single', locals: locals
+	.then (data, callback) ->
+		model.photo
+			.find( _user: user._id )
+			.notEqualTo('_id', photo._id)
+			.desc('created_at')
+			.limit(6)
+			.run callback
+
+	.and (data, callback) ->
+		model.photo
+			.find()
+			.notEqualTo('_id', photo._id)
+			.desc('created_at')
+			.limit(6)
+			.run callback
+
+	.rescue (err) ->
+		next err
+
+	.end null, (data) ->
+		console.log data
+
+		res.locals
+			body_class: 'single'
+			photo: photo
+			photos:
+				from_user: data[0]
+				from_everyone: data[1]
+			slug: slug
+			user: user
+		
+		res.render 'gallery_single'
 
 
 app.get '/fotos/:user/:slug/sizes/:size', (req, res) ->
@@ -163,7 +191,7 @@ app.get '/fotos/:user/:slug/sizes/:size', (req, res) ->
 		.populate('_tags')
 		.run (err, photo) ->
 			return next err  if err
-			return next 404 if photo == null
+			return error_handler(404)(req, res)  if !photo
 
 			photo.views += 1
 			photo.save()
@@ -309,7 +337,14 @@ app.get '/tags/:tag', (req, res) ->
 
 
 app.get '/tags', (req, res) ->
-	res.send "GET /tags", 'Content-Type': 'text/plain'
+	per_page = helpers.pagination
+	model.tag.find {}, (err, tags) ->
+		res.locals
+			body_class: "tags"
+			path: "/tags"
+			tags: tags
+
+		res.render 'tags'
 
 
 app.get '/feed/:user', (req, res) ->
@@ -358,6 +393,32 @@ app.post '/registro', (req, res, next) ->
 
 
 # Logged in user routes
+app.post '/comment', (req, res, next) ->
+	comment =
+		body: req.body.comment
+		user:
+			email: req.body.email
+			name: req.body.name
+	
+	if req.user
+		delete comment.user
+		comment._user = req.user._id
+		comment.guest = false
+
+	invoke (data, callback) ->
+		model.photo
+			.findOne( slug: req.body.photo )
+			.populate('_user')
+			.run (err, photo) ->
+				photo.comments.push comment
+				photo.save callback
+
+	.rescue (err) ->
+		next err
+
+	.end null, (photo) ->
+		res.redirect "/fotos/#{photo._user.username}/#{photo.slug}#c#{_.last(photo.comments)._id}"
+
 app.get '/fotos/publicar', middleware.auth, (req, res) ->
 	res.render 'gallery_upload'
 
@@ -387,12 +448,11 @@ app.post '/fotos/publicar', middleware.auth, (req, res, next) ->
 			callback err
 
 	# image upload - move file from /tmp to /public/uploads
-	.then (data, callback) ->
-		photo.upload_photo file, callback
-
 	# image manipulation - resize & crop images asynchronously
-	.and (data, callback) ->
-		photo.resize_photos callback
+	.then (data, callback) ->
+		photo.upload_photo file, (err) ->
+			return callback err  if err
+			photo.resize_photos callback
 
 	# tags - create tag and update tags count
 	if tags.length > 0
@@ -400,7 +460,7 @@ app.post '/fotos/publicar', middleware.auth, (req, res, next) ->
 			photo.set_tags tags, callback 
 
 	# set photo slug
-	queue.then (data, callback) ->
+	queue.and (data, callback) ->
 		photo.set_slug (photo_slug) ->
 			console.log "photo set slug - #{photo_slug}"
 			callback null, photo_slug
@@ -411,10 +471,10 @@ app.post '/fotos/publicar', middleware.auth, (req, res, next) ->
 		next err  if err
 	
 	# end
-	.end null, (photo_slug) ->
+	.end null, (data) ->
 		# redirect
 		console.log "photo end - redirect"
-		res.redirect "/fotos/#{user.username}/#{photo_slug}"
+		res.redirect "/fotos/#{user.username}/#{photo.slug}"
 
 
 app.get '/fotos/:user/:slug/editar', middleware.auth, (req, res) ->

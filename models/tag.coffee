@@ -9,6 +9,10 @@ tag = new Schema
 		lowercase: true
 		type: String
 		required: true
+	slug:
+		lowercase: true
+		type: String
+		required: true
 		unique: true
 
 module.exports = mongoose.model 'tag', tag
