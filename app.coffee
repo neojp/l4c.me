@@ -151,15 +151,17 @@ app.get '/fotos/:user/:slug', (req, res, next) ->
 		model.photo
 			.find( _user: user._id )
 			.notEqualTo('_id', photo._id)
-			.desc('created_at')
+			.$or( helpers.random_query() )
+			# .desc('created_at')
 			.limit(6)
 			.run callback
 
 	.and (data, callback) ->
 		model.photo
 			.find()
-			.notEqualTo('_id', photo._id)
-			.desc('created_at')
+			.notEqualTo('_user', photo._user._id)
+			.$or( helpers.random_query() )
+			# .desc('created_at')
 			.limit(6)
 			.run callback
 

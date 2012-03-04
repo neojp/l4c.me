@@ -168,9 +168,9 @@ app.get('/fotos/:user/:slug', function(req, res, next) {
   }).then(function(data, callback) {
     return model.photo.find({
       _user: user._id
-    }).notEqualTo('_id', photo._id).desc('created_at').limit(6).run(callback);
+    }).notEqualTo('_id', photo._id).$or(helpers.random_query()).limit(6).run(callback);
   }).and(function(data, callback) {
-    return model.photo.find().notEqualTo('_id', photo._id).desc('created_at').limit(6).run(callback);
+    return model.photo.find().notEqualTo('_user', photo._user._id).$or(helpers.random_query()).limit(6).run(callback);
   }).rescue(function(err) {
     return next(err);
   }).end(null, function(data) {

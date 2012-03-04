@@ -55,6 +55,13 @@ module.exports =
 	pretty_date: (date) ->
 		moment(date).fromNow(true)
 
+	random_query: () ->
+		rand = Math.random()
+		random = [
+			{ random: $gte: rand }
+			{ random: $lte: rand }
+		]
+
 	slugify: (str) ->
 		str = str.replace /^\s+|\s+$/g, ''
 		str = str.toLowerCase()

@@ -26,6 +26,7 @@ user = new Schema
 		type: String
 	random:
 		default: Math.random
+		index: true
 		set: (v) -> Math.random()
 		type: Number
 	url:

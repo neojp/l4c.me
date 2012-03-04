@@ -38,6 +38,7 @@ user = new Schema({
   },
   random: {
     "default": Math.random,
+    index: true,
     set: function(v) {
       return Math.random();
     },
