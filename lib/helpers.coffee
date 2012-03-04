@@ -47,7 +47,8 @@ module.exports =
 				size: 't'
 				width: 100
 
-	markdown: marked
+	markdown: (str) ->
+		marked(str) if _.isString(str)
 
 	pagination: 20
 
