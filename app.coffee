@@ -47,7 +47,7 @@ app.configure ->
 	app.use middleware.static( __dirname + '/public' )
 	app.use middleware.static( app.set('views'), urlPrefix: '/templates' )
 
-	app.use express.logger( format: ':status ":method :url"' )
+	app.use express.logger( format: ':status ":method :url" - :response-time ms' )
 	app.use express.bodyParser()
 	app.use express.methodOverride()
 	app.use express.cookieParser helpers.heart

@@ -56,7 +56,7 @@ app.configure(function() {
     urlPrefix: '/templates'
   }));
   app.use(express.logger({
-    format: ':status ":method :url"'
+    format: ':status ":method :url" - :response-time ms'
   }));
   app.use(express.bodyParser());
   app.use(express.methodOverride());
