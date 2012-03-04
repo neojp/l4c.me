@@ -27,7 +27,7 @@ module.exports =
 
 		sizes:
 			l:
-				action: 'crop'
+				action: 'resize'
 				height: 728
 				size: 'l'
 				width: 970

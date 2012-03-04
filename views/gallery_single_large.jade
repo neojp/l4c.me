@@ -34,7 +34,11 @@
 				- size = (size == 'p') ? 's' : size;
 				- size = (size == 'g') ? 'l' : size;
 				- helper_image = helpers.image.sizes[size];
-				img( src= "/uploads/#{photo._id}_#{size}.jpg", width= helper_image.width, height= helper_image.height )
+				- if (helper_image.action == 'crop')
+					img( src= "/uploads/#{photo._id}_#{size}.jpg", width= helper_image.width, height= helper_image.height )
+				- else
+					img( src= "/uploads/#{photo._id}_#{size}.jpg" )
+			
 			- //.icons
 			- //	a.icon-edit( href="/edit/" )
 	
