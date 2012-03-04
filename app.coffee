@@ -36,12 +36,15 @@ passport.use new LocalStrategy (username, password, next) ->
 
 # Express configuration
 app.configure ->
-	app.set 'views', __dirname + '/public/templates'
+	app.set 'views', __dirname + '/views'
 	app.set 'view engine', 'jade'
 	app.set 'strict routing', true
+	app.set 'static options', maxAge: 31556926000 # 1 year on milliseconds
 
 	app.use express.favicon()
-	app.use express.static( __dirname + '/public', maxAge: 31556926000 ) # 1 year on milliseconds
+	app.use express.static( __dirname + '/public', app.set 'static options' )
+	app.use middleware.static_templates
+
 	app.use express.logger( format: ':status ":method :url"' )
 	app.use express.bodyParser()
 	app.use express.methodOverride()
@@ -49,10 +52,15 @@ app.configure ->
 	app.use express.session( secret: helpers.heart, store: new mongo_session( url: 'mongodb://localhost/l4c/sessions' ))
 	app.use passport.initialize()
 	app.use passport.session()
-	
 	app.use app.router
-	# app.use error_handler
-	app.use express.errorHandler dumpExceptions: true, showStack: true
+	app.use error_handler(404)  # 404 handler
+
+app.configure 'development', ->
+	app.use express.errorHandler dumpExceptions: true, showStack: true  #development handler
+	express.errorHandler.title = "L4C.me &hearts;"
+
+app.configure 'production', ->
+	app.use error_handler  # public 500 handler
 
 
 # Route Params
@@ -529,10 +537,6 @@ app.put '/perfil', middleware.auth, (req, res) ->
 
 app.get '/tweets', middleware.auth, (req, res) ->
 	res.send "GET /tweets", 'Content-Type': 'text/plain'
-
-
-# 404 errors fallback
-app.all '*', error_handler(404)
 
 
 # Only listen on $ node app.js

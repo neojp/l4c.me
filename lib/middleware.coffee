@@ -1,4 +1,5 @@
 _ = require 'underscore'
+express = require 'express'
 
 module.exports = (app) -> middleware =
 	# auth: (path = '/') -> (req, res, next) ->
@@ -10,14 +11,6 @@ module.exports = (app) -> middleware =
 		
 		req.flash 'auth_redirect', req.originalUrl
 		res.redirect('/login')
-	
-	
-	# err: (err, req, res, next) ->
-	# 	if !err && flash = req.flash('err')
-	# 		return next flash, req, res, next
-		
-	# 	next err, req, res, next
-	
 
 	hmvc: (path) -> (req, res, next) ->
 		route = app.match.get(path)
@@ -56,3 +49,10 @@ module.exports = (app) -> middleware =
 			return res.redirect url, 301
 		
 		next()
+
+	# map static files on url /templates/* to path /views
+	static_templates: (req, res, next) ->
+		path = '/templates'
+		return next()  if req.url.indexOf(path) != 0
+		req.url = req.url.substring path.length
+		express.static( app.set('views'), app.set('static options') )(req, res, next)

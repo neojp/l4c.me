@@ -43,13 +43,15 @@ passport.use(new LocalStrategy(function(username, password, next) {
 }));
 
 app.configure(function() {
-  app.set('views', __dirname + '/public/templates');
+  app.set('views', __dirname + '/views');
   app.set('view engine', 'jade');
   app.set('strict routing', true);
-  app.use(express.favicon());
-  app.use(express.static(__dirname + '/public', {
+  app.set('static options', {
     maxAge: 31556926000
-  }));
+  });
+  app.use(express.favicon());
+  app.use(express.static(__dirname + '/public', app.set('static options')));
+  app.use(middleware.static_templates);
   app.use(express.logger({
     format: ':status ":method :url"'
   }));
@@ -65,10 +67,19 @@ app.configure(function() {
   app.use(passport.initialize());
   app.use(passport.session());
   app.use(app.router);
-  return app.use(express.errorHandler({
+  return app.use(error_handler(404));
+});
+
+app.configure('development', function() {
+  app.use(express.errorHandler({
     dumpExceptions: true,
     showStack: true
   }));
+  return express.errorHandler.title = "L4C.me &hearts;";
+});
+
+app.configure('production', function() {
+  return app.use(error_handler);
 });
 
 app.param('page', function(req, res, next, id) {
@@ -541,8 +552,6 @@ app.get('/tweets', middleware.auth, function(req, res) {
     'Content-Type': 'text/plain'
   });
 });
-
-app.all('*', error_handler(404));
 
 if (!module.parent) {
   app.listen(3000);
