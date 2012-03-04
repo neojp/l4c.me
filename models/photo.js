@@ -249,6 +249,13 @@ photo = new Schema({
     required: true,
     type: String
   },
+  random: {
+    "default": Math.random,
+    set: function(v) {
+      return Math.random();
+    },
+    type: Number
+  },
   slug: {
     type: String,
     unique: true

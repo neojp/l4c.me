@@ -24,6 +24,10 @@ user = new Schema
 	password:
 		required: true
 		type: String
+	random:
+		default: Math.random
+		set: (v) -> Math.random()
+		type: Number
 	url:
 		type: Url
 	username:

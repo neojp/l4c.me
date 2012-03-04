@@ -195,6 +195,10 @@ photo = new Schema
 	name:
 		required: true
 		type: String
+	random:
+		default: Math.random
+		set: (v) -> Math.random()
+		type: Number
 	# sizes:
 	# 	l: String
 	# 	m: String
