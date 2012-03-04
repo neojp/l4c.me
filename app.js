@@ -47,11 +47,14 @@ app.configure(function() {
   app.set('view engine', 'jade');
   app.set('strict routing', true);
   app.set('static options', {
-    maxAge: 31556926000
+    maxAge: 31556926000,
+    ignoreExtensions: 'styl coffeee'
   });
   app.use(express.favicon());
-  app.use(express.static(__dirname + '/public', app.set('static options')));
-  app.use(middleware.static_templates);
+  app.use(middleware.static(__dirname + '/public'));
+  app.use(middleware.static(app.set('views'), {
+    urlPrefix: '/templates'
+  }));
   app.use(express.logger({
     format: ':status ":method :url"'
   }));

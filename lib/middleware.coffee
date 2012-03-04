@@ -1,4 +1,6 @@
 _ = require 'underscore'
+_.str = require 'underscore.string'
+_path = require 'path'
 express = require 'express'
 
 module.exports = (app) -> middleware =
@@ -50,9 +52,22 @@ module.exports = (app) -> middleware =
 		
 		next()
 
-	# map static files on url /templates/* to path /views
-	static_templates: (req, res, next) ->
-		path = '/templates'
-		return next()  if req.url.indexOf(path) != 0
-		req.url = req.url.substring path.length
-		express.static( app.set('views'), app.set('static options') )(req, res, next)
+	# extends express.static with a url prefix to map static files
+	# eg. static(_dirname + '/views', { urlPrefix: '/templates', maxAge: 31556926000 })
+	# will look for urls this: /templates/layout.jade and send the file: _dirname + '/views/layout.jade'
+	static: (path, options = {}) ->
+		_.defaults options, app.set('static options')
+		urlPrefix = options.urlPrefix
+
+		(req, res, next) ->
+			if _.isString urlPrefix
+				return next()  if not _.str.startsWith req.url, urlPrefix
+				req.url = req.url.substring urlPrefix.length
+
+			extension = _path.extname(req.url).substring(1)
+			if extension && _.isString(options.ignoreExtensions) && options.ignoreExtensions.length
+				extensions = options.ignoreExtensions.split(' ')
+				extensions = _.compact extensions
+				return next() if extension && _.include extensions, extension
+			
+			express.static( path, options )(req, res, next)

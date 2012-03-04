@@ -39,11 +39,13 @@ app.configure ->
 	app.set 'views', __dirname + '/views'
 	app.set 'view engine', 'jade'
 	app.set 'strict routing', true
-	app.set 'static options', maxAge: 31556926000 # 1 year on milliseconds
+	app.set 'static options',
+		maxAge: 31556926000 # 1 year on milliseconds
+		ignoreExtensions: 'styl coffeee'
 
 	app.use express.favicon()
-	app.use express.static( __dirname + '/public', app.set 'static options' )
-	app.use middleware.static_templates
+	app.use middleware.static( __dirname + '/public' )
+	app.use middleware.static( app.set('views'), urlPrefix: '/templates' )
 
 	app.use express.logger( format: ':status ":method :url"' )
 	app.use express.bodyParser()
