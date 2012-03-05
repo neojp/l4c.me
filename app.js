@@ -251,7 +251,8 @@ app.get('/fotos/:user', function(req, res, next) {
       path: "/fotos/" + user.username,
       photos: photos,
       sort: null,
-      total: count
+      total: count,
+      user: user
     });
     return res.render('gallery');
   });
@@ -329,20 +330,48 @@ app.get('/fotos/galeria', function(req, res, next) {
 app.get('/tags/:tag/pag/:page?', middleware.paged('/tags/:tag'));
 
 app.get('/tags/:tag', function(req, res) {
-  var page, tag;
-  tag = req.params.tag;
+  var page, per_page, photos, tag, tag_slug;
+  tag_slug = req.params.tag;
   page = parseInt(req.param('page', 1));
-  return res.send("GET /tags/" + tag + "/pag/" + page, {
-    'Content-Type': 'text/plain'
+  per_page = helpers.pagination;
+  tag = null;
+  photos = null;
+  return invoke(function(data, callback) {
+    return model.tag.findOne({
+      slug: tag_slug
+    }, callback);
+  }).then(function(data, callback) {
+    if (!data) return error_handler(404)(req, res);
+    tag = data;
+    return model.photo.find({
+      _tags: tag._id
+    }).limit(per_page).skip(per_page * (page - 1)).desc('created_at').populate('_user').run(callback);
+  }).rescue(function(err) {
+    if (err) return next(err);
+  }).end(null, function(data) {
+    var count;
+    count = tag.count;
+    photos = data;
+    console.log(photos);
+    res.locals({
+      body_class: 'gallery liquid tag',
+      pages: Math.ceil(count / per_page),
+      path: "/tags/" + tag.slug,
+      photos: photos,
+      tag: tag,
+      sort: null,
+      total: count
+    });
+    return res.render('gallery');
   });
 });
 
 app.get('/tags', function(req, res) {
   var per_page;
   per_page = helpers.pagination;
-  return model.tag.find({}, function(err, tags) {
+  return model.tag.find().desc('count').asc('name').run(function(err, tags) {
     res.locals({
-      body_class: "tags",
+      body_class: 'gallery liquid tags',
       path: "/tags",
       tags: tags
     });

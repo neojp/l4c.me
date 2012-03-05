@@ -1,23 +1,40 @@
 nav#breadcrumb
 	h1 Galeria
-	ul
-		- var className = '';
-		
-		- className = (sort == 'ultimas') ? 'active' : '';
-		li( class= className )
-			a( href="/fotos" ) M&aacute;s recientes
-		
-		- className = (sort == 'top') ? 'active' : '';
-		li( class= className )
-			a( href="/fotos/top" ) Mas vistas
-		
-		- className = (sort == 'galeria') ? 'active' : '';
-		li( class= className )
-			a( href="/fotos/galeria" ) Galer&iacute;as de Usuarios
+	- if (original_url.indexOf('/tags/') == 0)
+		ul
+			li
+				a( href="/tags" ) Categorias
 
-		- className = original_url.indexOf('/tags') == 0 ? 'active' : '';
-		li( class= className )
-			a( href="/tags" ) Categorias
-		
-		li#upload
-			a( href="/fotos/publicar" ) Sube una foto
+			li.active
+				a( href="/tags/#{tag.slug}" )= tag.name
+
+	- else if (original_url !== '/fotos/galeria' && original_url !== '/fotos/top' && original_url !== '/fotos/publicar' && original_url.indexOf('/fotos/') == 0)
+		ul
+			li
+				a( href="/fotos/galeria" ) Galer&iacute;as de Usuarios
+
+			li.active
+				a( href="/fotos/#{user.username}" )= user.username
+
+	- else
+		ul
+			- var className = '';
+			
+			- className = (sort == 'ultimas') ? 'active' : '';
+			li( class= className )
+				a( href="/fotos" ) M&aacute;s recientes
+			
+			- className = (sort == 'top') ? 'active' : '';
+			li( class= className )
+				a( href="/fotos/top" ) Mas vistas
+			
+			- className = (sort == 'galeria') ? 'active' : '';
+			li( class= className )
+				a( href="/fotos/galeria" ) Galer&iacute;as de Usuarios
+
+			- className = original_url.indexOf('/tags') == 0 ? 'active' : '';
+			li( class= className )
+				a( href="/tags" ) Categorias
+			
+			li#upload
+				a( href="/fotos/publicar" ) Sube una foto

@@ -247,6 +247,7 @@ app.get '/fotos/:user', (req, res, next) ->
 			photos: photos
 			sort: null
 			total: count
+			user: user
 
 		res.render 'gallery'
 
@@ -332,21 +333,60 @@ app.get '/fotos/galeria', (req, res, next) ->
 
 app.get '/tags/:tag/pag/:page?', middleware.paged('/tags/:tag')
 app.get '/tags/:tag', (req, res) ->
-	tag = req.params.tag
+	tag_slug = req.params.tag
 	page = parseInt req.param 'page', 1
+	per_page = helpers.pagination
+	tag = null
+	photos = null
 
-	res.send "GET /tags/#{tag}/pag/#{page}", 'Content-Type': 'text/plain'
+	invoke (data, callback) ->
+		model.tag.findOne slug: tag_slug, callback
+
+	.then (data, callback) ->
+		return error_handler(404)(req, res)  if (!data)
+		tag = data
+
+		model.photo
+			.find( _tags: tag._id )
+			.limit(per_page)
+			.skip(per_page * (page - 1))
+			.desc('created_at')
+			.populate('_user')
+			.run callback
+
+	.rescue (err) ->
+		next err  if err
+	
+	.end null, (data) ->
+		count = tag.count
+		photos = data
+		console.log photos
+
+		res.locals
+			body_class: 'gallery liquid tag'
+			pages: Math.ceil count / per_page
+			path: "/tags/#{tag.slug}"
+			photos: photos
+			tag: tag
+			sort: null
+			total: count
+
+		res.render 'gallery'
 
 
 app.get '/tags', (req, res) ->
 	per_page = helpers.pagination
-	model.tag.find {}, (err, tags) ->
-		res.locals
-			body_class: "tags"
-			path: "/tags"
-			tags: tags
+	model.tag
+		.find()
+		.desc('count')
+		.asc('name')
+		.run (err, tags) ->
+			res.locals
+				body_class: 'gallery liquid tags'
+				path: "/tags"
+				tags: tags
 
-		res.render 'tags'
+			res.render 'tags'
 
 
 app.get '/feed/:user', (req, res) ->

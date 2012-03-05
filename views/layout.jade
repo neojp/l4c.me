@@ -41,7 +41,7 @@ html( lang="es" )
 									li( class= className )
 										a( href="/registro" ) Registro
 								
-								- className = ((original_url !== '/' && original_url !== '/fotos/publicar') && (logged_user && original_url.indexOf('/fotos/' + logged_user.username) == -1)) ? 'active' : '';
+								- className = ((original_url !== '/' && original_url !== '/fotos/publicar' && original_url !== '/registro') && !(logged_user && original_url.indexOf('/fotos/' + logged_user.username) == -1)) ? 'active' : '';
 								li( class= className )
 									a( href="/fotos" ) Galeria
 						
