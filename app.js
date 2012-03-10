@@ -1,4 +1,4 @@
-var LocalStrategy, app, error_handler, express, helpers, invoke, lib, middleware, model, mongo_session, mongoose, passport, underscore, _;
+var LocalStrategy, app, error_handler, express, helpers, invoke, lib, middleware, model, moment, mongo_session, mongoose, passport, underscore, _;
 
 _ = underscore = require('underscore');
 
@@ -7,6 +7,8 @@ _.str = underscore.str = require('underscore.string');
 invoke = require('invoke');
 
 express = require('express');
+
+moment = require('moment');
 
 app = module.exports = express.createServer();
 
@@ -55,9 +57,7 @@ app.configure(function() {
   app.use(middleware.static(app.set('views'), {
     urlPrefix: '/templates'
   }));
-  app.use(express.logger({
-    format: ':status ":method :url" - :response-time ms'
-  }));
+  app.use(express.logger(helpers.logger_format));
   app.use(express.bodyParser());
   app.use(express.methodOverride());
   app.use(express.cookieParser(helpers.heart));
@@ -175,7 +175,7 @@ app.get('/fotos/:user/:slug', function(req, res, next) {
     return next(err);
   }).end(null, function(data) {
     res.locals({
-      body_class: 'single',
+      body_class: 'user single',
       photo: photo,
       photos: {
         from_user: data[0],
@@ -202,7 +202,7 @@ app.get('/fotos/:user/:slug/sizes/:size', function(req, res) {
     photo.views += 1;
     photo.save();
     locals = {
-      body_class: 'single sizes',
+      body_class: 'user sizes',
       photo: photo,
       size: req.param('size'),
       slug: slug,
@@ -246,7 +246,7 @@ app.get('/fotos/:user', function(req, res, next) {
     count = data[0];
     photos = data[1];
     res.locals({
-      body_class: 'gallery liquid',
+      body_class: 'gallery liquid user',
       pages: Math.ceil(count / per_page),
       path: "/fotos/" + user.username,
       photos: photos,

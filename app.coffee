@@ -3,6 +3,7 @@ _ = underscore = require 'underscore'
 _.str = underscore.str = require 'underscore.string'
 invoke = require 'invoke'
 express = require 'express'
+moment = require 'moment'
 
 
 # L4C library
@@ -47,7 +48,7 @@ app.configure ->
 	app.use middleware.static( __dirname + '/public' )
 	app.use middleware.static( app.set('views'), urlPrefix: '/templates' )
 
-	app.use express.logger( format: ':status ":method :url" - :response-time ms' )
+	app.use express.logger helpers.logger_format
 	app.use express.bodyParser()
 	app.use express.methodOverride()
 	app.use express.cookieParser helpers.heart
@@ -170,7 +171,7 @@ app.get '/fotos/:user/:slug', (req, res, next) ->
 
 	.end null, (data) ->
 		res.locals
-			body_class: 'single'
+			body_class: 'user single'
 			photo: photo
 			photos:
 				from_user: data[0]
@@ -198,7 +199,7 @@ app.get '/fotos/:user/:slug/sizes/:size', (req, res) ->
 			photo.save()
 
 			locals =
-				body_class: 'single sizes'
+				body_class: 'user sizes'
 				photo: photo
 				size: req.param 'size'
 				slug: slug
@@ -241,7 +242,7 @@ app.get '/fotos/:user', (req, res, next) ->
 		photos = data[1]
 		
 		res.locals
-			body_class: 'gallery liquid'
+			body_class: 'gallery liquid user'
 			pages: Math.ceil count / per_page
 			path: "/fotos/#{user.username}"
 			photos: photos
@@ -293,6 +294,7 @@ app.get '/fotos/:sort?', (req, res, next) ->
 		res.render 'gallery'
 
 
+# TODO: Show list of users with his latest 6 photos
 app.get '/fotos/galeria/pag/:page?', middleware.paged('/fotos/galeria')
 app.get '/fotos/galeria', (req, res, next) ->
 	sort = 'galeria'

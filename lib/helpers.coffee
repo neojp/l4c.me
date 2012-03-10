@@ -47,6 +47,26 @@ module.exports =
 				size: 't'
 				width: 100
 
+	logger_format: (tokens, req, res) ->
+		status = res.statusCode
+		color = 
+			if status >= 500 then 31
+			else if status >= 400 then 33
+			else if status >= 300 then 36
+			else 32
+
+		d = moment()
+		date = d.format 'YYYY/MM/DD HH:mm:ss ZZ'
+
+		return '' +
+			'\033[' + color + 'm' + res.statusCode +
+			' \033[90m' + date + '  ' +
+			' \033[90m' + req.method +
+			' \033[0m' + req.originalUrl +
+			' \033[90m' + (new Date - req._startTime) + 'ms' +
+			'          \033[90m' + tokens['remote-addr'](req) +
+			'\033[0m'
+
 	markdown: (str) ->
 		marked(str) if _.isString(str)
 
