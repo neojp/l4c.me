@@ -165,6 +165,7 @@ app.get '/fotos/:user/:slug', (req, res, next) ->
 			.$or( helpers.random_query() )
 			# .desc('created_at')
 			.limit(6)
+			.populate('_user')
 			.run callback
 
 	.rescue (err) ->
