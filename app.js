@@ -1,4 +1,4 @@
-var LocalStrategy, app, error_handler, express, helpers, invoke, lib, middleware, model, moment, mongo_session, mongoose, passport, underscore, _;
+var LocalStrategy, app, error_handler, express, helpers, invoke, lib, middleware, model, mongo_session, mongoose, nodejs_url, passport, underscore, _;
 
 _ = underscore = require('underscore');
 
@@ -8,7 +8,7 @@ invoke = require('invoke');
 
 express = require('express');
 
-moment = require('moment');
+nodejs_url = require('url');
 
 app = module.exports = express.createServer();
 
@@ -137,7 +137,8 @@ app.all('*', middleware.remove_trailing_slash, function(req, res, next) {
     page: 1,
     photos: [],
     res: res,
-    sort: null
+    sort: null,
+    query_vars: nodejs_url.parse(req.url, true).query
   });
   return next('route');
 });
@@ -389,11 +390,12 @@ app.get('/feed/:user', function(req, res) {
 
 app.get('/login', function(req, res, next) {
   if (req.isAuthenticated()) return res.redirect('/');
+  res.local('failed', !_.isUndefined(res.local('query_vars').failed));
   return res.render('login');
 });
 
 app.post('/login', passport.authenticate('local', {
-  failureRedirect: '/login'
+  failureRedirect: '/login?failed'
 }), function(req, res, next) {
   var flash, url;
   flash = req.flash('auth_redirect');
@@ -427,7 +429,7 @@ app.post('/registro', function(req, res, next) {
   }).end(null, function(data) {
     return passport.authenticate('local', {
       successRedirect: '/perfil',
-      failureRedirect: '/'
+      failureRedirect: '/registro?failed'
     })(req, res);
   });
 });

@@ -3,7 +3,7 @@ _ = underscore = require 'underscore'
 _.str = underscore.str = require 'underscore.string'
 invoke = require 'invoke'
 express = require 'express'
-moment = require 'moment'
+nodejs_url  = require 'url'
 
 
 # L4C library
@@ -116,6 +116,7 @@ app.all '*', middleware.remove_trailing_slash, (req, res, next) ->
 		photos: []
 		res: res
 		sort: null
+		query_vars: nodejs_url.parse(req.url, true).query
 	
 	# res.locals helpers
 	next('route')
@@ -400,10 +401,11 @@ app.get '/login', (req, res, next) ->
 	if (req.isAuthenticated())
 		return res.redirect '/'
 	
+	res.local 'failed', not _.isUndefined(res.local('query_vars').failed)
 	res.render 'login'
 
 
-app.post '/login', passport.authenticate('local', failureRedirect: '/login'), (req, res, next) ->
+app.post '/login', passport.authenticate('local', failureRedirect: '/login?failed'), (req, res, next) ->
 	flash = req.flash('auth_redirect')
 	url = if _.size flash then _.first flash else '/'
 	res.redirect url
@@ -433,7 +435,7 @@ app.post '/registro', (req, res, next) ->
 		next err  if err
 	
 	.end null, (data) ->
-		passport.authenticate('local', successRedirect: '/perfil', failureRedirect: '/')(req, res)
+		passport.authenticate('local', successRedirect: '/perfil', failureRedirect: '/registro?failed')(req, res)
 
 
 # Logged in user routes

@@ -1,3 +1,11 @@
+- if (failed)
+	div.message.error
+		p
+			strong Please re-enter your password
+		p The password you entered is incorrect. Please try again (make sure your caps lock is off).
+		p Forgot your password? 
+			a Request a new one.
+
 form( method="post", action="/login" )
 	p
 		label Username
