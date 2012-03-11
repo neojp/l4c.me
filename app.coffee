@@ -244,7 +244,7 @@ app.get '/fotos/:user', (req, res, next) ->
 		photos = data[1]
 		
 		res.locals
-			body_class: 'gallery liquid user'
+			body_class: 'gallery user'
 			pages: Math.ceil count / per_page
 			path: "/fotos/#{user.username}"
 			photos: photos
@@ -286,7 +286,7 @@ app.get '/fotos/:sort?', (req, res, next) ->
 		photos = data[1]
 
 		res.locals
-			body_class: "gallery liquid #{sort}"
+			body_class: "gallery #{sort}"
 			pages: Math.ceil count / per_page
 			path: "/fotos/#{sort}"
 			photos: photos
@@ -325,7 +325,7 @@ app.get '/fotos/galeria', (req, res, next) ->
 		photos = data[1]
 
 		res.locals
-			body_class: "gallery liquid #{sort}"
+			body_class: "gallery #{sort}"
 			pages: Math.ceil count / per_page
 			path: "/fotos/#{sort}"
 			photos: photos
@@ -367,7 +367,7 @@ app.get '/tags/:tag', (req, res) ->
 		console.log photos
 
 		res.locals
-			body_class: 'gallery liquid tag'
+			body_class: 'gallery tag'
 			pages: Math.ceil count / per_page
 			path: "/tags/#{tag.slug}"
 			photos: photos
@@ -386,7 +386,7 @@ app.get '/tags', (req, res) ->
 		.asc('name')
 		.run (err, tags) ->
 			res.locals
-				body_class: 'gallery liquid tags'
+				body_class: 'gallery tags'
 				path: "/tags"
 				tags: tags
 
@@ -471,7 +471,7 @@ app.get '/publicar', (req, res) -> res.redirect '/fotos/publicar'
 app.get '/fotos/publicar', middleware.auth, (req, res) ->
 	res.locals
 		body_class: 'upload'
-	
+
 	res.render 'gallery_upload'
 
 
