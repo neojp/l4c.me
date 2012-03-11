@@ -29,15 +29,18 @@
 	#img
 		.img
 			- if (size == 'o')
-				img( src= "/uploads/#{photo._id}_o.#{photo.ext}" )
+				a( href="/uploads/#{photo._id}_#{size}.#{photo.ext}", target="_blank" )
+					img( src= "/uploads/#{photo._id}_o.#{photo.ext}" )
 			- else
 				- size = (size == 'p') ? 's' : size;
 				- size = (size == 'g') ? 'l' : size;
 				- helper_image = helpers.image.sizes[size];
 				- if (helper_image.action == 'crop')
-					img( src= "/uploads/#{photo._id}_#{size}.#{photo.ext}", width= helper_image.width, height= helper_image.height )
+					a( href="/uploads/#{photo._id}_#{size}.#{photo.ext}", target="_blank" )
+						img( src= "/uploads/#{photo._id}_#{size}.#{photo.ext}", width= helper_image.width, height= helper_image.height )
 				- else
-					img( src= "/uploads/#{photo._id}_#{size}.#{photo.ext}" )
+					a( href="/uploads/#{photo._id}_#{size}.#{photo.ext}", target="_blank" )
+						img( src= "/uploads/#{photo._id}_#{size}.#{photo.ext}" )
 			
 			- //.icons
 			- //	a.icon-edit( href="/edit/" )
