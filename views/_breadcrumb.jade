@@ -8,6 +8,9 @@ nav#breadcrumb
 			li.active
 				a( href="/tags/#{tag.slug}" )= tag.name
 
+			li#upload
+				a( href="/fotos/publicar" ) Sube una foto
+
 	- else if (original_url !== '/fotos/galeria' && original_url !== '/fotos/top' && original_url !== '/fotos/publicar' && original_url.indexOf('/fotos/') == 0)
 		ul
 			li
@@ -15,6 +18,9 @@ nav#breadcrumb
 
 			li.active
 				a( href="/fotos/#{user.username}" )= user.username
+
+			li#upload
+				a( href="/fotos/publicar" ) Sube una foto
 
 	- else
 		ul
