@@ -1,0 +1,1 @@
+node ../node_modules/coffee-script/bin/coffee -wbc ../app ../lib/ ../models/

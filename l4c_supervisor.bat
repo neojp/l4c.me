@@ -1,1 +1,0 @@
-supervisor --watch .,lib,models --exec node app

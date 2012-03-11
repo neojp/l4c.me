@@ -1,0 +1,1 @@
+node ../node_modules/supervisor/lib/cli-wrapper.js --watch ../,../lib,../models --exec node ../app.js
