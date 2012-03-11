@@ -164,6 +164,7 @@ div.comments form p{font-size:1.2em}
 div.comments form label{color:#666;font-weight:normal}
 div.comments .col-1{float:left}
 div.comments .col-2{float:right}
+body.single #container{width:1000px}
 body.sizes #container{width:970px}
 body.sizes #breadcrumb{margin-bottom:10px;}
 body.sizes #breadcrumb ul{float:right;font-size:1.2em}
