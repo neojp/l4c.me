@@ -207,7 +207,7 @@ app.get '/fotos/:user/:slug/sizes/:size', (req, res) ->
 				slug: slug
 				user: user
 
-			res.render 'gallery_single_large', locals: locals
+			res.render 'gallery_sizes', locals: locals
 
 
 app.get '/fotos/:user/pag/:page?', middleware.paged('/fotos/:user')

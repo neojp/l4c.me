@@ -209,7 +209,7 @@ app.get('/fotos/:user/:slug/sizes/:size', function(req, res) {
       slug: slug,
       user: user
     };
-    return res.render('gallery_single_large', {
+    return res.render('gallery_sizes', {
       locals: locals
     });
   });
