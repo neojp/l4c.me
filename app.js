@@ -467,6 +467,9 @@ app.get('/publicar', function(req, res) {
 });
 
 app.get('/fotos/publicar', middleware.auth, function(req, res) {
+  res.locals({
+    body_class: 'upload'
+  });
   return res.render('gallery_upload');
 });
 

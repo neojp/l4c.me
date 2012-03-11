@@ -469,6 +469,9 @@ app.post '/comment', (req, res, next) ->
 
 app.get '/publicar', (req, res) -> res.redirect '/fotos/publicar'
 app.get '/fotos/publicar', middleware.auth, (req, res) ->
+	res.locals
+		body_class: 'upload'
+	
 	res.render 'gallery_upload'
 
 

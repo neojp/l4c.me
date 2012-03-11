@@ -1,9 +1,6 @@
 #content-sidebar-wrap
 	nav#breadcrumb
 		h1 Subir una foto
-		ul			
-			li#upload
-				a( href="/fotos/publicar" ) Sube una foto
 
 	hr
 
@@ -12,45 +9,44 @@
 			p
 				label( for="upload-title" ) Titulo 
 					em (requerido)
-				br
+				
 				input#upload-title( type="text", name="name" )
 			
 			p
 				label( for="upload-description" ) Descripci&oacute;n 
 					em Es opcional, pero nos gusta saber que tienes para decir
-				br
+						br
+						br
+						strong Nota: 
+							a( href="http://en.wikipedia.org/wiki/Markdown", target="_blank" ) Markdown
+						|  está disponible
 				textarea#upload-description( name="description" )
-				br
-				strong Nota: 
-				| Markdown está disponible
-			
+
 			hr
 			
-			#upload-placeholder-container
-				p
-					label Fotografia
-				//- p#upload-placeholder Arrastra una foto ac&aacute; para publicarla autom&aacute;ticamente
-				//- p No est&aacute; funcionando?
-				//- 	br
-				//- 	| Tambien puedes usar el 
-				//- 	a( href="#upload-file-container" ) cargador b&aacute;sico
+			//- #upload-placeholder-container
+			//- 	label Fotografia
+			//- 	p#upload-placeholder Arrastra una foto ac&aacute; para publicarla autom&aacute;ticamente
+			//- 	p No est&aacute; funcionando?
+			//- 		br
+			//- 		| Tambien puedes usar el 
+			//- 		a( href="#upload-file-container" ) cargador b&aacute;sico
 			
 			#upload-file-container
-				input#upload-file( type="file", name="file", accept="jpg,gif,png,bmp" )
+				p
+					label( for="upload-file" ) Fotografia
+					input#upload-file( type="file", name="file", accept="jpg,gif,png,bmp" )
 					//- br
 					//- | Puedes usar el 
 					//- a( href="#upload-placeholder-container" ) cargador avanzado
 					//- em &nbsp;con "Drag &amp; Drop"
-			
-			hr
-			
+
 			p
 				label( for="upload-tags" ) Tags 
 					em Separalos con espacios, NO uses comas
-				br
-				br
+				
 				input#upload-tags( type="text", name="tags" )
-				br
+
 				span.help
 					span.popup Los tags son palabras clave que identifican la imagen.
 			
