@@ -1,25 +1,27 @@
-nav.pagination
-	- var className = "";
-	span
-		- if (page > 2)
-			a.prev( href= "#{path}/pag/#{page-1}" ) Anterior
-		- if (page == 2)
-			a.prev( href= path ) Anterior
-		- if (page == 1)
-			a.prev.disabled Anterior
-	
-	- if (pages > 1)
-		- _.each( _.range(1, pages + 1), function(i){
-			span
-				- className = (i == page) ? "active" : "";
-				a( href= "#{path}/pag/#{i}", class= className )= i
-		- });
-	- else
+- if (pages > 1)
+
+	nav.pagination
+		- var className = "";
 		span
-			a( href="#{path}", class="active" ) 1
-	
-	span
-		- if (page < pages)
-			a.next( href= "#{path}/pag/#{page+1}" ) Siguiente
+			- if (page > 2)
+				a.prev( href= "#{path}/pag/#{page-1}" ) Anterior
+			- if (page == 2)
+				a.prev( href= path ) Anterior
+			- if (page == 1)
+				a.prev.disabled Anterior
+		
+		- if (pages > 1)
+			- _.each( _.range(1, pages + 1), function(i){
+				span
+					- className = (i == page) ? "active" : "";
+					a( href= "#{path}/pag/#{i}", class= className )= i
+			- });
 		- else
-			a.next.disabled Siguiente
+			span
+				a( href="#{path}", class="active" ) 1
+		
+		span
+			- if (page < pages)
+				a.next( href= "#{path}/pag/#{page+1}" ) Siguiente
+			- else
+				a.next.disabled Siguiente
