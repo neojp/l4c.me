@@ -13,6 +13,14 @@ moment.lang 'es'
 
 
 module.exports =
+	format_number: (num) ->
+		p = (num + '').split ''
+		p.reverse().reduce(
+			(acc, num, i, orig) ->
+				num + (if i && !(i % 3) then "," else "") + acc
+			""
+		)
+	
 	gravatar: (email, size) ->
 		gravatar.url email, { s: size }
 

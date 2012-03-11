@@ -69,7 +69,7 @@
 					- if (photo.views == 1)
 						strong #{photo.views} vez. 
 					- else
-						strong #{photo.views} veces. 
+						strong #{helpers.format_number(photo.views)} veces. 
 					| &nbsp; Publicada hace 
 					strong= photo.pretty_date
 
