@@ -579,7 +579,7 @@ app.delete '/fotos/:user/:slug', middleware.auth, (req, res) ->
 
 
 app.get '/perfil', middleware.auth, (req, res) ->
-	res.redirect '/fotos/publicar'
+	res.render 'profile'
 	# res.send "GET /perfil", 'Content-Type': 'text/plain'
 
 

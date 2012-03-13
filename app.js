@@ -575,7 +575,7 @@ app["delete"]('/fotos/:user/:slug', middleware.auth, function(req, res) {
 });
 
 app.get('/perfil', middleware.auth, function(req, res) {
-  return res.redirect('/fotos/publicar');
+  return res.render('profile');
 });
 
 app.put('/perfil', middleware.auth, function(req, res) {
