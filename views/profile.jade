@@ -1,0 +1,36 @@
+form( method="post", action="/profile" )
+	p
+		label Username
+			| 
+			input( type="text", name="username" )
+	
+	p
+		label E-mail
+			| 
+			input( type="email", name="email" )
+	
+	p
+		label Password
+			| 
+			input( type="password", name="password" )
+	
+	p
+		label Repeat Password
+			| 
+			input( type="password", name="password_repeat" )
+	
+	p
+		label Are you a Cristalab member? 
+			input( type="radio", name="clab_boolean", value="yes" )
+			| Yes
+		| 
+		label
+			input( type="radio", name="clab_boolean", value="no", checked )
+			| No
+	
+	p
+		label Cristalab username 
+			input( type="text", name="clab" )
+	
+	p
+		button( type="submit" ) Submit
