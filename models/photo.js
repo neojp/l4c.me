@@ -1,4 +1,4 @@
-var Email, ObjectId, Schema, comment, fs, helpers, im, invoke, methods, model, model_tag, mongoose, mongooseTypes, photo, underscore, util, _;
+var Email, ObjectId, Schema, comment, fs, helpers, im, invoke, methods, model, model_tag, mongoose, mongooseTypes, nodejs_path, photo, underscore, util, _;
 
 mongoose = require('mongoose');
 
@@ -19,6 +19,8 @@ model_tag = require('./tag');
 fs = require('fs');
 
 util = require('util');
+
+nodejs_path = require('path');
 
 Schema = mongoose.Schema;
 
@@ -138,12 +140,12 @@ methods = {
       return next(new Error('Image size required'));
     }
     doc = this;
-    path = "public/uploads/" + doc._id + "_" + size.size + "." + doc.ext;
+    path = nodejs_path.normalize("" + __dirname + "/../public/uploads/" + doc._id + "_" + size.size + "." + doc.ext);
     return im[size.action]({
       dstPath: path,
       format: doc.ext,
       height: size.height,
-      srcPath: "public/uploads/" + doc._id + "_o." + doc.ext,
+      srcPath: nodejs_path.normalize("" + __dirname + "/../public/uploads/" + doc._id + "_o." + doc.ext),
       width: size.width
     }, function(err, stdout, stderr) {
       console.log("photo resize " + size.size);
@@ -176,7 +178,7 @@ methods = {
     var alternate_upload, doc, upload_path;
     console.log('photo upload', file.path);
     doc = this;
-    upload_path = "" + __dirname + "/../public/uploads/" + doc._id + "_o." + doc.ext;
+    upload_path = nodejs_path.normalize("" + __dirname + "/../public/uploads/" + doc._id + "_o." + doc.ext);
     alternate_upload = function(path1, path2) {
       var origin, upload;
       origin = fs.createReadStream(path1);
