@@ -587,5 +587,12 @@ app.delete '/:user/:slug', middleware.auth, (req, res) ->
 
 # Only listen on $ node app.js
 if (!module.parent)
-	app.listen 3000
-	console.log "Listening on port %d", app.address().port
+	cdn = express.createServer()
+	cdn.use express.static( __dirname + '/public/uploads', app.set('static options') )
+
+	server = express.createServer()
+	server.use express.vhost 'uploads.*', cdn
+	server.use express.vhost '*', app
+	
+	server.listen 3000
+	console.log "Listening on port %d", server.address().port
