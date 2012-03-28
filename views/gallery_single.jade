@@ -2,18 +2,18 @@
 	#content
 		nav.pagination
 			span
-				a.prev( href="/fotos/#{username}/#{slug}" ) Anterior
+				a.prev( href="/#{username}/#{slug}" ) Anterior
 			
 			span
-				a.next( href="/fotos/#{username}/#{slug}" ) Siguiente
+				a.next( href="/#{username}/#{slug}" ) Siguiente
 		
 		#img
 			.img
-				a( href="/fotos/#{username}/#{slug}/sizes/g" )
+				a( href="/#{username}/#{slug}/sizes/g" )
 					img( src= "/uploads/#{photo._id}_m.#{photo.ext}" )
 				.icons
-					a.icon-zoom( href="/fotos/#{username}/#{slug}/sizes/g" )
-					- // a.icon-edit( href="/fotos/#{username}/#{slug}/editar" )
+					a.icon-zoom( href="/#{username}/#{slug}/sizes/g" )
+					- // a.icon-edit( href="/#{username}/#{slug}/editar" )
 		
 		.img-info
 			h1= photo.name
@@ -34,26 +34,26 @@
 
 		.widget
 			h2 Otras fotos de 
-				a( href="/fotos/#{username}" )= user.username
+				a( href="/#{username}" )= user.username
 				a.icon-rss( href="/feed/#{username}" ) [RSS]
 			
 			- var from_user = photos.from_user.length ? photos.from_user : [photo];
 			ul.grid
 				- _.each(from_user, function(photo){
 					li
-						a( href="/fotos/#{username}/#{photo.slug}" )
+						a( href="/#{username}/#{photo.slug}" )
 							img( src= "/uploads/#{photo._id}_t.#{photo.ext}" )
 							span.icon-zoom
 				- });
 
 
 			p.alignright
-				a( href="/fotos/#{username}" ) Ver galer&iacute;a completa
+				a( href="/#{username}" ) Ver galer&iacute;a completa
 	
 		.widget
 			h2 Sobre fotograf&iacute;a: 
 				small
-					a.edit-link( href="/fotos/#{username}/#{slug}/editar" ) (Editar)
+					a.edit-link( href="/#{username}/#{slug}/editar" ) (Editar)
 			
 			.widget-content
 				- if (photo._tags.length > 0)
@@ -80,7 +80,7 @@
 				ul.grid
 					- _.each(photos.from_all, function(photo){
 						li
-							a( href="/fotos/#{photo._user.username}/#{photo.slug}" )
+							a( href="/#{photo._user.username}/#{photo.slug}" )
 								img( src= "/uploads/#{photo._id}_t.#{photo.ext}" )
 								span.icon-zoom
 					- });

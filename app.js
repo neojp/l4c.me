@@ -145,7 +145,7 @@ app.all('*', middleware.remove_trailing_slash, function(req, res, next) {
 
 app.get('/', middleware.hmvc('/fotos/:sort?'));
 
-app.get('/fotos/:user/:slug', function(req, res, next) {
+app.get('/:user/:slug', function(req, res, next) {
   var morephotos, myphotos, photo, slug, user, username;
   slug = req.param('slug');
   username = req.param('user');
@@ -190,7 +190,7 @@ app.get('/fotos/:user/:slug', function(req, res, next) {
   });
 });
 
-app.get('/fotos/:user/:slug/sizes/:size', function(req, res) {
+app.get('/:user/:slug/sizes/:size', function(req, res) {
   var slug, user;
   slug = req.param('slug');
   user = req.param('user');
@@ -215,9 +215,9 @@ app.get('/fotos/:user/:slug/sizes/:size', function(req, res) {
   });
 });
 
-app.get('/fotos/:user/pag/:page?', middleware.paged('/fotos/:user'));
+app.get('/:user/pag/:page?', middleware.paged('/:user'));
 
-app.get('/fotos/:user', function(req, res, next) {
+app.get('/:user', function(req, res, next) {
   var page, per_page, photos, user, username;
   username = req.param('user');
   per_page = helpers.pagination;
@@ -249,7 +249,7 @@ app.get('/fotos/:user', function(req, res, next) {
     res.locals({
       body_class: 'gallery user',
       pages: Math.ceil(count / per_page),
-      path: "/fotos/" + user.username,
+      path: "/" + user.username,
       photos: photos,
       sort: null,
       total: count,
@@ -458,7 +458,7 @@ app.post('/comment', function(req, res, next) {
   }).rescue(function(err) {
     return next(err);
   }).end(null, function(photo) {
-    return res.redirect("/fotos/" + photo._user.username + "/" + photo.slug + "#c" + (_.last(photo.comments)._id));
+    return res.redirect("/" + photo._user.username + "/" + photo.slug + "#c" + (_.last(photo.comments)._id));
   });
 });
 
@@ -515,11 +515,11 @@ app.post('/fotos/publicar', middleware.auth, function(req, res, next) {
     if (err) return next(err);
   }).end(null, function(data) {
     console.log("photo end - redirect");
-    return res.redirect("/fotos/" + user.username + "/" + photo.slug);
+    return res.redirect("/" + user.username + "/" + photo.slug);
   });
 });
 
-app.get('/fotos/:user/:slug/editar', middleware.auth, function(req, res) {
+app.get('/:user/:slug/editar', middleware.auth, function(req, res) {
   var photo, slug, user, username;
   slug = req.param('slug');
   username = req.param('user');
@@ -547,7 +547,7 @@ app.get('/fotos/:user/:slug/editar', middleware.auth, function(req, res) {
   }).end(user, function(data) {
     res.locals({
       body_class: 'single edit',
-      path: "/fotos/" + user.username + "/" + photo.slug + "/editar",
+      path: "/" + user.username + "/" + photo.slug + "/editar",
       photo: photo,
       slug: slug,
       user: username
@@ -556,20 +556,20 @@ app.get('/fotos/:user/:slug/editar', middleware.auth, function(req, res) {
   });
 });
 
-app.put('/fotos/:user/:slug', middleware.auth, function(req, res) {
+app.put('/:user/:slug', middleware.auth, function(req, res) {
   var slug, user;
   user = req.param('user');
   slug = req.param('slug');
-  return res.send("PUT /fotos/" + user + "/" + slug, {
+  return res.send("PUT /" + user + "/" + slug, {
     'Content-Type': 'text/plain'
   });
 });
 
-app["delete"]('/fotos/:user/:slug', middleware.auth, function(req, res) {
+app["delete"]('/:user/:slug', middleware.auth, function(req, res) {
   var slug, user;
   user = req.param('user');
   slug = req.param('slug');
-  return res.send("DELETE /fotos/" + user + "/" + slug, {
+  return res.send("DELETE /" + user + "/" + slug, {
     'Content-Type': 'text/plain'
   });
 });

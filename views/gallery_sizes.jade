@@ -3,7 +3,7 @@
 
 #content
 	p.nomargin
-		a( href="/fotos/#{username}/#{photo.slug}" ) &laquo;&nbsp;Volver a la fotograf&iacute;a de #{username}
+		a( href="/#{username}/#{photo.slug}" ) &laquo;&nbsp;Volver a la fotograf&iacute;a de #{username}
 	
 	nav#breadcrumb
 		h1= photo.name
@@ -12,19 +12,19 @@
 		
 			- className = (size == 'p') ? 'active' : '';
 			li( class= className )
-				a( href="/fotos/#{username}/#{photo.slug}/sizes/p" ) Peque&ntilde;a
+				a( href="/#{username}/#{photo.slug}/sizes/p" ) Peque&ntilde;a
 			
 			- className = (size == 'm') ? 'active' : '';
 			li( class= className )
-				a( href="/fotos/#{username}/#{photo.slug}/sizes/m" ) Mediana
+				a( href="/#{username}/#{photo.slug}/sizes/m" ) Mediana
 			
 			- className = (size == 'g') ? 'active' : '';
 			li( class= className )
-				a( href="/fotos/#{username}/#{photo.slug}/sizes/g" ) Grande
+				a( href="/#{username}/#{photo.slug}/sizes/g" ) Grande
 
 			- className = (size == 'o') ? 'active' : '';
 			li( class= className )
-				a( href="/fotos/#{username}/#{photo.slug}/sizes/o" ) Original
+				a( href="/#{username}/#{photo.slug}/sizes/o" ) Original
 
 	#img
 		.img
@@ -66,4 +66,4 @@
 			strong= photo.pretty_date
 
 		p
-			a.edit-link( href="/fotos/#{photo.user}/#{photo.slug}/editar" ) (Editar)
+			a.edit-link( href="/#{photo.user}/#{photo.slug}/editar" ) (Editar)

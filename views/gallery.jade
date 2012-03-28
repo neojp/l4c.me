@@ -9,7 +9,7 @@ hr
 		- size = helpers.image.sizes.s
 		- _.each( photos, function(photo) {
 			- user = photo._user;
-			- url = '/fotos/' + user.username + '/' + photo.slug;
+			- url = '/' + user.username + '/' + photo.slug;
 
 			li
 				div.img
@@ -24,7 +24,7 @@ hr
 						br
 						span.by por&nbsp;
 						strong.username
-							a( href= "/fotos/#{user.username}" )= user.username
+							a( href= "/#{user.username}" )= user.username
 
 					a.comments( href= url ) Comentarios
 

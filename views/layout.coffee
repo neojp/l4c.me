@@ -32,11 +32,11 @@ html lang: 'es', ->
 									a href:"/fotos/publicar", -> 'Subir'
 								
 								if (@logged_user)
-									classsname = 'active' if @original_url.indexOf "/fotos/#{@logged_user.username}" != -1
+									classsname = 'active' if @original_url.indexOf "/#{@logged_user.username}" != -1
 									li class: classname, ->
-										a href:"/fotos/#{@logged_user.username}", -> 'Mis Fotos'
+										a href:"/#{@logged_user.username}", -> 'Mis Fotos'
 
-								if (@original_url not in ['/', '/fotos/publicar']) && (@logged_user && @original_url.indexOf("/fotos/#{@logged_user.username}") == -1)
+								if (@original_url not in ['/', '/fotos/publicar']) && (@logged_user && @original_url.indexOf("/#{@logged_user.username}") == -1)
 									classname = 'active'
 
 								li class: classname, ->
@@ -48,7 +48,7 @@ html lang: 'es', ->
 							aside ->
 								p ->
 									'Hola '
-									a '.username', href: "/fotos/#{@logged_user.username}", -> @logged_user.username
+									a '.username', href: "/#{@logged_user.username}", -> @logged_user.username
 									', puedes editar tu '
 									a '.profile', href: "/perfil/", -> 'perfil'
 									' o '

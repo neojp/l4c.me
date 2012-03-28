@@ -4,7 +4,7 @@
 			p.comment-author
 				- if (!comment.guest)
 					| Por 
-					a( href="/fotos/#{comment._user.username}" )= comment._user.username
+					a( href="/#{comment._user.username}" )= comment._user.username
 				- else
 					= comment.user.name
 

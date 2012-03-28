@@ -125,7 +125,7 @@ app.all '*', middleware.remove_trailing_slash, (req, res, next) ->
 app.get '/', middleware.hmvc('/fotos/:sort?')
 
 
-app.get '/fotos/:user/:slug', (req, res, next) ->
+app.get '/:user/:slug', (req, res, next) ->
 	slug = req.param 'slug'
 	username = req.param 'user'
 	
@@ -185,7 +185,7 @@ app.get '/fotos/:user/:slug', (req, res, next) ->
 		res.render 'gallery_single'
 
 
-app.get '/fotos/:user/:slug/sizes/:size', (req, res) ->
+app.get '/:user/:slug/sizes/:size', (req, res) ->
 	slug = req.param 'slug'
 	user = req.param 'user'
 
@@ -210,8 +210,8 @@ app.get '/fotos/:user/:slug/sizes/:size', (req, res) ->
 			res.render 'gallery_sizes', locals: locals
 
 
-app.get '/fotos/:user/pag/:page?', middleware.paged('/fotos/:user')
-app.get '/fotos/:user', (req, res, next) ->
+app.get '/:user/pag/:page?', middleware.paged('/:user')
+app.get '/:user', (req, res, next) ->
 	username = req.param 'user'
 	per_page = helpers.pagination
 	page = req.param 'page', 1
@@ -246,7 +246,7 @@ app.get '/fotos/:user', (req, res, next) ->
 		res.locals
 			body_class: 'gallery user'
 			pages: Math.ceil count / per_page
-			path: "/fotos/#{user.username}"
+			path: "/#{user.username}"
 			photos: photos
 			sort: null
 			total: count
@@ -464,7 +464,7 @@ app.post '/comment', (req, res, next) ->
 		next err
 
 	.end null, (photo) ->
-		res.redirect "/fotos/#{photo._user.username}/#{photo.slug}#c#{_.last(photo.comments)._id}"
+		res.redirect "/#{photo._user.username}/#{photo.slug}#c#{_.last(photo.comments)._id}"
 
 
 app.get '/publicar', (req, res) -> res.redirect '/fotos/publicar'
@@ -526,10 +526,10 @@ app.post '/fotos/publicar', middleware.auth, (req, res, next) ->
 	.end null, (data) ->
 		# redirect
 		console.log "photo end - redirect"
-		res.redirect "/fotos/#{user.username}/#{photo.slug}"
+		res.redirect "/#{user.username}/#{photo.slug}"
 
 
-app.get '/fotos/:user/:slug/editar', middleware.auth, (req, res) ->
+app.get '/:user/:slug/editar', middleware.auth, (req, res) ->
 	slug = req.param 'slug'
 	username = req.param 'user'
 	user = null
@@ -558,7 +558,7 @@ app.get '/fotos/:user/:slug/editar', middleware.auth, (req, res) ->
 	.end user, (data) ->
 		res.locals
 			body_class: 'single edit'
-			path: "/fotos/#{user.username}/#{photo.slug}/editar"
+			path: "/#{user.username}/#{photo.slug}/editar"
 			photo: photo
 			slug: slug
 			user: username
@@ -566,16 +566,16 @@ app.get '/fotos/:user/:slug/editar', middleware.auth, (req, res) ->
 		res.render 'gallery_single'
 
 
-app.put '/fotos/:user/:slug', middleware.auth, (req, res) ->
+app.put '/:user/:slug', middleware.auth, (req, res) ->
 	user = req.param 'user'
 	slug = req.param 'slug'
-	res.send "PUT /fotos/#{user}/#{slug}", 'Content-Type': 'text/plain'
+	res.send "PUT /#{user}/#{slug}", 'Content-Type': 'text/plain'
 
 
-app.delete '/fotos/:user/:slug', middleware.auth, (req, res) ->
+app.delete '/:user/:slug', middleware.auth, (req, res) ->
 	user = req.param 'user'
 	slug = req.param 'slug'
-	res.send "DELETE /fotos/#{user}/#{slug}", 'Content-Type': 'text/plain'
+	res.send "DELETE /#{user}/#{slug}", 'Content-Type': 'text/plain'
 
 
 app.get '/perfil', middleware.auth, (req, res) ->
