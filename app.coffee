@@ -96,13 +96,6 @@ app.param 'sort', (req, res, next, id) ->
 		return next('route')
 
 
-app.param 'user', (req, res, next, id) ->
-	if id not in ['ultimas', 'top', 'galeria', 'pag', 'publicar']
-		next()
-	else
-		return next('route')
-
-
 # Routes
 app.all '*', middleware.remove_trailing_slash, (req, res, next) ->
 	res.locals
@@ -123,136 +116,6 @@ app.all '*', middleware.remove_trailing_slash, (req, res, next) ->
 
 
 app.get '/', middleware.hmvc('/fotos/:sort?')
-
-
-app.get '/:user/:slug', (req, res, next) ->
-	slug = req.param 'slug'
-	username = req.param 'user'
-	
-	user = null
-	photo = null
-	myphotos = []
-	morephotos = []
-
-	invoke (data, callback) ->
-		model.photo
-			.findOne( slug: slug )
-			.populate('_user')
-			.populate('_tags')
-			.populate('comments._user')
-			.run (err, data) ->
-				return callback err  if err
-				return error_handler(404)(req, res)  if !data && data._user.username != username
-
-				user = data._user
-				photo = data
-				photo.views += 1
-				photo.save callback
-
-	.then (data, callback) ->
-		model.photo
-			.find( _user: user._id )
-			.notEqualTo('_id', photo._id)
-			.$or( helpers.random_query() )
-			# .desc('created_at')
-			.limit(6)
-			.run callback
-
-	.and (data, callback) ->
-		model.photo
-			.find()
-			.notEqualTo('_user', photo._user._id)
-			.$or( helpers.random_query() )
-			# .desc('created_at')
-			.limit(6)
-			.populate('_user')
-			.run callback
-
-	.rescue (err) ->
-		next err
-
-	.end null, (data) ->
-		res.locals
-			body_class: 'user single'
-			photo: photo
-			photos:
-				from_user: data[0]
-				from_all: data[1]
-			slug: slug
-			user: user
-			username: user.username
-		
-		res.render 'gallery_single'
-
-
-app.get '/:user/:slug/sizes/:size', (req, res) ->
-	slug = req.param 'slug'
-	user = req.param 'user'
-
-	model.photo
-		.findOne( slug: slug )
-		.populate('_user')
-		.populate('_tags')
-		.run (err, photo) ->
-			return next err  if err
-			return error_handler(404)(req, res)  if !photo
-
-			photo.views += 1
-			photo.save()
-
-			locals =
-				body_class: 'user sizes'
-				photo: photo
-				size: req.param 'size'
-				slug: slug
-				user: user
-
-			res.render 'gallery_sizes', locals: locals
-
-
-app.get '/:user/pag/:page?', middleware.paged('/:user')
-app.get '/:user', (req, res, next) ->
-	username = req.param 'user'
-	per_page = helpers.pagination
-	page = req.param 'page', 1
-	user = null
-	photos = null
-
-	invoke (data, callback) ->
-		model.user.findOne username: username, (err, user) -> callback err, user
-
-	.then (data, callback) ->
-		return error_handler(404)(req, res)  if (!data)
-		user = data
-		
-		model.photo.count { _user: user._id }, callback
-	
-	.and (data, callback) ->
-		photos = model.photo
-			.find( _user: user._id )
-			.limit(per_page)
-			.skip(per_page * (page - 1))
-			.desc('created_at')
-			.populate('_user')
-			.run callback
-
-	.rescue (err) ->
-		next err  if err
-	
-	.end user, (data) ->
-		count = data[0]
-		photos = data[1]
-		
-		res.locals
-			body_class: 'gallery user'
-			pages: Math.ceil count / per_page
-			path: "/#{user.username}"
-			photos: photos
-			sort: null
-			total: count
-			user: user
-
-		res.render 'gallery'
 
 
 app.get '/fotos/:sort/pag/:page?', middleware.paged('/fotos/:sort?')
@@ -529,6 +392,149 @@ app.post '/fotos/publicar', middleware.auth, (req, res, next) ->
 		res.redirect "/#{user.username}/#{photo.slug}"
 
 
+app.get '/perfil', middleware.auth, (req, res) ->
+	res.render 'profile'
+	# res.send "GET /perfil", 'Content-Type': 'text/plain'
+
+
+app.put '/perfil', middleware.auth, (req, res) ->
+	res.send "PUT /perfil", 'Content-Type': 'text/plain'
+
+
+app.get '/tweets', middleware.auth, (req, res) ->
+	res.send "GET /tweets", 'Content-Type': 'text/plain'
+
+
+app.get '/:user/:slug', (req, res, next) ->
+	slug = req.param 'slug'
+	username = req.param 'user'
+	
+	user = null
+	photo = null
+	myphotos = []
+	morephotos = []
+
+	invoke (data, callback) ->
+		model.photo
+			.findOne( slug: slug )
+			.populate('_user')
+			.populate('_tags')
+			.populate('comments._user')
+			.run (err, data) ->
+				return callback err  if err
+				return error_handler(404)(req, res)  if !data && data._user.username != username
+
+				user = data._user
+				photo = data
+				photo.views += 1
+				photo.save callback
+
+	.then (data, callback) ->
+		model.photo
+			.find( _user: user._id )
+			.notEqualTo('_id', photo._id)
+			.$or( helpers.random_query() )
+			# .desc('created_at')
+			.limit(6)
+			.run callback
+
+	.and (data, callback) ->
+		model.photo
+			.find()
+			.notEqualTo('_user', photo._user._id)
+			.$or( helpers.random_query() )
+			# .desc('created_at')
+			.limit(6)
+			.populate('_user')
+			.run callback
+
+	.rescue (err) ->
+		next err
+
+	.end null, (data) ->
+		res.locals
+			body_class: 'user single'
+			photo: photo
+			photos:
+				from_user: data[0]
+				from_all: data[1]
+			slug: slug
+			user: user
+			username: user.username
+		
+		res.render 'gallery_single'
+
+
+app.get '/:user/:slug/sizes/:size', (req, res) ->
+	slug = req.param 'slug'
+	user = req.param 'user'
+
+	model.photo
+		.findOne( slug: slug )
+		.populate('_user')
+		.populate('_tags')
+		.run (err, photo) ->
+			return next err  if err
+			return error_handler(404)(req, res)  if !photo
+
+			photo.views += 1
+			photo.save()
+
+			locals =
+				body_class: 'user sizes'
+				photo: photo
+				size: req.param 'size'
+				slug: slug
+				user: user
+
+			res.render 'gallery_sizes', locals: locals
+
+
+app.get '/:user/pag/:page?', middleware.paged('/:user')
+app.get '/:user', (req, res, next) ->
+	username = req.param 'user'
+	per_page = helpers.pagination
+	page = req.param 'page', 1
+	user = null
+	photos = null
+
+	invoke (data, callback) ->
+		model.user.findOne username: username, (err, user) -> callback err, user
+
+	.then (data, callback) ->
+		return error_handler(404)(req, res)  if (!data)
+		user = data
+		
+		model.photo.count { _user: user._id }, callback
+	
+	.and (data, callback) ->
+		photos = model.photo
+			.find( _user: user._id )
+			.limit(per_page)
+			.skip(per_page * (page - 1))
+			.desc('created_at')
+			.populate('_user')
+			.run callback
+
+	.rescue (err) ->
+		next err  if err
+	
+	.end user, (data) ->
+		count = data[0]
+		photos = data[1]
+		
+		res.locals
+			body_class: 'gallery user'
+			pages: Math.ceil count / per_page
+			path: "/#{user.username}"
+			photos: photos
+			sort: null
+			total: count
+			user: user
+
+		res.render 'gallery'
+
+
 app.get '/:user/:slug/editar', middleware.auth, (req, res) ->
 	slug = req.param 'slug'
 	username = req.param 'user'
@@ -577,18 +583,6 @@ app.delete '/:user/:slug', middleware.auth, (req, res) ->
 	slug = req.param 'slug'
 	res.send "DELETE /#{user}/#{slug}", 'Content-Type': 'text/plain'
 
-
-app.get '/perfil', middleware.auth, (req, res) ->
-	res.render 'profile'
-	# res.send "GET /perfil", 'Content-Type': 'text/plain'
-
-
-app.put '/perfil', middleware.auth, (req, res) ->
-	res.send "PUT /perfil", 'Content-Type': 'text/plain'
-
-
-app.get '/tweets', middleware.auth, (req, res) ->
-	res.send "GET /tweets", 'Content-Type': 'text/plain'
 
 
 # Only listen on $ node app.js

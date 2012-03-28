@@ -118,14 +118,6 @@ app.param('sort', function(req, res, next, id) {
   }
 });
 
-app.param('user', function(req, res, next, id) {
-  if (id !== 'ultimas' && id !== 'top' && id !== 'galeria' && id !== 'pag' && id !== 'publicar') {
-    return next();
-  } else {
-    return next('route');
-  }
-});
-
 app.all('*', middleware.remove_trailing_slash, function(req, res, next) {
   res.locals({
     _: underscore,
@@ -144,120 +136,6 @@ app.all('*', middleware.remove_trailing_slash, function(req, res, next) {
 });
 
 app.get('/', middleware.hmvc('/fotos/:sort?'));
-
-app.get('/:user/:slug', function(req, res, next) {
-  var morephotos, myphotos, photo, slug, user, username;
-  slug = req.param('slug');
-  username = req.param('user');
-  user = null;
-  photo = null;
-  myphotos = [];
-  morephotos = [];
-  return invoke(function(data, callback) {
-    return model.photo.findOne({
-      slug: slug
-    }).populate('_user').populate('_tags').populate('comments._user').run(function(err, data) {
-      if (err) return callback(err);
-      if (!data && data._user.username !== username) {
-        return error_handler(404)(req, res);
-      }
-      user = data._user;
-      photo = data;
-      photo.views += 1;
-      return photo.save(callback);
-    });
-  }).then(function(data, callback) {
-    return model.photo.find({
-      _user: user._id
-    }).notEqualTo('_id', photo._id).$or(helpers.random_query()).limit(6).run(callback);
-  }).and(function(data, callback) {
-    return model.photo.find().notEqualTo('_user', photo._user._id).$or(helpers.random_query()).limit(6).populate('_user').run(callback);
-  }).rescue(function(err) {
-    return next(err);
-  }).end(null, function(data) {
-    res.locals({
-      body_class: 'user single',
-      photo: photo,
-      photos: {
-        from_user: data[0],
-        from_all: data[1]
-      },
-      slug: slug,
-      user: user,
-      username: user.username
-    });
-    return res.render('gallery_single');
-  });
-});
-
-app.get('/:user/:slug/sizes/:size', function(req, res) {
-  var slug, user;
-  slug = req.param('slug');
-  user = req.param('user');
-  return model.photo.findOne({
-    slug: slug
-  }).populate('_user').populate('_tags').run(function(err, photo) {
-    var locals;
-    if (err) return next(err);
-    if (!photo) return error_handler(404)(req, res);
-    photo.views += 1;
-    photo.save();
-    locals = {
-      body_class: 'user sizes',
-      photo: photo,
-      size: req.param('size'),
-      slug: slug,
-      user: user
-    };
-    return res.render('gallery_sizes', {
-      locals: locals
-    });
-  });
-});
-
-app.get('/:user/pag/:page?', middleware.paged('/:user'));
-
-app.get('/:user', function(req, res, next) {
-  var page, per_page, photos, user, username;
-  username = req.param('user');
-  per_page = helpers.pagination;
-  page = req.param('page', 1);
-  user = null;
-  photos = null;
-  return invoke(function(data, callback) {
-    return model.user.findOne({
-      username: username
-    }, function(err, user) {
-      return callback(err, user);
-    });
-  }).then(function(data, callback) {
-    if (!data) return error_handler(404)(req, res);
-    user = data;
-    return model.photo.count({
-      _user: user._id
-    }, callback);
-  }).and(function(data, callback) {
-    return photos = model.photo.find({
-      _user: user._id
-    }).limit(per_page).skip(per_page * (page - 1)).desc('created_at').populate('_user').run(callback);
-  }).rescue(function(err) {
-    if (err) return next(err);
-  }).end(user, function(data) {
-    var count;
-    count = data[0];
-    photos = data[1];
-    res.locals({
-      body_class: 'gallery user',
-      pages: Math.ceil(count / per_page),
-      path: "/" + user.username,
-      photos: photos,
-      sort: null,
-      total: count,
-      user: user
-    });
-    return res.render('gallery');
-  });
-});
 
 app.get('/fotos/:sort/pag/:page?', middleware.paged('/fotos/:sort?'));
 
@@ -519,6 +397,136 @@ app.post('/fotos/publicar', middleware.auth, function(req, res, next) {
   });
 });
 
+app.get('/perfil', middleware.auth, function(req, res) {
+  return res.render('profile');
+});
+
+app.put('/perfil', middleware.auth, function(req, res) {
+  return res.send("PUT /perfil", {
+    'Content-Type': 'text/plain'
+  });
+});
+
+app.get('/tweets', middleware.auth, function(req, res) {
+  return res.send("GET /tweets", {
+    'Content-Type': 'text/plain'
+  });
+});
+
+app.get('/:user/:slug', function(req, res, next) {
+  var morephotos, myphotos, photo, slug, user, username;
+  slug = req.param('slug');
+  username = req.param('user');
+  user = null;
+  photo = null;
+  myphotos = [];
+  morephotos = [];
+  return invoke(function(data, callback) {
+    return model.photo.findOne({
+      slug: slug
+    }).populate('_user').populate('_tags').populate('comments._user').run(function(err, data) {
+      if (err) return callback(err);
+      if (!data && data._user.username !== username) {
+        return error_handler(404)(req, res);
+      }
+      user = data._user;
+      photo = data;
+      photo.views += 1;
+      return photo.save(callback);
+    });
+  }).then(function(data, callback) {
+    return model.photo.find({
+      _user: user._id
+    }).notEqualTo('_id', photo._id).$or(helpers.random_query()).limit(6).run(callback);
+  }).and(function(data, callback) {
+    return model.photo.find().notEqualTo('_user', photo._user._id).$or(helpers.random_query()).limit(6).populate('_user').run(callback);
+  }).rescue(function(err) {
+    return next(err);
+  }).end(null, function(data) {
+    res.locals({
+      body_class: 'user single',
+      photo: photo,
+      photos: {
+        from_user: data[0],
+        from_all: data[1]
+      },
+      slug: slug,
+      user: user,
+      username: user.username
+    });
+    return res.render('gallery_single');
+  });
+});
+
+app.get('/:user/:slug/sizes/:size', function(req, res) {
+  var slug, user;
+  slug = req.param('slug');
+  user = req.param('user');
+  return model.photo.findOne({
+    slug: slug
+  }).populate('_user').populate('_tags').run(function(err, photo) {
+    var locals;
+    if (err) return next(err);
+    if (!photo) return error_handler(404)(req, res);
+    photo.views += 1;
+    photo.save();
+    locals = {
+      body_class: 'user sizes',
+      photo: photo,
+      size: req.param('size'),
+      slug: slug,
+      user: user
+    };
+    return res.render('gallery_sizes', {
+      locals: locals
+    });
+  });
+});
+
+app.get('/:user/pag/:page?', middleware.paged('/:user'));
+
+app.get('/:user', function(req, res, next) {
+  var page, per_page, photos, user, username;
+  username = req.param('user');
+  per_page = helpers.pagination;
+  page = req.param('page', 1);
+  user = null;
+  photos = null;
+  return invoke(function(data, callback) {
+    return model.user.findOne({
+      username: username
+    }, function(err, user) {
+      return callback(err, user);
+    });
+  }).then(function(data, callback) {
+    if (!data) return error_handler(404)(req, res);
+    user = data;
+    return model.photo.count({
+      _user: user._id
+    }, callback);
+  }).and(function(data, callback) {
+    return photos = model.photo.find({
+      _user: user._id
+    }).limit(per_page).skip(per_page * (page - 1)).desc('created_at').populate('_user').run(callback);
+  }).rescue(function(err) {
+    if (err) return next(err);
+  }).end(user, function(data) {
+    var count;
+    count = data[0];
+    photos = data[1];
+    res.locals({
+      body_class: 'gallery user',
+      pages: Math.ceil(count / per_page),
+      path: "/" + user.username,
+      photos: photos,
+      sort: null,
+      total: count,
+      user: user
+    });
+    return res.render('gallery');
+  });
+});
+
 app.get('/:user/:slug/editar', middleware.auth, function(req, res) {
   var photo, slug, user, username;
   slug = req.param('slug');
@@ -570,22 +578,6 @@ app["delete"]('/:user/:slug', middleware.auth, function(req, res) {
   user = req.param('user');
   slug = req.param('slug');
   return res.send("DELETE /" + user + "/" + slug, {
-    'Content-Type': 'text/plain'
-  });
-});
-
-app.get('/perfil', middleware.auth, function(req, res) {
-  return res.render('profile');
-});
-
-app.put('/perfil', middleware.auth, function(req, res) {
-  return res.send("PUT /perfil", {
-    'Content-Type': 'text/plain'
-  });
-});
-
-app.get('/tweets', middleware.auth, function(req, res) {
-  return res.send("GET /tweets", {
     'Content-Type': 'text/plain'
   });
 });
