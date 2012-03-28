@@ -15,7 +15,7 @@ module.exports = (app) -> middleware =
 		res.redirect('/login')
 
 	hmvc: (path) -> (req, res, next) ->
-		route = app.match.get(path)
+		route = app.match(path)
 		route = _.filter route, (i) -> i.path == path
 		route = _.first route
 		callback = _.last route.callbacks
