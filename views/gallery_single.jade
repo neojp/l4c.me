@@ -1,40 +1,39 @@
-#content-sidebar-wrap
+#img
+	.img
+		a( href="/#{username}/#{slug}/sizes/o" )
+			img( src= "/uploads/#{photo._id}_l.#{photo.ext}" )
+		.icons
+			a.icon-zoom( href="/#{username}/#{slug}/sizes/g" )
+			- // a.icon-edit( href="/#{username}/#{slug}/editar" )
+
+#content-sidebar-wrap.wrap
 	#content
 		nav.pagination
 			span
-				a.prev( href="/#{username}/#{slug}" ) Anterior
-			
+				a.prev( href="/#{username}/#{slug}" )
+					span.hidden &laquo;&nbsp;
+					| Anterior
+			span.hidden
+				|  &nbsp; 
 			span
-				a.next( href="/#{username}/#{slug}" ) Siguiente
-		
-		#img
-			.img
-				a( href="/#{username}/#{slug}/sizes/g" )
-					img( src= "/uploads/#{photo._id}_m.#{photo.ext}" )
-				.icons
-					a.icon-zoom( href="/#{username}/#{slug}/sizes/g" )
-					- // a.icon-edit( href="/#{username}/#{slug}/editar" )
-		
+				a.next( href="/#{username}/#{slug}" )
+					| Siguiente
+					span.hidden &nbsp;&raquo;
+
 		.img-info
 			h1= photo.name
 			!= helpers.markdown(photo.description)
 		
-		#social-bar
+		//- #social-bar
 
-		hr
-
-		a#comentarios
-		
-		!= partial('_comments', res.locals)
+	hr.hidden
 
 	
 	#sidebar
-		#upload
-			a( href="/fotos/publicar" ) Sube una foto
-
 		.widget
 			h2 Otras fotos de 
 				a( href="/#{username}" )= user.username
+				| 
 				a.icon-rss( href="/feed/#{username}" ) [RSS]
 			
 			- var from_user = photos.from_user.length ? photos.from_user : [photo];
@@ -49,29 +48,9 @@
 
 			p.alignright
 				a( href="/#{username}" ) Ver galer&iacute;a completa
-	
-		.widget
-			h2 Sobre fotograf&iacute;a: 
-				small
-					a.edit-link( href="/#{username}/#{slug}/editar" ) (Editar)
-			
-			.widget-content
-				- if (photo._tags.length > 0)
-					p.tags Tags: 
-						- _.each( photo._tags, function(tag) {
 
-							a( href="/tags/#{tag.name}" )= tag.name 
-							| 
-
-						- });
-				
-				p.info Ha sido vista 
-					- if (photo.views == 1)
-						strong #{photo.views} vez. 
-					- else
-						strong #{helpers.format_number(photo.views)} veces. 
-					| &nbsp; Publicada hace 
-					strong= photo.pretty_date
+		#upload
+			a( href="/fotos/publicar" ) Sube una foto
 
 		- if (photos.from_all.length)
 			.widget
@@ -87,3 +66,10 @@
 				
 				p.alignright
 					a( href="/fotos" ) Ver m&aacute;s
+
+	#comments
+		hr
+
+		a#comentarios
+		
+		!= partial('_comments', res.locals)

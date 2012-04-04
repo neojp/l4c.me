@@ -5,15 +5,15 @@
 }
 @import "classes"
 @import "reset"
-//@import "boilerplate"
+// @import "boilerplate"
 
 body
 	background #242c33
 	color #333
-	min-width 1000px
+	// min-width 1000px
 
-#overflow
-	overflow hidden
+// #overflow
+// 	overflow hidden
 
 hr
 	background url(images/bg_hr.png) repeat-x left bottom
@@ -37,36 +37,47 @@ input, textarea
 		outline 0
 
 button
-	background #FF9933 url(images/icon_comments_white.png) no-repeat 90% 50%
+	// background #FF9933 url(images/icon_comments_white.png) no-repeat 90% 50%
+	background #FF9933
+	border 0
 	color #fff
+	cursor pointer
+	font bold 12px/1 Helvetica, Arial, sans-serif
 	height 25px
-	padding 0 35px 0 10px
+	// padding 0 35px 0 10px
+	padding 0 10px
 	border-radius()
+	transition()
 
-	&:after
-		content: "|"
-		font-size 16px
-		color #FFC993
-		height 20px
-		margin-left 8px
-		overflow hidden
-		width 0
+	// &:after
+	// 	content: "|"
+	// 	font-size 16px
+	// 	color #FFC993
+	// 	height 20px
+	// 	margin-left 8px
+	// 	overflow hidden
+	// 	width 0
 	
 	&:hover, &:focus
 		background-color lighten( #ff9933, 10% )
 
+	&:focus
+		outline	0
+		box-shadow( unquote("inset 0 0 0 1px #fff, 0 0 0 1px #FF9933") )
+
 .wrap
 	margin 0 auto
 	position relative
-	min-width 1000px
-	width 90%
-
-.wrap, #container
 	max-width 1250px
+	// min-width 1000px
+	// width 90%
 
-header
+#header
 	background #00b8f4
-	height 60px
+	min-height 60px
+
+	.wrap
+		clearfix()
 
 	&, a
 		border 0
@@ -225,7 +236,7 @@ footer
 	background #fff
 
 #wrap
-	padding 15px 0 25px
+	padding 25px 0
 
 #message
 	background #ffc68c
@@ -478,6 +489,7 @@ body.upload
 	clearfix()
 
 	#content
+	#comments
 		float left
 		padding-left 10px
 		width 600px
@@ -502,7 +514,6 @@ body.upload
 		.prev, .next
 			border-radius 0
 	*/
-	
 
 	#sidebar
 		float right
@@ -583,17 +594,24 @@ body.upload
 
 
 #img
-	margin-bottom 15px
+	background #333
+	margin-bottom 25px
+	overflow hidden
+	padding 0 10px
+	position relative
 	text-align center
 
 	a
 		border 0
 	
 	.img
+		box-shadow( 0 0 50px #222 )
 		display inline-block
 		position relative
 
 	img
+		height auto
+		max-width 100%
 		vertical-align bottom
 	
 	.icons
@@ -659,12 +677,23 @@ div.comments
 		float right
 	
 body.single
-	#container
-		width 1000px
+	#wrap
+		padding-top 0
+
+	// #container
+	// 	width 1000px
+
+	#content-sidebar-wrap nav.pagination
+		float right
+		margin 0
+		padding 0
+
+	#sidebar #upload
+		text-align center
 
 body.sizes
-	#container
-		width 970px
+	// #container
+	// 	width 970px
 	
 	#breadcrumb
 		margin-bottom 10px

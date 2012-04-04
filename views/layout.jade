@@ -13,7 +13,7 @@ html( lang="es" )
 
 		#overflow
 		
-			header
+			header#header
 				.wrap
 					p#logo
 						a( href="/", title="L4C.me" )
@@ -59,21 +59,19 @@ html( lang="es" )
 							aside
 								form( method="post", action="/login" )
 									p
-										input( type="text", name="username", placeholder="Username" )
-										input( type="password", name="password", placeholder="Password" )
-										button( type="submit" ) Submit
+										input( type="text", name="username", placeholder="Nombre de usuario" )
+										input( type="password", name="password", placeholder="Contraseña" )
+										button( type="submit" ) Iniciar Sesión
 			
 			hr.hidden
 
 			section#inner
-				#wrap.wrap
+				#wrap
 					
-					p#message No te pierdas lo nuevo de L4C, un concurso nuevo cada mes. 
-						a.more( href="/concursos/" ) Leer m&aacute;s
-						a.close Cerrar [x]
+					//- p#message No te pierdas lo nuevo de L4C, un concurso nuevo cada mes. 
+					//- 	a.more( href="/concursos/" ) Leer m&aacute;s
+					//- 	a.close Cerrar [x]
 				
-					hr.hidden
-
 					#container.clearfix
 						!= body
 			

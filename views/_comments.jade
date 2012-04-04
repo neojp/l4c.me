@@ -1,32 +1,29 @@
-#comments.comments
-	- _.each(photo.comments, function(comment, index, comments){
-		article.comment( id= "c#{comment._id}" )
-			p.comment-author
-				- if (!comment.guest)
-					| Por 
-					a( href="/#{comment._user.username}" )= comment._user.username
-				- else
-					= comment.user.name
+- if (photo.comments.length)
+	#comments.comments
+		- _.each(photo.comments, function(comment, index, comments){
+			article.comment( id= "c#{comment._id}" )
+				p.comment-author
+					- if (!comment.guest)
+						| Por 
+						a( href="/#{comment._user.username}" )= comment._user.username
+					- else
+						= comment.user.name
 
-			p.gravatar
-				img( src= helpers.gravatar(comment._user.email, 50) )
+				p.gravatar
+					img( src= helpers.gravatar(comment._user.email, 50) )
 
-			p.comment-date Hace #{comment.pretty_date}
+				p.comment-date Hace #{comment.pretty_date}
 
-			.comment-body!= helpers.markdown(comment.body)
-	- });
+				.comment-body!= helpers.markdown(comment.body)
+		- });
+
+	hr.hidden
 
 
 #comments-form.comments
-	h2 Comentarios
+	h2.hidden Comentarios
 	form.clearfix( method="post", action="/comment" )
 		input( type="hidden", name="photo", value=photo.slug )
-
-		.col.col-1
-			p
-				label Comentario
-					br
-					textarea( name="comment" )
 		
 		.col.col-2
 			p
@@ -38,6 +35,13 @@
 				label Email
 					br
 					input( type="email", name="email" )
+
+		.col.col-1
+			p
+				label Comentario
+					br
+					textarea( name="comment" )
 		
+		.col.col-2
 			p.buttons
 				button( type="submit" ) Comentar
