@@ -34,19 +34,24 @@ module.exports =
 			'image/png': 'png'
 
 		sizes:
+			# l:
+			# 	action: 'resize'
+			# 	height: 960
+			# 	size: 'l'
+			# 	width: 1280
 			l:
 				action: 'resize'
 				height: 720
 				size: 'l'
-				width: 1280
+				width: 960
 			m:
 				action: 'resize'
-				height: 480
+				height: 540
 				size: 'm'
-				width: 640
+				width: 720
 			s:
 				action: 'crop'
-				height: 190
+				height: 143
 				size: 's'
 				width: 190
 			t:

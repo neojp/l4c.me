@@ -554,7 +554,7 @@ app.get '/:user/:slug/editar', middleware.auth, (req, res) ->
 			.run callback
 
 	.then (data, callback) ->
-		photo.resize_photos (404)(req, res)  if !data
+		photo.resize_photos(404)(req, res)  if !data
 		return error_handler(403)(req, res)  if !_.isEqual user._id, req.user._id
 		photo = data
 

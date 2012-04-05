@@ -547,7 +547,7 @@ app.get('/:user/:slug/editar', middleware.auth, function(req, res) {
       slug: slug
     }).populate('_user').populate('_tags').run(callback);
   }).then(function(data, callback) {
-    if (!data) photo.resize_photos(404.(req, res));
+    if (!data) photo.resize_photos(404)(req, res);
     if (!_.isEqual(user._id, req.user._id)) return error_handler(403)(req, res);
     return photo = data;
   }).rescue(function(err) {
