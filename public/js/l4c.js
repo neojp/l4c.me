@@ -51,34 +51,41 @@ window.Site = $.extend({}, window.Site, {
     });
   },
   login: function() {
-    var active, first, fn;
+    var $aside, $close, $trigger, active, close, first, open;
     first = true;
     active = false;
-    fn = function(e) {
+    $aside = $('#header aside');
+    $trigger = $('#header-login-trigger');
+    $close = $('#header-register a.close');
+    open = function(e) {
       e.stopPropagation();
-      $(this).parent().addClass('active');
+      if (active) return;
+      $aside.addClass('active');
       active = true;
       if (first) {
-        $('#header-login-social img[data-src]').lazyload({
+        $aside.find('img[data-src]').lazyload({
           load: true
         });
         return first = false;
       }
     };
-    $('#header aside a.button').hoverIntent({
-      over: fn,
-      out: $.noop
-    });
-    $body.one('click.login', function(e) {
+    close = function(e) {
       if (active) {
-        $('#header aside.active').removeClass('active');
+        $aside.removeClass('active');
         return active = false;
       }
+    };
+    $trigger.on('click.login', open).hoverIntent({
+      over: open,
+      out: $.noop
     });
-    $body.on('click.login', 'aside', function(e) {
+    $close.on('click.login', close);
+    $body.on('click.login', function() {
+      if (active) return $close.trigger('click.login');
+    });
+    return $body.on('click.login', 'aside', function(e) {
       return e.stopPropagation();
     });
-    return $body.on('click.login', 'aside a.button', fn);
   },
   mobile: function() {
     return navigator.appVersion.toLowerCase().indexOf("mobile") > -1;

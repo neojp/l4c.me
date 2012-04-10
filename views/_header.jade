@@ -15,7 +15,7 @@ hr.hidden
 - else
 
 	aside
-		a.button Iniciar Sesión o Registrate
+		a#header-login-trigger.button Iniciar Sesión o Registrate
 		form#header-login( method="post", action="/login" )
 			span.bg
 			span.topbar
@@ -49,3 +49,9 @@ hr.hidden
 						img( src= helpers.image.blank, data-src="/images/cristalab_32.png", alt="", width="32", height="32" )
 					a#header-mdw-link( href="#" )
 						img( src= helpers.image.blank, data-src="/images/mdw_32.png", alt="", width="32", height="32" )
+
+			hr.gray.nomargin
+			fieldset#header-register
+				p
+					a.button.blue( href="/registro" ) Registrate en L4C.me
+					a.close Cerrar

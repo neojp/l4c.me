@@ -57,26 +57,36 @@ window.Site = $.extend {}, window.Site,
 		first = true
 		active = false
 
-		fn = (e) ->
+		$aside = $('#header aside')
+		$trigger = $('#header-login-trigger')
+		$close = $('#header-register a.close')
+
+		open = (e) ->
 			e.stopPropagation()
-			$(this).parent().addClass('active')
+			return if active
+
+			$aside.addClass('active')
 			active = true
 
 			if first
-				$('#header-login-social img[data-src]').lazyload( load: true )
+				$aside.find('img[data-src]').lazyload( load: true )
 				first = false
 
-		$('#header aside a.button').hoverIntent
-			over: fn
-			out: $.noop
-
-		$body.one 'click.login', (e) ->
+		close = (e) ->
 			if active
-				$('#header aside.active').removeClass('active')
+				$aside.removeClass('active')
 				active = false
 
+		$trigger
+			.on('click.login', open)
+			.hoverIntent
+				over: open
+				out: $.noop
+
+		$close.on 'click.login', close
+		$body.on 'click.login', -> $close.trigger 'click.login' if active
+		
 		$body.on 'click.login', 'aside', (e) -> e.stopPropagation()
-		$body.on 'click.login', 'aside a.button', fn
 
 	# check if current browser is safari mobile
 	mobile: () ->
