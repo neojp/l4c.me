@@ -2,10 +2,15 @@ mongoose = require 'mongoose'
 mongooseTypes = require 'mongoose-types'
 mongooseTypes.loadTypes mongoose
 
+helpers = require '../lib/helpers'
+
 Schema = mongoose.Schema
 ObjectId = Schema.ObjectId
 Email = mongoose.SchemaTypes.Email
 Url = mongoose.SchemaTypes.Url
+
+encrypt_password = (password) ->
+	require('crypto').createHash('sha1').update(password + helpers.heart).digest('hex')
 
 user = new Schema
 	_photos: [
@@ -23,6 +28,7 @@ user = new Schema
 		unique: true
 	password:
 		required: true
+		set: encrypt_password
 		type: String
 	random:
 		default: Math.random
@@ -37,7 +43,10 @@ user = new Schema
 		type: String
 		unique: true
 
+user.statics.encrypt_password = encrypt_password
+
 user.statics.login = (username, password, next) ->
+	password = encrypt_password(password)
 	@findOne
 			username: username
 			password: password

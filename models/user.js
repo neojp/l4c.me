@@ -1,10 +1,12 @@
-var Email, ObjectId, Schema, Url, mongoose, mongooseTypes, user;
+var Email, ObjectId, Schema, Url, encrypt_password, helpers, mongoose, mongooseTypes, user;
 
 mongoose = require('mongoose');
 
 mongooseTypes = require('mongoose-types');
 
 mongooseTypes.loadTypes(mongoose);
+
+helpers = require('../lib/helpers');
 
 Schema = mongoose.Schema;
 
@@ -13,6 +15,10 @@ ObjectId = Schema.ObjectId;
 Email = mongoose.SchemaTypes.Email;
 
 Url = mongoose.SchemaTypes.Url;
+
+encrypt_password = function(password) {
+  return require('crypto').createHash('sha1').update(password + helpers.heart).digest('hex');
+};
 
 user = new Schema({
   _photos: [
@@ -34,6 +40,7 @@ user = new Schema({
   },
   password: {
     required: true,
+    set: encrypt_password,
     type: String
   },
   random: {
@@ -55,7 +62,10 @@ user = new Schema({
   }
 });
 
+user.statics.encrypt_password = encrypt_password;
+
 user.statics.login = function(username, password, next) {
+  password = encrypt_password(password);
   return this.findOne({
     username: username,
     password: password
