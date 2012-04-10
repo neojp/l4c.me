@@ -17,8 +17,11 @@ hr.hidden
 	aside
 		a.button Iniciar Sesión o Registrate
 		form#header-login( method="post", action="/login" )
-			fieldset
-				legend con cuenta de L4C.me
+			span.bg
+			span.topbar
+
+			fieldset#header-login-fields
+				legend desde L4C.me
 				
 				p
 					//- label( for="header-username" ) Nombre de usuario
@@ -28,6 +31,21 @@ hr.hidden
 					//- label( for="header-password" ) Contraseña
 					input#header-password( type="password", name="password", placeholder="Contraseña", required )
 				
-				p
+				p.buttons
 					button( type="submit" ) Iniciar Sesión
-			
+
+			fieldset#header-login-social
+				legend desde otros sitios
+				
+				p
+					a#header-facebook-link( href="#" )
+						img( src="/images/facebook_32.png", alt="" )
+					a#header-twitter-link( href="#" )
+						img( src="/images/twitter_32.png", alt="" )
+					a#header-googleplus-link( href="#" )
+						img( src="/images/googleplus_32.png", alt="" )
+					br
+					a#header-cristalab-link( href="#" )
+						img( src="/images/cristalab_32.png", alt="" )
+					a#header-mdw-link( href="#" )
+						img( src="/images/mdw_32.png", alt="" )

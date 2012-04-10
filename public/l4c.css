@@ -48,7 +48,9 @@ button:focus,a.button:focus{outline:0;box-shadow:inset 0 0 0 1px #fff, 0 0 0 1px
 #header nav ul.menu > li{margin-right:5px;}
 #header nav ul.menu > li > a{padding:0 10px;text-decoration:none;border-radius:5px;-o-border-radius:5px;-ms-border-radius:5px;-moz-border-radius:5px;-webkit-border-radius:5px;-webkit-background-clip:padding-box;transition:all .15s linear;-o-transition:all .15s linear;-ms-transition:all .15s linear;-moz-transition:all .15s linear;-webkit-transition:all .15s linear}
 #header nav ul.menu > li > a:hover,#header nav ul.menu > li.active > a{background:#0a93ca}
-#header aside{float:right;padding:18px 15px 0 0;height:25px;line-height:25px;}
+#header aside{float:right;margin-right:10px;padding:18px 5px 0 0;height:25px;line-height:25px;position:relative;}
+#header aside.active a.button{border-radius:5px 5px 0 0;-o-border-radius:5px 5px 0 0;-ms-border-radius:5px 5px 0 0;-moz-border-radius:5px 5px 0 0;-webkit-border-radius:5px 5px 0 0;-webkit-background-clip:padding-box}
+#header aside.active #header-login{display:block}
 #header aside a{text-decoration:none}
 #header aside a.username{border-bottom:2px solid #80dcfa;}
 #header aside a.username:hover{border-color:#fff}
@@ -56,13 +58,20 @@ button:focus,a.button:focus{outline:0;box-shadow:inset 0 0 0 1px #fff, 0 0 0 1px
 #header aside a.profile:after,#header aside a.logout:after{content:"|";font-size:16px;color:#37cdff;height:20px;margin-left:8px;overflow:hidden;width:0}
 #header aside a.profile{background-color:#c2ecfc;background-image:url("images/icon_profile.png");color:#0a93ca}
 #header aside a.logout{background-color:#0a93ca;background-image:url("images/icon_logout.png");color:#c2ecfc}
-#header #header-login{background:#f7f7f7;border-radius:0 0 0 5px;-o-border-radius:0 0 0 5px;-ms-border-radius:0 0 0 5px;-moz-border-radius:0 0 0 5px;-webkit-border-radius:0 0 0 5px;-webkit-background-clip:padding-box;box-sizing:border-box;padding:15px;position:absolute;right:0;top:60px;}
-#header #header-login fieldset{border:0;margin:0;padding:0}
-#header #header-login legend{color:#666;font-weight:bold;line-height:1;margin:0;padding:0 0 10px;text-align:center}
+#header #header-login{background:#f7f7f7;border-radius:0 0 5px 5px;-o-border-radius:0 0 5px 5px;-ms-border-radius:0 0 5px 5px;-moz-border-radius:0 0 5px 5px;-webkit-border-radius:0 0 5px 5px;-webkit-background-clip:padding-box;box-shadow:0 0 5px rgba(0,0,0,0.50);-o-box-shadow:0 0 5px rgba(0,0,0,0.50);-ms-box-shadow:0 0 5px rgba(0,0,0,0.50);-moz-box-shadow:0 0 5px rgba(0,0,0,0.50);-webkit-box-shadow:0 0 5px rgba(0,0,0,0.50);-webkit-background-clip:padding-box;box-sizing:border-box;display:none;padding:15px;position:absolute;right:0;top:48px;width:406px;}
+#header #header-login fieldset{border:0;margin:0;overflow:hidden;padding:0}
+#header #header-login legend{color:#666;font-weight:bold;line-height:1;margin:0;padding:0 0 10px;text-align:center;width:180px}
 #header #header-login label{display:block}
-#header #header-login p{float:left;margin:0 0 0 10px;}
-#header #header-login p:first-child{margin-left:0}
 #header #header-login input{margin:0;width:165px}
+#header #header-login hr{background-image:url("images/bg_hr_gray.png");display:none}
+#header #header-login span.bg,#header #header-login span.topbar{background:#00b8f4;height:5px;left:0;position:absolute;right:0;top:-5px}
+#header #header-login span.topbar{background:#f93;left:0;right:0}
+#header #header-login-social{float:right;text-align:center;}
+#header #header-login-social p{margin:10px 0 0}
+#header #header-login-social a{display:inline-block;margin:5px}
+#header #header-login-social img{vertical-align:bottom}
+#header #header-login-fields{background:url("images/bg_vr_gray.png") repeat-y right top;float:left;padding-right:16px !important;}
+#header #header-login-fields p.buttons{text-align:right}
 #footer{background:#242c33;padding:13px;position:relative;text-align:center;z-index:1;}
 #footer,#footer a{border:0;color:#fff}
 #footer ul{height:37px;list-style:none;margin:0;padding:0}

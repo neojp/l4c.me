@@ -139,9 +139,18 @@ a.button
 	
 	aside
 		float right
-		padding 18px 15px 0 0
+		margin-right 10px
+		padding 18px 5px 0 0
 		height 25px
 		line-height 25px
+		position relative
+
+		&.active
+			a.button
+				border-radius( 5px 5px 0 0 )
+
+			#header-login
+				display block
 
 		a
 			text-decoration none
@@ -181,17 +190,21 @@ a.button
 
 	#header-login
 		background #F7F7F7
-		border-radius( 0 0 0 5px )
+		border-radius( 0 0 5px 5px )
+		box-shadow( 0 0 5px rgba(#000, 0.5) )
 		box-sizing border-box
+		display none
 		// height 60px
 		padding 15px
 		position absolute
 		right 0
-		top 60px
+		top 48px
+		width 180px + 180 + 30 + 16
 
 		fieldset
 			border 0
 			margin 0
+			overflow hidden
 			padding 0
 
 		legend
@@ -201,21 +214,54 @@ a.button
 			margin 0
 			padding 0 0 10px
 			text-align center
+			width 180px
 
 		label
 			display block
-
-		p
-			float left
-			margin 0 0 0 10px
-
-			&:first-child
-				margin-left 0
 
 		input
 			margin 0
 			width 165px
 
+		hr
+			background-image url(images/bg_hr_gray.png)
+			display none
+
+		span.bg
+		span.topbar
+			background #00B8F4
+			height 5px
+			left 0
+			position absolute
+			right 0
+			top -5px
+
+		span.topbar
+			background #FF9933
+			left 0
+			right 0
+
+	#header-login-social
+		float right
+		text-align center
+
+		p
+			margin 10px 0 0
+
+		a
+			display inline-block
+			margin 5px
+
+		img
+			vertical-align bottom
+
+	#header-login-fields
+		background url(images/bg_vr_gray.png) repeat-y right top
+		float left
+		padding-right 16px !important
+
+		p.buttons
+			text-align right
 
 #footer
 	background #242c33
