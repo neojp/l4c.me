@@ -54,10 +54,11 @@ module.exports = (app) -> middleware =
 
 	# extends express.static with a url prefix to map static files
 	# eg. static(_dirname + '/views', { urlPrefix: '/templates', maxAge: 31556926000 })
-	# will look for urls this: /templates/layout.jade and send the file: _dirname + '/views/layout.jade'
+	# will look for urls like this: /templates/layout.jade and send the file: _dirname + '/views/layout.jade'
 	static: (path, options = {}) ->
 		_.defaults options, app.set('static options')
 		urlPrefix = options.urlPrefix
+		console.log options
 
 		(req, res, next) ->
 			if _.isString urlPrefix

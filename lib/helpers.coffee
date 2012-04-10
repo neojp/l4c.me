@@ -27,6 +27,8 @@ module.exports =
 	heart: '♥'
 
 	image:
+		blank: 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=='
+		
 		extensions:
 			'image/jpeg': 'jpg'
 			'image/pjpeg': 'jpg'

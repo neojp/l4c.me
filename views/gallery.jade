@@ -7,27 +7,29 @@ hr
 #content
 	ul.grid
 		- size = helpers.image.sizes.s
-		- _.each( photos, function(photo) {
-			- user = photo._user;
-			- url = '/' + user.username + '/' + photo.slug;
+		- _.each( _.range(1,10), function() {
+			- _.each( photos, function(photo) {
+				- user = photo._user;
+				- url = '/' + user.username + '/' + photo.slug;
 
-			li
-				div.img
-					a( href= url )
-						img( src= "/uploads/#{photo._id}_#{size.size}.#{photo.ext}", height= size.height, width= size.width )
-						span.icon-zoom
+				li
+					div.img
+						a( href= url )
+							img( src= helpers.image.blank, data-src= "/uploads/#{photo._id}_#{size.size}.#{photo.ext}", height= size.height, width= size.width )
+							span.icon-zoom
 
-				div.info
-					span.photo-name
-						a.photo( href= url )= photo.name.replace(/ /g, '&nbsp;') + '&nbsp;'
-							small (#{helpers.format_number(photo.views)})
-						br
-						span.by por&nbsp;
-						strong.username
-							a( href= "/#{user.username}" )= user.username
+					div.info
+						span.photo-name
+							a.photo( href= url )= photo.name.replace(/ /g, '&nbsp;') + '&nbsp;'
+								small (#{helpers.format_number(photo.views)})
+							br
+							span.by por&nbsp;
+							strong.username
+								a( href= "/#{user.username}" )= user.username
 
-					a.comments( href= url ) Comentarios
+						a.comments( href= url ) Comentarios
 
+			- });
 		- });
 
 hr
