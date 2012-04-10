@@ -5,9 +5,9 @@ hr
 != partial('_pagination')
 
 #content
-	ul.grid
-		- size = helpers.image.sizes.s
-		- _.each( _.range(1,10), function() {
+	- if (photos.length)
+		ul.grid
+			- size = helpers.image.sizes.s
 			- _.each( photos, function(photo) {
 				- user = photo._user;
 				- url = '/' + user.username + '/' + photo.slug;
@@ -30,7 +30,11 @@ hr
 						a.comments( href= url ) Comentarios
 
 			- });
-		- });
+	- else
+		p.aligncenter No hay imagenes disponibles.
+			br
+			strong Y U NO UPLOAD MOAR PICTURES?! 
+				= helpers.yuno
 
 hr
 
