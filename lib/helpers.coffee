@@ -121,3 +121,5 @@ module.exports =
 		
 		# collapse dashes
 		str = str.replace /-+/g, '-'
+
+	yuno: 'ლ(ಠ益ಠლ)'
