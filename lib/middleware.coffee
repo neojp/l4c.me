@@ -58,7 +58,6 @@ module.exports = (app) -> middleware =
 	static: (path, options = {}) ->
 		_.defaults options, app.set('static options')
 		urlPrefix = options.urlPrefix
-		console.log options
 
 		(req, res, next) ->
 			if _.isString urlPrefix
