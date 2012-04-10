@@ -11,57 +11,11 @@ html( lang="es" )
 	body( class= body_class )
 		script document.body.className += ' js-enable ';
 
-		#overflow
+		div#overflow
 		
 			header#header
 				.wrap
-					p#logo
-						a( href="/", title="L4C.me" )
-							img( src="/images/logo.png", alt="", width="96", height="49" )
-					
-					#nav-aside.clearfix
-						nav
-							- var className = '';
-							ul.menu
-								- className = (original_url == '/') ? 'active' : '';
-								li( class= className )
-									a( href="/" ) Inicio
-								
-								- className = (original_url == '/fotos/publicar') ? 'active' : '';
-								li( class= className )
-									a( href="/fotos/publicar" ) Subir
-								
-								- if (logged_user)
-									- className = original_url.indexOf('/' + logged_user.username) != -1 ? 'active' : '';
-									li( class= className )
-										a( href="/" + logged_user.username ) Mis Fotos
-
-								- else
-									- className = original_url == '/registro' ? 'active' : '';
-									li( class= className )
-										a( href="/registro" ) Registro
-								
-								- className = ((original_url !== '/' && original_url !== '/fotos/publicar' && original_url !== '/registro') && !(logged_user && original_url.indexOf('/' + logged_user.username) == 0)) ? 'active' : '';
-								li( class= className )
-									a( href="/fotos" ) Galeria
-						
-						hr.hidden
-
-						- if (logged_user)
-							aside
-								p Hola 
-									a.username( href= "/" + logged_user.username )= logged_user.username
-									|, puedes editar tu 
-									a.profile( href="/perfil/" ) perfil
-									|  o 
-									a.logout( href="/logout/" ) salir
-						- else
-							aside
-								form( method="post", action="/login" )
-									p
-										input( type="text", name="username", placeholder="Nombre de usuario" )
-										input( type="password", name="password", placeholder="Contraseña" )
-										button( type="submit" ) Iniciar Sesión
+					!= partial('_header')
 			
 			hr.hidden
 
@@ -77,7 +31,7 @@ html( lang="es" )
 			
 			hr.hidden
 			
-			footer
+			footer#footer
 				ul
 					li#claborg
 						a( href="http://www.cristalab.org/" ) Cristalab.org
@@ -91,12 +45,12 @@ html( lang="es" )
 						a( href="http://dotgaia.com/" ) dotGaia.com
 					li#p3
 						a( href="http://puls3.com/" ) Puls3.com
+
+					#github
+						a( href="https://github.com/neojp/L4C.me/" )
+							//- img( style="position: absolute; top: 0; right: 0; border: 0;", src="https://a248.e.akamai.net/assets.github.com/img/30f550e0d38ceb6ef5b81500c64d970b7fb0f028/687474703a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6f72616e67655f6666373630302e706e67", alt="Fork me on GitHub" )
+							| Fork on GitHub.com
 			
 			section#js
 				script window.onload = function(){ document.body.className += ' js-ready '; }; var Site = {};
 				//script#analytics var _gaq = _gaq || []; _gaq.push(['_setAccount', 'UA-1102463-13']); _gaq.push(['_trackPageview']); (function() { var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true; ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js'; var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s); })();
-
-		#github
-			a( href="https://github.com/neojp/L4C.me/" )
-				//- img( style="position: absolute; top: 0; right: 0; border: 0;", src="https://a248.e.akamai.net/assets.github.com/img/30f550e0d38ceb6ef5b81500c64d970b7fb0f028/687474703a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6f72616e67655f6666373630302e706e67", alt="Fork me on GitHub" )
-				| Fork on GitHub.com

@@ -36,7 +36,11 @@ input, textarea
 		border-color #FF9933
 		outline 0
 
+a.button
+	display inline-block
+
 button
+a.button
 	// background #FF9933 url(images/icon_comments_white.png) no-repeat 90% 50%
 	background #FF9933 no-repeat
 	border 0
@@ -44,6 +48,7 @@ button
 	cursor pointer
 	font bold 12px/1 Helvetica, Arial, sans-serif
 	height 25px
+	line-height 25px
 	// padding 0 35px 0 10px
 	padding 0 10px
 	border-radius()
@@ -75,6 +80,8 @@ button
 #header
 	background #00b8f4
 	min-height 60px
+	position relative
+	z-index 3
 
 	.wrap
 		clearfix()
@@ -85,7 +92,7 @@ button
 
 	#logo
 		height 49px
-		left 13px
+		left 15px
 		margin 0
 		position absolute
 		top 5px
@@ -132,7 +139,7 @@ button
 	
 	aside
 		float right
-		padding-top 18px
+		padding 18px 15px 0 0
 		height 25px
 		line-height 25px
 
@@ -172,10 +179,50 @@ button
 			background-image url(images/icon_logout.png)
 			color #c2ecfc
 
-footer
+	#header-login
+		background #F7F7F7
+		border-radius( 0 0 0 5px )
+		box-sizing border-box
+		// height 60px
+		padding 15px
+		position absolute
+		right 0
+		top 60px
+
+		fieldset
+			border 0
+			margin 0
+			padding 0
+
+		legend
+			color #666
+			font-weight bold
+			line-height 1
+			margin 0
+			padding 0 0 10px
+			text-align center
+
+		label
+			display block
+
+		p
+			float left
+			margin 0 0 0 10px
+
+			&:first-child
+				margin-left 0
+
+		input
+			margin 0
+			width 165px
+
+
+#footer
 	background #242c33
 	padding 13px
+	position relative
 	text-align center
+	z-index 1
 
 	&, a
 		border 0
@@ -234,6 +281,8 @@ footer
 
 #inner
 	background #fff
+	position relative
+	z-index 2
 
 #wrap
 	padding 25px 0
