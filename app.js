@@ -118,6 +118,14 @@ app.param('sort', function(req, res, next, id) {
   }
 });
 
+app.param('user', function(req, res, next, id) {
+  if (id !== 'favicon.ico' && id !== 'images' && id !== 'js' && id !== 'l4c.css' && id !== 'stylus' && id !== 'uploads') {
+    return next();
+  } else {
+    return next('route');
+  }
+});
+
 app.all('*', middleware.remove_trailing_slash, function(req, res, next) {
   res.locals({
     _: underscore,
@@ -425,6 +433,7 @@ app.get('/:user/:slug', function(req, res, next) {
     return model.photo.findOne({
       slug: slug
     }).populate('_user').populate('_tags').populate('comments._user').run(function(err, data) {
+      console.log('/:user/:slug', err, data);
       if (err) return callback(err);
       if (!data && data._user.username !== username) {
         return error_handler(404)(req, res);
