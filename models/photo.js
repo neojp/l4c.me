@@ -143,6 +143,7 @@ methods = {
     path = nodejs_path.normalize("" + __dirname + "/../public/uploads/" + doc._id + "_" + size.size + "." + doc.ext);
     return im[size.action]({
       dstPath: path,
+      filter: 'Cubic',
       format: doc.ext,
       height: size.height,
       srcPath: nodejs_path.normalize("" + __dirname + "/../public/uploads/" + doc._id + "_o." + doc.ext),

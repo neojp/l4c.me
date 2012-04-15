@@ -112,6 +112,7 @@ methods =
 
 		im[size.action]
 			dstPath: path
+			filter: 'Cubic'  #  Lagrange is only available on v6.3.7-1
 			format: doc.ext
 			height: size.height
 			srcPath: nodejs_path.normalize "#{__dirname}/../public/uploads/#{doc._id}_o.#{doc.ext}"
