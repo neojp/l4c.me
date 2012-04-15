@@ -24,8 +24,8 @@
   "dependencies": {
     "beautifyjs": ">= 0.1.0",
     "coffee-script": ">= 1.2.0",
-    "connect-mongo": ">= 0.1.7",
-    "express": ">= 2.5.8",
+    "connect-mongo": "0.1.7",
+    "express": "2.x.x",
     "gravatar": ">= 1.0.6",
     "imagemagick": ">= 0.1.2",
     "invoke": ">= 0.1.0",
