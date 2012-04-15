@@ -44,6 +44,8 @@ app.configure ->
 		maxAge: 31556926000 # 1 year on milliseconds
 		ignoreExtensions: 'styl coffeee'
 
+	# app.enable 'view cache'
+
 	app.use express.favicon()
 	app.use middleware.static( __dirname + '/public' )
 	app.use middleware.static( app.set('views'), urlPrefix: '/templates' )
@@ -91,6 +93,13 @@ app.param 'slug', (req, res, next, id) ->
 
 app.param 'sort', (req, res, next, id) ->
 	if id in ['ultimas', 'top']
+		next()
+	else
+		return next('route')
+
+
+app.param 'user', (req, res, next, id) ->
+	if id not in [ 'favicon.ico', 'images', 'js', 'l4c.css', 'stylus', 'uploads']
 		next()
 	else
 		return next('route')
@@ -421,6 +430,7 @@ app.get '/:user/:slug', (req, res, next) ->
 			.populate('_tags')
 			.populate('comments._user')
 			.run (err, data) ->
+				console.log '/:user/:slug', err, data
 				return callback err  if err
 				return error_handler(404)(req, res)  if !data && data._user.username != username
 
