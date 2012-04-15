@@ -99,10 +99,9 @@ app.param 'sort', (req, res, next, id) ->
 
 
 app.param 'user', (req, res, next, id) ->
-	if id not in [ 'favicon.ico', 'images', 'js', 'l4c.css', 'stylus', 'uploads']
+	model.user.findOne username: id, (err, user) ->
+		return next('route') if err || user == null
 		next()
-	else
-		return next('route')
 
 
 # Routes

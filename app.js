@@ -119,11 +119,12 @@ app.param('sort', function(req, res, next, id) {
 });
 
 app.param('user', function(req, res, next, id) {
-  if (id !== 'favicon.ico' && id !== 'images' && id !== 'js' && id !== 'l4c.css' && id !== 'stylus' && id !== 'uploads') {
+  return model.user.findOne({
+    username: id
+  }, function(err, user) {
+    if (err || user === null) return next('route');
     return next();
-  } else {
-    return next('route');
-  }
+  });
 });
 
 app.all('*', middleware.remove_trailing_slash, function(req, res, next) {
