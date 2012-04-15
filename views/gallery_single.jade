@@ -1,7 +1,7 @@
 #img
 	.img
 		a( href="/#{username}/#{slug}/sizes/o" )
-			img( src= "/uploads/#{photo._id}_m.#{photo.ext}" )
+			img( src= helpers.image.blank, data-src= "/uploads/#{photo._id}_m.#{photo.ext}" )
 		.icons
 			a.icon-zoom( href="/#{username}/#{slug}/sizes/g" )
 			- // a.icon-edit( href="/#{username}/#{slug}/editar" )
@@ -30,6 +30,7 @@
 
 	
 	#sidebar
+		- var size = helpers.image.sizes.t;
 		.widget
 			h2 Otras fotos de 
 				a( href="/#{username}" )= user.username
@@ -41,7 +42,7 @@
 				- _.each(from_user, function(photo){
 					li
 						a( href="/#{username}/#{photo.slug}" )
-							img( src= "/uploads/#{photo._id}_t.#{photo.ext}" )
+							img( src= helpers.image.blank, data-src= "/uploads/#{photo._id}_t.#{photo.ext}", height= size.height, width= size.width )
 							span.icon-zoom
 				- });
 
@@ -60,7 +61,7 @@
 					- _.each(photos.from_all, function(photo){
 						li
 							a( href="/#{photo._user.username}/#{photo.slug}" )
-								img( src= "/uploads/#{photo._id}_t.#{photo.ext}" )
+								img( src= helpers.image.blank, data-src= "/uploads/#{photo._id}_t.#{photo.ext}", height= size.height, width= size.width )
 								span.icon-zoom
 					- });
 				
