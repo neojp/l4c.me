@@ -99,6 +99,7 @@ app.param 'sort', (req, res, next, id) ->
 
 
 app.param 'user', (req, res, next, id) ->
+
 	model.user.findOne username: id, (err, user) ->
 		return next('route') if err || user == null
 		next()
@@ -429,7 +430,6 @@ app.get '/:user/:slug', (req, res, next) ->
 			.populate('_tags')
 			.populate('comments._user')
 			.run (err, data) ->
-				console.log '/:user/:slug', err, data
 				return callback err  if err
 				return error_handler(404)(req, res)  if !data && data._user.username != username
 
@@ -599,9 +599,17 @@ if (!module.parent)
 	cdn = express.createServer()
 	cdn.use express.static( __dirname + '/public/uploads', app.set('static options') )
 
+	config = require('./config.json')
+
 	server = express.createServer()
-	server.use express.vhost 'uploads.*', cdn
-	server.use express.vhost '*', app
+	server_apps =
+		cdn: cdn
+		app: app
+
+	console.log config
+
+	_.each config.domains, (value, key, list) ->
+		server.use express.vhost key, server_apps[value]
 	
-	server.listen 3000
+	server.listen config.port
 	console.log "Listening on port %d", server.address().port

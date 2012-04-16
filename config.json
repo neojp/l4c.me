@@ -1,0 +1,7 @@
+{
+	"domains": {
+		"i.yourdomain.com" : "cdn",
+		"yourdomain.com": "app"
+	},
+	"port": 3000
+}

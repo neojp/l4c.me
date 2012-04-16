@@ -1,4 +1,4 @@
-var LocalStrategy, app, cdn, error_handler, express, helpers, invoke, lib, middleware, model, mongo_session, mongoose, nodejs_url, passport, server, underscore, _;
+var LocalStrategy, app, cdn, config, error_handler, express, helpers, invoke, lib, middleware, model, mongo_session, mongoose, nodejs_url, passport, server, server_apps, underscore, _;
 
 _ = underscore = require('underscore');
 
@@ -434,7 +434,6 @@ app.get('/:user/:slug', function(req, res, next) {
     return model.photo.findOne({
       slug: slug
     }).populate('_user').populate('_tags').populate('comments._user').run(function(err, data) {
-      console.log('/:user/:slug', err, data);
       if (err) return callback(err);
       if (!data && data._user.username !== username) {
         return error_handler(404)(req, res);
@@ -595,9 +594,16 @@ app["delete"]('/:user/:slug', middleware.auth, function(req, res) {
 if (!module.parent) {
   cdn = express.createServer();
   cdn.use(express.static(__dirname + '/public/uploads', app.set('static options')));
+  config = require('./config.json');
   server = express.createServer();
-  server.use(express.vhost('uploads.*', cdn));
-  server.use(express.vhost('*', app));
-  server.listen(3000);
+  server_apps = {
+    cdn: cdn,
+    app: app
+  };
+  console.log(config);
+  _.each(config.domains, function(value, key, list) {
+    return server.use(express.vhost(key, server_apps[value]));
+  });
+  server.listen(config.port);
   console.log("Listening on port %d", server.address().port);
 }

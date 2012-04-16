@@ -6,3 +6,4 @@ public/uploads/*
 ./*.js
 models/*.js
 lib/*.js
+config.json
