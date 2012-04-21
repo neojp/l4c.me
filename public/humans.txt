@@ -1,0 +1,42 @@
+TEAM: DEVELOPERS
+-=-=-=-=-=-=-=-=-=-=-=-=-
+
+Joan Piedra  /  @neojp  /  http://joanpiedra.com
+ Lead developer, UX, design refresh
+ (USA, Peru)
+
+
+Leónidas Esteban  /  @LeonidasEsteban  /  http://leonidasesteban.com
+ Front-End developer
+ (Peru)
+
+
+Freddy Vega  /  @freddier  /  http://freddyvega.com
+ Lord & master
+ (Colombia, the world)
+
+
+
+TEAM: DESIGNERS
+-=-=-=-=-=-=-=-=-=-=-=-=-
+
+Hugo Muralles  /  @hCante  /  http://muralles.net
+ Original design
+ (Guatemala)
+
+
+
+THANKS
+-=-=-=-=-=-=-=-=-=-=-=-=-
+
+Rafael Soto  /  @faelazo  /  http://therr.org
+ Original PHP Developer
+ (Mexico)
+
+
+
+L4C.me
+-=-=-=-=-=-=-=-=-=-=-=-=-
+
+http://l4c.me
+http://github.com/neojp/l4c.me
