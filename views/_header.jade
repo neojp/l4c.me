@@ -36,18 +36,25 @@ hr.hidden
 
 			fieldset#header-login-social
 				legend desde otros sitios
+
+				p
+					a#header-facebook-link.zocial.facebook( href="#" ) Logueate con Facebook
+					a#header-twitter-link.zocial.twitter( href="#" ) Logueate con Twitter
+					a#header-googleplus-link.zocial.googleplus( href="#" ) Logueate con Google+
 				
 				p
-					a#header-facebook-link( href="#" )
-						img( src= helpers.image.blank, data-src="/images/facebook_32.png", alt="", width="32", height="32" )
-					a#header-twitter-link( href="#" )
-						img( src= helpers.image.blank, data-src="/images/twitter_32.png", alt="", width="32", height="32" )
-					a#header-googleplus-link( href="#" )
-						img( src= helpers.image.blank, data-src="/images/googleplus_32.png", alt="", width="32", height="32" )
-					br
-					a#header-cristalab-link( href="#" )
+					//- a#header-facebook-link( href="#" )
+					//- 	img( src= helpers.image.blank, data-src="/images/facebook_32.png", alt="", width="32", height="32" )
+					//- a#header-twitter-link( href="#" )
+					//- 	img( src= helpers.image.blank, data-src="/images/twitter_32.png", alt="", width="32", height="32" )
+					//- a#header-googleplus-link( href="#" )
+					//- 	img( src= helpers.image.blank, data-src="/images/googleplus_32.png", alt="", width="32", height="32" )
+					//- br
+
+					a#header-cristalab-link.disabled( title="No disponible" )
 						img( src= helpers.image.blank, data-src="/images/cristalab_32.png", alt="", width="32", height="32" )
-					a#header-mdw-link( href="#" )
+					
+					a#header-mdw-link.disabled( title="No disponible" )
 						img( src= helpers.image.blank, data-src="/images/mdw_32.png", alt="", width="32", height="32" )
 
 			hr.gray.nomargin

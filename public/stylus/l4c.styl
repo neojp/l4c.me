@@ -1,7 +1,6 @@
 @css {
-/* L4C.me
-	@import 'fonts/stylesheet.css';
-*/
+/* L4C.me */
+@import url("zocial/zocial.css");
 }
 @import "classes"
 @import "reset"
@@ -204,94 +203,101 @@ a.button
 			background-image url(images/icon_logout.png)
 			color #c2ecfc
 
-	#header-login
-		background #F7F7F7
-		border-radius( 0 0 5px 5px )
-		box-shadow( 0 0 5px rgba(#000, 0.5) )
-		box-sizing border-box
-		left -9999px
-		opacity 0
-		padding 15px
+#header-login
+	background #F7F7F7
+	border-radius( 0 0 5px 5px )
+	box-shadow( 0 0 5px rgba(#000, 0.5) )
+	box-sizing border-box
+	left -9999px
+	opacity 0
+	padding 15px
+	position absolute
+	top -9999px
+	width (180px + 15) + (395px + 16) + 30
+	width 
+	transition( opacity .150s linear )
+
+	fieldset
+		border 0
+	
+	legend
+		color #666
+		font-weight bold
+		line-height 1
+		margin 0
+		padding 0 0 10px
+		text-align center
+		width 180px
+
+	label
+		display block
+
+	input
+		margin 0
+		width 165px
+
+	// hr
+	// 	background-image url(images/bg_hr_gray.png)
+	// 	display none
+
+	span.bg
+	span.topbar
+		background #00B8F4
+		height 5px
+		left 0
 		position absolute
-		top -9999px
-		width 180px + 180 + 30 + 16
-		transition( opacity .150s linear )
+		right 0
+		top -5px
 
-		fieldset
-			border 0
-		
-		legend
-			color #666
-			font-weight bold
-			line-height 1
-			margin 0
-			padding 0 0 10px
-			text-align center
-			width 180px
+	span.topbar
+		background #FF9933
+		left 0
+		right 0
 
-		label
-			display block
+#header-login-fields
+	float left
+	margin 0
+	padding 0
 
-		input
-			margin 0
-			width 165px
+	p.buttons
+		text-align right
 
-		// hr
-		// 	background-image url(images/bg_hr_gray.png)
-		// 	display none
+#header-login-social
+	background url(images/bg_vr_gray.png) repeat-y left top
+	float right
+	margin 0
+	padding 0 0 0 15px
+	text-align center
+	width 395px
 
-		span.bg
-		span.topbar
-			background #00B8F4
-			height 5px
-			left 0
-			position absolute
-			right 0
-			top -5px
+	p
+		margin 0 0 10px
 
-		span.topbar
-			background #FF9933
-			left 0
-			right 0
+	a
+		display inline-block
+		margin 5px
 
-	#header-login-fields
-		background url(images/bg_vr_gray.png) repeat-y right top
-		float left
+		&.disabled
+			cursor default
+			margin 0 10px
+			opacity 0.5
+
+	img
+		vertical-align bottom
+
+#header-register
+	margin 15px 0 0
+	text-align center
+
+	p
 		margin 0
-		padding 0 16px 0 0
 
-		p.buttons
-			text-align right
+	a.button
+		margin-right 25px
 
-	#header-login-social
-		float right
-		margin 0
-		padding 0
-		text-align center
-
-		p
-			margin 10px 0 0
-
-		a
-			display inline-block
-			margin 5px
-
-		img
-			vertical-align bottom
-
-	#header-register
-		margin 15px 0 0
-		text-align center
-
-		p
-			margin 0
-
-		a.button
-			margin-right 10px
-
-		a.close
-			color #666
-			border-bottom 2px solid #ccc
+	a.close
+		color #666
+		border-bottom 2px solid #ccc
 
 #footer
 	background #242c33

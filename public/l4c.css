@@ -1,6 +1,5 @@
-/* L4C.me
-	@import 'fonts/stylesheet.css';
-*/
+/* L4C.me */
+@import url("zocial/zocial.css");
 .ir{background-repeat:no-repeat;height:100%;direction:ltr;display:block;overflow:hidden;text-align:left;text-indent:-999em;width:100%}
 .hidden{display:none !important;visibility:hidden !important}
 .visuallyhidden{left:-9999px;position:absolute !important;top:-9999px}
@@ -62,23 +61,24 @@ button.blue:focus,a.button.blue:focus,button.blue.focus,a.button.blue.focus{box-
 #header aside a.profile:after,#header aside a.logout:after{content:"|";font-size:16px;color:#37cdff;height:20px;margin-left:8px;overflow:hidden;width:0}
 #header aside a.profile{background-color:#c2ecfc;background-image:url("images/icon_profile.png");color:#0a93ca}
 #header aside a.logout{background-color:#0a93ca;background-image:url("images/icon_logout.png");color:#c2ecfc}
-#header #header-login{background:#f7f7f7;border-radius:0 0 5px 5px;-o-border-radius:0 0 5px 5px;-ms-border-radius:0 0 5px 5px;-moz-border-radius:0 0 5px 5px;-webkit-border-radius:0 0 5px 5px;-webkit-background-clip:padding-box;box-shadow:0 0 5px rgba(0,0,0,0.50);-o-box-shadow:0 0 5px rgba(0,0,0,0.50);-ms-box-shadow:0 0 5px rgba(0,0,0,0.50);-moz-box-shadow:0 0 5px rgba(0,0,0,0.50);-webkit-box-shadow:0 0 5px rgba(0,0,0,0.50);-webkit-background-clip:padding-box;box-sizing:border-box;left:-9999px;opacity:0;padding:15px;position:absolute;top:-9999px;width:406px;transition:opacity .15s linear;-o-transition:opacity .15s linear;-ms-transition:opacity .15s linear;-moz-transition:opacity .15s linear;-webkit-transition:opacity .15s linear;}
-#header #header-login fieldset{border:0}
-#header #header-login legend{color:#666;font-weight:bold;line-height:1;margin:0;padding:0 0 10px;text-align:center;width:180px}
-#header #header-login label{display:block}
-#header #header-login input{margin:0;width:165px}
-#header #header-login span.bg,#header #header-login span.topbar{background:#00b8f4;height:5px;left:0;position:absolute;right:0;top:-5px}
-#header #header-login span.topbar{background:#f93;left:0;right:0}
-#header #header-login-fields{background:url("images/bg_vr_gray.png") repeat-y right top;float:left;margin:0;padding:0 16px 0 0;}
-#header #header-login-fields p.buttons{text-align:right}
-#header #header-login-social{float:right;margin:0;padding:0;text-align:center;}
-#header #header-login-social p{margin:10px 0 0}
-#header #header-login-social a{display:inline-block;margin:5px}
-#header #header-login-social img{vertical-align:bottom}
-#header #header-register{margin:15px 0 0;text-align:center;}
-#header #header-register p{margin:0}
-#header #header-register a.button{margin-right:10px}
-#header #header-register a.close{color:#666;border-bottom:2px solid #ccc}
+#header-login{background:#f7f7f7;border-radius:0 0 5px 5px;-o-border-radius:0 0 5px 5px;-ms-border-radius:0 0 5px 5px;-moz-border-radius:0 0 5px 5px;-webkit-border-radius:0 0 5px 5px;-webkit-background-clip:padding-box;box-shadow:0 0 5px rgba(0,0,0,0.50);-o-box-shadow:0 0 5px rgba(0,0,0,0.50);-ms-box-shadow:0 0 5px rgba(0,0,0,0.50);-moz-box-shadow:0 0 5px rgba(0,0,0,0.50);-webkit-box-shadow:0 0 5px rgba(0,0,0,0.50);-webkit-background-clip:padding-box;box-sizing:border-box;left:-9999px;opacity:0;padding:15px;position:absolute;top:-9999px;width:636px;widthtransition:opacity .15s linear;-o-transition:opacity .15s linear;-ms-transition:opacity .15s linear;-moz-transition:opacity .15s linear;-webkit-transition:opacity .15s linear;}
+#header-login fieldset{border:0}
+#header-login legend{color:#666;font-weight:bold;line-height:1;margin:0;padding:0 0 10px;text-align:center;width:180px}
+#header-login label{display:block}
+#header-login input{margin:0;width:165px}
+#header-login span.bg,#header-login span.topbar{background:#00b8f4;height:5px;left:0;position:absolute;right:0;top:-5px}
+#header-login span.topbar{background:#f93;left:0;right:0}
+#header-login-fields{float:left;margin:0;padding:0;}
+#header-login-fields p.buttons{text-align:right}
+#header-login-social{background:url("images/bg_vr_gray.png") repeat-y left top;float:right;margin:0;padding:0 0 0 15px;text-align:center;width:395px;}
+#header-login-social p{margin:0 0 10px}
+#header-login-social a{display:inline-block;margin:5px;}
+#header-login-social a.disabled{cursor:default;margin:0 10px;opacity:.5}
+#header-login-social img{vertical-align:bottom}
+#header-register{margin:15px 0 0;text-align:center;}
+#header-register p{margin:0}
+#header-register a.button{margin-right:25px}
+#header-register a.close{color:#666;border-bottom:2px solid #ccc}
 #footer{background:#242c33;padding:13px;position:relative;text-align:center;z-index:1;}
 #footer,#footer a{border:0;color:#fff}
 #footer ul{height:37px;list-style:none;margin:0;padding:0}
