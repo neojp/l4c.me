@@ -7,7 +7,7 @@ _No peeking._
 
 ---
 
-1. Install [MongoDB](http://www.mongodb.org/display/DOCS/Quickstart)
+1. Install [MongoDB](http://www.mongodb.org/display/DOCS/Quickstart) and [ImageMagick](http://www.imagemagick.org/)
 
 2. Clone repo
 
