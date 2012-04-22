@@ -155,7 +155,21 @@ task 'supervisor', 'Watch source files and restart the server upon changes', ->
 
 
 
+task 'mkdir', 'Create directories and set permissions', ->
+	fs   = require 'fs'
+	path = require 'path'
+
+	directories = ['public/uploads', 'logs']
+
+	directories.forEach (dir) ->
+		fs.mkdirSync dir unless path.existsSync dir
+		fs.chmodSync dir, 0777
+
+
+
 task 'start', 'Build and run all scripts', ->
+	invoke 'mkdir'
+
 	setTimeout (-> invoke 'build:stylus'), 0
 	setTimeout (-> invoke 'build:coffee-src'), 1000
 	setTimeout (-> invoke 'build:coffee-static'), 2000
