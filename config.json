@@ -6,11 +6,16 @@
 	"mongodb": "mongodb://localhost/l4c",
 
 	"port": 3000,
+	"port_git": 3001,
 
 	"users": {
 		"default": {
 			"gid": "node",
 			"uid": "node"
+		},
+		"root": {
+			"gid": "root",
+			"uid": "root"
 		}
 	},
 	
