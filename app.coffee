@@ -606,19 +606,20 @@ if (!module.parent)
 			server.use express.vhost key, available_apps[value]
 	
 	server.listen config.port || 3000, ->
-		if config.gid
-			try
-				process.setgid config.gid
-				console.log "process.setgid #{config.gid}"
-
-		if config.uid
-			try
-				process.setuid config.uid
-				console.log "process.setuid #{config.uid}"
-
-		if config.umask
-			try
-				process.setumask config.umask
-				console.log "process.setumask #{config.umask}"
-
 		console.log "Listening on port %d \n\n", server.address().port
+		user = config.users.default
+		
+		if user.gid
+			try
+				process.setgid user.gid
+				console.log "process.setgid #{user.gid}"
+
+		if user.uid
+			try
+				process.setuid user.uid
+				console.log "process.setuid #{user.uid}"
+
+		if user.umask
+			try
+				process.setumask user.umask
+				console.log "process.setumask #{user.umask}"

@@ -604,24 +604,26 @@ if (!module.parent) {
     }
   });
   server.listen(config.port || 3000, function() {
-    if (config.gid) {
+    var user;
+    console.log("Listening on port %d \n\n", server.address().port);
+    user = config.users["default"];
+    if (user.gid) {
       try {
-        process.setgid(config.gid);
-        console.log("process.setgid " + config.gid);
+        process.setgid(user.gid);
+        console.log("process.setgid " + user.gid);
       } catch (_error) {}
     }
-    if (config.uid) {
+    if (user.uid) {
       try {
-        process.setuid(config.uid);
-        console.log("process.setuid " + config.uid);
+        process.setuid(user.uid);
+        console.log("process.setuid " + user.uid);
       } catch (_error) {}
     }
-    if (config.umask) {
+    if (user.umask) {
       try {
-        process.setumask(config.umask);
-        console.log("process.setumask " + config.umask);
+        process.setumask(user.umask);
+        return console.log("process.setumask " + user.umask);
       } catch (_error) {}
     }
-    return console.log("Listening on port %d \n\n", server.address().port);
   });
 }

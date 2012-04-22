@@ -2,9 +2,17 @@
 	"domains": {
 		"yourdomain.com": "app"
 	},
+
 	"mongodb": "mongodb://localhost/l4c",
-	"gid": "node",
-	"uid": "node",
-	"umask": "0777",
-	"port": 3000
+
+	"port": 3000,
+
+	"users": {
+		"default": {
+			"gid": "node",
+			"uid": "node"
+		}
+	},
+	
+	"umask": "0777"
 }
