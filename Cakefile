@@ -163,7 +163,7 @@ task 'mkdir', 'Create directories and set permissions', ->
 
 	directories.forEach (dir) ->
 		fs.mkdirSync dir unless path.existsSync dir
-		fs.chmodSync dir, 0777
+		fs.chmodSync dir, parseInt '0777'
 
 
 
