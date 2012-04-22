@@ -1,4 +1,4 @@
-var LocalStrategy, app, cdn, config, error_handler, express, helpers, invoke, lib, middleware, model, mongo_session, mongoose, nodejs_url, passport, server, server_apps, underscore, _;
+var LocalStrategy, app, available_apps, config, error_handler, express, helpers, invoke, lib, middleware, model, mongo_session, mongoose, nodejs_url, passport, server, underscore, _;
 
 _ = underscore = require('underscore');
 
@@ -9,6 +9,8 @@ invoke = require('invoke');
 express = require('express');
 
 nodejs_url = require('url');
+
+config = require('./config.json');
 
 app = module.exports = express.createServer();
 
@@ -24,7 +26,7 @@ mongo_session = require('connect-mongo');
 
 mongoose = require('mongoose');
 
-mongoose.connect('mongodb://localhost/l4c');
+mongoose.connect(config.mongodb);
 
 model = require('./models');
 
@@ -592,18 +594,34 @@ app["delete"]('/:user/:slug', middleware.auth, function(req, res) {
 });
 
 if (!module.parent) {
-  cdn = express.createServer();
-  cdn.use(express.static(__dirname + '/public/uploads', app.set('static options')));
-  config = require('./config.json');
   server = express.createServer();
-  server_apps = {
-    cdn: cdn,
+  available_apps = {
     app: app
   };
-  console.log(config);
   _.each(config.domains, function(value, key, list) {
-    return server.use(express.vhost(key, server_apps[value]));
+    if (available_apps[value]) {
+      return server.use(express.vhost(key, available_apps[value]));
+    }
   });
-  server.listen(config.port);
-  console.log("Listening on port %d", server.address().port);
+  server.listen(config.port || 3000, function() {
+    if (config.gid) {
+      try {
+        process.setgid(config.gid);
+        console.log("process.setgid " + config.gid);
+      } catch (_error) {}
+    }
+    if (config.uid) {
+      try {
+        process.setuid(config.uid);
+        console.log("process.setuid " + config.uid);
+      } catch (_error) {}
+    }
+    if (config.umask) {
+      try {
+        process.setumask(config.umask);
+        console.log("process.setumask " + config.umask);
+      } catch (_error) {}
+    }
+    return console.log("Listening on port %d \n\n", server.address().port);
+  });
 }

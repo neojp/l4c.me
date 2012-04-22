@@ -7,6 +7,7 @@ nodejs_url  = require 'url'
 
 
 # L4C library
+config = require('./config.json')
 app = module.exports = express.createServer()
 lib = require './lib'
 helpers = lib.helpers
@@ -17,7 +18,7 @@ middleware = lib.middleware(app)
 # Mongoose configuration
 mongo_session = require 'connect-mongo'
 mongoose = require 'mongoose'
-mongoose.connect 'mongodb://localhost/l4c'
+mongoose.connect config.mongodb
 model = require './models'
 
 
@@ -596,20 +597,28 @@ app.delete '/:user/:slug', middleware.auth, (req, res) ->
 
 # Only listen on $ node app.js
 if (!module.parent)
-	cdn = express.createServer()
-	cdn.use express.static( __dirname + '/public/uploads', app.set('static options') )
-
-	config = require('./config.json')
-
 	server = express.createServer()
-	server_apps =
-		cdn: cdn
+	available_apps =
 		app: app
 
-	console.log config
-
 	_.each config.domains, (value, key, list) ->
-		server.use express.vhost key, server_apps[value]
+		if available_apps[value]
+			server.use express.vhost key, available_apps[value]
 	
-	server.listen config.port
-	console.log "Listening on port %d", server.address().port
+	server.listen config.port || 3000, ->
+		if config.gid
+			try
+				process.setgid config.gid
+				console.log "process.setgid #{config.gid}"
+
+		if config.uid
+			try
+				process.setuid config.uid
+				console.log "process.setuid #{config.uid}"
+
+		if config.umask
+			try
+				process.setumask config.umask
+				console.log "process.setumask #{config.umask}"
+
+		console.log "Listening on port %d \n\n", server.address().port
