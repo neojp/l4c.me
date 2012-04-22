@@ -1,1 +1,0 @@
-node ../node_modules/coffee-script/bin/coffee -wbc -o ../public/js/ ../public/coffee/

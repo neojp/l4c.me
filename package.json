@@ -15,11 +15,9 @@
   "engines": {
     "node": "0.6"
   },
-  "main": "./bin/l4c_supervisor",
-  "bin" : {
-      "l4c_coffee" : "./bin/l4c_coffee",
-      "l4c_stylus" : "./bin/l4c_stylus",
-      "l4c_supervisor" : "./bin/l4c_supervisor"
+  "main": "app.js",
+  "scripts": {
+    "start": "node node_modules/coffee-script/bin/cake start"
   },
   "dependencies": {
     "beautifyjs": ">= 0.1.0",
