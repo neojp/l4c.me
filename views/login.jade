@@ -1,3 +1,8 @@
+nav#breadcrumb
+	h1 Iniciar Sesión
+
+hr
+
 - if (failed)
 	div.message.error
 		p
@@ -6,16 +11,39 @@
 		p Forgot your password? 
 			a Request a new one.
 
-form( method="post", action="/login" )
-	p
-		label Username
-			| 
-			input( type="text", name="username" )
-	
-	p
-		label Password
-			| 
-			input( type="password", name="password" )
-	
-	p
-		button( type="submit" ) Submit
+
+form.login( method="post", action="/login" )
+	fieldset.fields
+		legend desde L4C.me
+		
+		p
+			//- label( for="header-username" ) Nombre de usuario
+			input#header-username( type="text", name="username", placeholder="Nombre de usuario", required )
+
+		p
+			//- label( for="header-password" ) Contraseña
+			input#header-password( type="password", name="password", placeholder="Contraseña", required )
+		
+		p.buttons
+			a.forgot( href="/login/forgot" ) Recuperar Contraseña
+			button( type="submit" ) Iniciar Sesión
+
+	fieldset.social
+		legend desde otros sitios
+
+		p
+			a.zocial.facebook( href="/login/facebook" ) Logueate con Facebook
+			a.zocial.twitter( href="/login/twitter" ) Logueate con Twitter
+			a.zocial.googleplus( href="#" ) Logueate con Google+
+		
+		p
+			a.cristalab.disabled( title="No disponible" )
+				img( src= helpers.image.blank, data-src="/images/cristalab_32.png", alt="", width="32", height="32" )
+			
+			a.mdw.disabled( title="No disponible" )
+				img( src= helpers.image.blank, data-src="/images/mdw_32.png", alt="", width="32", height="32" )
+
+	hr.gray.nomargin
+	fieldset.register
+		p
+			a.button.blue( href="/registro" ) Registrate en L4C.me

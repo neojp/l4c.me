@@ -49,10 +49,10 @@ a.button
 	color #fff
 	cursor pointer
 	font bold 12px/1 Helvetica, Arial, sans-serif
-	height 25px
-	line-height 25px
+	// height 25px
+	// line-height 25px
 	// padding 0 35px 0 10px
-	padding 0 10px
+	padding 6px 10px
 	border-radius()
 	transition()
 
@@ -91,6 +91,7 @@ a.button
 
 #header
 	background #00b8f4
+	color #fff
 	min-height 60px
 	position relative
 	z-index 3
@@ -98,9 +99,8 @@ a.button
 	.wrap
 		clearfix()
 
-	&, a
-		border 0
-		color #fff
+	// &, a
+	//	border 0
 
 	#logo
 		height 49px
@@ -157,16 +157,6 @@ a.button
 		line-height 25px
 		position relative
 
-		&.active
-			#header-login-trigger
-				border-radius( 5px 5px 0 0 )
-
-			#header-login
-				left auto
-				opacity 1
-				right 0
-				top 48px
-
 		a
 			text-decoration none
 		
@@ -204,41 +194,40 @@ a.button
 			color #c2ecfc
 
 #header-login
-	background #F7F7F7
-	border-radius( 0 0 5px 5px )
-	box-shadow( 0 0 5px rgba(#000, 0.5) )
-	box-sizing border-box
-	left -9999px
-	opacity 0
-	padding 15px
-	position absolute
-	top -9999px
-	width (180px + 15) + (395px + 16) + 30
-	width 
-	transition( opacity .150s linear )
+	&.active
+		#header-login-trigger
+			border-radius( 5px 5px 0 0 )
 
-	fieldset
-		border 0
-	
-	legend
-		color #666
-		font-weight bold
-		line-height 1
-		margin 0
-		padding 0 0 10px
-		text-align center
-		width 180px
+		form.login
+			left auto
+			opacity 1
+			right 0
+			top 48px
 
-	label
-		display block
+	form.login
+		background #F7F7F7
+		border-radius( 0 0 5px 5px )
+		box-shadow( 0 0 5px rgba(#000, 0.5) )
+		box-sizing border-box
+		left -9999px
+		opacity 0
+		padding 15px
+		position absolute
+		top -9999px
+		width (180px + 15) + (395px + 16) + 30
+		transition( opacity .150s linear )
 
 	input
-		margin 0
+		font-size 1em
+		padding 5px
 		width 165px
 
-	// hr
-	// 	background-image url(images/bg_hr_gray.png)
-	// 	display none
+	legend
+		font-size 1em
+		font-weight bold
+		line-height 1
+		margin 0 0 10px
+
 
 	span.bg
 	span.topbar
@@ -254,50 +243,105 @@ a.button
 		left 0
 		right 0
 
-#header-login-fields
-	float left
-	margin 0
-	padding 0
+	.fields button
+		font-size 1em
 
-	p.buttons
-		text-align right
+	.social
+		padding 0 0 0 15px
+		width 395px
 
-#header-login-social
-	background url(images/bg_vr_gray.png) repeat-y left top
-	float right
-	margin 0
-	padding 0 0 0 15px
-	text-align center
-	width 395px
+		p
+			margin-bottom 10px
+	
+	.zocial
+		font-size 1em
 
-	p
-		margin 0 0 10px
+form.login
+	margin 0 auto
+	width 325px + 15 + 500 + 16 + 30
 
-	a
-		display inline-block
-		margin 5px
-
-		&.disabled
-			cursor default
-			margin 0 10px
-			opacity 0.5
-
-	img
-		vertical-align bottom
-
-#header-register
-	margin 15px 0 0
-	text-align center
-
-	p
+	fieldset
+		border 0
+	
+	legend
+		color #666
+		font-size 1.2em
 		margin 0
+		padding 0 0 1em
+		text-align center
+		width 180px
 
-	a.button
-		margin-right 25px
+	label
+		display block
 
+	input
+		margin 0
+		font-size 1.2em
+		padding 0.75em
+		width 300px
+
+	// hr
+	// 	background-image url(images/bg_hr_gray.png)
+	// 	display none
+
+	.fields
+		float left
+		margin 0
+		padding 0
+
+		p.buttons
+			text-align right
+
+		a.forgot
+			margin-right 10px
+
+		button
+			font-size 1.2em
+
+	.zocial
+		font-size 1.2em
+	
+	.social
+		background url(images/bg_vr_gray.png) repeat-y left top
+		float right
+		margin 0
+		padding 0 0 15px 15px
+		text-align center
+		width 500px
+
+		p
+			margin 0 0 20px
+
+		a
+			border 0
+			display inline-block
+			margin 5px
+
+			&.disabled
+				cursor default
+				margin 0 10px
+				opacity 0.5
+
+		img
+			vertical-align bottom
+
+	.register
+		margin 15px 0 0
+		text-align center
+
+		p
+			margin 0
+
+		a.button
+			font-size 1.4em
+			margin-right 25px
+			padding 0.5em 1em
+
+	a.forgot
 	a.close
 		color #666
 		border-bottom 2px solid #ccc
+
 
 #footer
 	background #242c33
@@ -437,9 +481,6 @@ a.button
 		li.active a
 			border-color #ffd6ae
 			color #ffae5e
-
-body.upload
-	background none
 
 #upload
 	background none
@@ -838,7 +879,7 @@ body.sizes
 
 body.upload
 	#inner
-		background url(images/bg_upload.png) no-repeat center bottom
+		background #fff url(images/bg_upload.png) no-repeat center bottom
 	
 	#content-sidebar-wrap #content
 		float none
@@ -907,12 +948,15 @@ body.upload
 		height 18px
 		margin 5px 0 0 10px
 		position relative
+		overflow hidden
 		width 18px
 
-		&:hover .popup
-			left -15px
-			bottom 25px
-			opacity 1
+		&:hover
+			overflow visible
+			.popup
+				left -15px
+				bottom 25px
+				opacity 1
 	
 		.popup
 			background #FF9933

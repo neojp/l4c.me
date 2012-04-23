@@ -41,7 +41,6 @@ window.Site = $.extend {}, window.Site,
 		log 'Y U NO STOP USING IE!!'
 	
 	# base64 - 1x1 pixel transparent image
-	# blank: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAMAAAAoyzS7AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAAZQTFRF////AAAAVcLTfgAAAAF0Uk5TAEDm2GYAAAAMSURBVHjaYmAACDAAAAIAAU9tWeEAAAAASUVORK5CYII='
 	blank: 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=='
 
 	# load images only when scrolled over
@@ -59,7 +58,7 @@ window.Site = $.extend {}, window.Site,
 
 		$aside = $('#header aside')
 		$trigger = $('#header-login-trigger')
-		$close = $('#header-register a.close')
+		$close = $('#header a.close')
 
 		open = (e) ->
 			e.stopPropagation()

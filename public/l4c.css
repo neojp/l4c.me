@@ -30,18 +30,17 @@ h1,h2,h3,h4,h5,h6{color:#0a92ca}
 a{border-bottom:2px solid #80c4e0;color:#0a92ca}
 input:focus,textarea:focus,input:active,textarea:active{border-color:#f93;outline:0}
 a.button{display:inline-block}
-button,a.button{background:#f93 no-repeat;border:0;color:#fff;cursor:pointer;font:bold 12px/1 Helvetica,Arial,sans-serif;height:25px;line-height:25px;padding:0 10px;border-radius:5px;-o-border-radius:5px;-ms-border-radius:5px;-moz-border-radius:5px;-webkit-border-radius:5px;-webkit-background-clip:padding-box;transition:all .15s linear;-o-transition:all .15s linear;-ms-transition:all .15s linear;-moz-transition:all .15s linear;-webkit-transition:all .15s linear;}
+button,a.button{background:#f93 no-repeat;border:0;color:#fff;cursor:pointer;font:bold 12px/1 Helvetica,Arial,sans-serif;padding:6px 10px;border-radius:5px;-o-border-radius:5px;-ms-border-radius:5px;-moz-border-radius:5px;-webkit-border-radius:5px;-webkit-background-clip:padding-box;transition:all .15s linear;-o-transition:all .15s linear;-ms-transition:all .15s linear;-moz-transition:all .15s linear;-webkit-transition:all .15s linear;}
 button:hover,a.button:hover,button:focus,a.button:focus{background-color:#ffa347}
 button:focus,a.button:focus{outline:0;box-shadow:inset 0 0 0 1px #fff, 0 0 0 1px #FF9933;-o-box-shadow:inset 0 0 0 1px #fff, 0 0 0 1px #FF9933;-ms-box-shadow:inset 0 0 0 1px #fff, 0 0 0 1px #FF9933;-moz-box-shadow:inset 0 0 0 1px #fff, 0 0 0 1px #FF9933;-webkit-box-shadow:inset 0 0 0 1px #fff, 0 0 0 1px #FF9933;-webkit-background-clip:padding-box}
 button.blue,a.button.blue{background-color:#999;background-color:#009ccf;}
 button.blue:hover,a.button.blue:hover,button.blue:focus,a.button.blue:focus{background-color:#00a6dc}
 button.blue:focus,a.button.blue:focus,button.blue.focus,a.button.blue.focus{box-shadow:inset 0 0 0 1px #fff, 0 0 0 1px #00a6dc;-o-box-shadow:inset 0 0 0 1px #fff, 0 0 0 1px #00a6dc;-ms-box-shadow:inset 0 0 0 1px #fff, 0 0 0 1px #00a6dc;-moz-box-shadow:inset 0 0 0 1px #fff, 0 0 0 1px #00a6dc;-webkit-box-shadow:inset 0 0 0 1px #fff, 0 0 0 1px #00a6dc;-webkit-background-clip:padding-box}
 .wrap{margin:0 auto;position:relative;max-width:1250px}
-#header{background:#00b8f4;min-height:60px;position:relative;z-index:3;}
+#header{background:#00b8f4;color:#fff;min-height:60px;position:relative;z-index:3;}
 #header .wrap{zoom:1;}
 #header .wrap:before,#header .wrap:after{content:"\0020";display:block;height:0;visibility:hidden}
 #header .wrap:after{clear:both}
-#header,#header a{border:0;color:#fff}
 #header #logo{height:49px;left:15px;margin:0;position:absolute;top:5px;width:96px;}
 #header #logo a{background-repeat:no-repeat;height:100%;direction:ltr;display:block;overflow:hidden;text-align:left;text-indent:-999em;width:100%;text-indent:0}
 #header #nav-aside{float:right;font-size:1.2em;width:720px;width:75%}
@@ -52,8 +51,6 @@ button.blue:focus,a.button.blue:focus,button.blue.focus,a.button.blue.focus{box-
 #header nav ul.menu > li > a{padding:0 10px;text-decoration:none;border-radius:5px;-o-border-radius:5px;-ms-border-radius:5px;-moz-border-radius:5px;-webkit-border-radius:5px;-webkit-background-clip:padding-box;transition:all .15s linear;-o-transition:all .15s linear;-ms-transition:all .15s linear;-moz-transition:all .15s linear;-webkit-transition:all .15s linear}
 #header nav ul.menu > li > a:hover,#header nav ul.menu > li.active > a{background:#0a93ca}
 #header aside{float:right;margin-right:10px;padding:18px 5px 0 0;height:25px;line-height:25px;position:relative;}
-#header aside.active #header-login-trigger{border-radius:5px 5px 0 0;-o-border-radius:5px 5px 0 0;-ms-border-radius:5px 5px 0 0;-moz-border-radius:5px 5px 0 0;-webkit-border-radius:5px 5px 0 0;-webkit-background-clip:padding-box}
-#header aside.active #header-login{left:auto;opacity:1;right:0;top:48px}
 #header aside a{text-decoration:none}
 #header aside a.username{border-bottom:2px solid #80dcfa;}
 #header aside a.username:hover{border-color:#fff}
@@ -61,24 +58,36 @@ button.blue:focus,a.button.blue:focus,button.blue.focus,a.button.blue.focus{box-
 #header aside a.profile:after,#header aside a.logout:after{content:"|";font-size:16px;color:#37cdff;height:20px;margin-left:8px;overflow:hidden;width:0}
 #header aside a.profile{background-color:#c2ecfc;background-image:url("images/icon_profile.png");color:#0a93ca}
 #header aside a.logout{background-color:#0a93ca;background-image:url("images/icon_logout.png");color:#c2ecfc}
-#header-login{background:#f7f7f7;border-radius:0 0 5px 5px;-o-border-radius:0 0 5px 5px;-ms-border-radius:0 0 5px 5px;-moz-border-radius:0 0 5px 5px;-webkit-border-radius:0 0 5px 5px;-webkit-background-clip:padding-box;box-shadow:0 0 5px rgba(0,0,0,0.50);-o-box-shadow:0 0 5px rgba(0,0,0,0.50);-ms-box-shadow:0 0 5px rgba(0,0,0,0.50);-moz-box-shadow:0 0 5px rgba(0,0,0,0.50);-webkit-box-shadow:0 0 5px rgba(0,0,0,0.50);-webkit-background-clip:padding-box;box-sizing:border-box;left:-9999px;opacity:0;padding:15px;position:absolute;top:-9999px;width:636px;widthtransition:opacity .15s linear;-o-transition:opacity .15s linear;-ms-transition:opacity .15s linear;-moz-transition:opacity .15s linear;-webkit-transition:opacity .15s linear;}
-#header-login fieldset{border:0}
-#header-login legend{color:#666;font-weight:bold;line-height:1;margin:0;padding:0 0 10px;text-align:center;width:180px}
-#header-login label{display:block}
-#header-login input{margin:0;width:165px}
+#header-login.active #header-login-trigger{border-radius:5px 5px 0 0;-o-border-radius:5px 5px 0 0;-ms-border-radius:5px 5px 0 0;-moz-border-radius:5px 5px 0 0;-webkit-border-radius:5px 5px 0 0;-webkit-background-clip:padding-box}
+#header-login.active form.login{left:auto;opacity:1;right:0;top:48px}
+#header-login form.login{background:#f7f7f7;border-radius:0 0 5px 5px;-o-border-radius:0 0 5px 5px;-ms-border-radius:0 0 5px 5px;-moz-border-radius:0 0 5px 5px;-webkit-border-radius:0 0 5px 5px;-webkit-background-clip:padding-box;box-shadow:0 0 5px rgba(0,0,0,0.50);-o-box-shadow:0 0 5px rgba(0,0,0,0.50);-ms-box-shadow:0 0 5px rgba(0,0,0,0.50);-moz-box-shadow:0 0 5px rgba(0,0,0,0.50);-webkit-box-shadow:0 0 5px rgba(0,0,0,0.50);-webkit-background-clip:padding-box;box-sizing:border-box;left:-9999px;opacity:0;padding:15px;position:absolute;top:-9999px;width:636px;transition:opacity .15s linear;-o-transition:opacity .15s linear;-ms-transition:opacity .15s linear;-moz-transition:opacity .15s linear;-webkit-transition:opacity .15s linear}
+#header-login input{font-size:1em;padding:5px;width:165px}
+#header-login legend{font-size:1em;font-weight:bold;line-height:1;margin:0 0 10px}
 #header-login span.bg,#header-login span.topbar{background:#00b8f4;height:5px;left:0;position:absolute;right:0;top:-5px}
 #header-login span.topbar{background:#f93;left:0;right:0}
-#header-login-fields{float:left;margin:0;padding:0;}
-#header-login-fields p.buttons{text-align:right}
-#header-login-social{background:url("images/bg_vr_gray.png") repeat-y left top;float:right;margin:0;padding:0 0 0 15px;text-align:center;width:395px;}
-#header-login-social p{margin:0 0 10px}
-#header-login-social a{display:inline-block;margin:5px;}
-#header-login-social a.disabled{cursor:default;margin:0 10px;opacity:.5}
-#header-login-social img{vertical-align:bottom}
-#header-register{margin:15px 0 0;text-align:center;}
-#header-register p{margin:0}
-#header-register a.button{margin-right:25px}
-#header-register a.close{color:#666;border-bottom:2px solid #ccc}
+#header-login .fields button{font-size:1em}
+#header-login .social{padding:0 0 0 15px;width:395px;}
+#header-login .social p{margin-bottom:10px}
+#header-login .zocial{font-size:1em}
+form.login{margin:0 auto;width:886px;}
+form.login fieldset{border:0}
+form.login legend{color:#666;font-size:1.2em;margin:0;padding:0 0 1em;text-align:center;width:180px}
+form.login label{display:block}
+form.login input{margin:0;font-size:1.2em;padding:.75em;width:300px}
+form.login .fields{float:left;margin:0;padding:0;}
+form.login .fields p.buttons{text-align:right}
+form.login .fields a.forgot{margin-right:10px}
+form.login .fields button{font-size:1.2em}
+form.login .zocial{font-size:1.2em}
+form.login .social{background:url("images/bg_vr_gray.png") repeat-y left top;float:right;margin:0;padding:0 0 15px 15px;text-align:center;width:500px;}
+form.login .social p{margin:0 0 20px}
+form.login .social a{border:0;display:inline-block;margin:5px;}
+form.login .social a.disabled{cursor:default;margin:0 10px;opacity:.5}
+form.login .social img{vertical-align:bottom}
+form.login .register{margin:15px 0 0;text-align:center;}
+form.login .register p{margin:0}
+form.login .register a.button{font-size:1.4em;margin-right:25px;padding:.5em 1em}
+form.login a.forgot,form.login a.close{color:#666;border-bottom:2px solid #ccc}
 #footer{background:#242c33;padding:13px;position:relative;text-align:center;z-index:1;}
 #footer,#footer a{border:0;color:#fff}
 #footer ul{height:37px;list-style:none;margin:0;padding:0}
@@ -109,7 +118,6 @@ button.blue:focus,a.button.blue:focus,button.blue.focus,a.button.blue.focus{box-
 #breadcrumb ul li:first-child{background:none;padding-left:10px}
 #breadcrumb ul a{border-bottom:2px solid #84c9e4;color:#0a93ca}
 #breadcrumb ul li.active a{border-color:#ffd6ae;color:#ffae5e}
-body.upload{background:none}
 #upload{background:none;height:45px;line-height:45px;margin:0;padding:0 !important;}
 #upload a{background:#f93;border:0 !important;color:#fff !important;display:inline-block;font-size:22px;font-weight:bold;padding:0 24px;border-radius:5px;-o-border-radius:5px;-ms-border-radius:5px;-moz-border-radius:5px;-webkit-border-radius:5px;-webkit-background-clip:padding-box;transition:all .15s linear;-o-transition:all .15s linear;-ms-transition:all .15s linear;-moz-transition:all .15s linear;-webkit-transition:all .15s linear;}
 #upload a:hover{background-color:#ffa347}
@@ -191,7 +199,7 @@ body.single #sidebar #upload{text-align:center}
 body.sizes #breadcrumb{margin-bottom:10px;}
 body.sizes #breadcrumb ul{float:right;font-size:1.2em}
 body.sizes .img-info{padding:10px 15px}
-body.upload #inner{background:url("images/bg_upload.png") no-repeat center bottom}
+body.upload #inner{background:#fff url("images/bg_upload.png") no-repeat center bottom}
 body.upload #content-sidebar-wrap #content{float:none;margin:40px auto;width:520px;}
 body.upload #content-sidebar-wrap #content form p{zoom:1;}
 body.upload #content-sidebar-wrap #content form p:before,body.upload #content-sidebar-wrap #content form p:after{content:"\0020";display:block;height:0;visibility:hidden}
@@ -208,7 +216,8 @@ body.upload #upload-placeholder-container label,body.upload #upload-file-contain
 body.upload #upload-placeholder-container p,body.upload #upload-file-container p{font-size:1.2em}
 body.upload #upload-placeholder{border:2px dashed #f93;color:#999;display:block;font-size:18px !important;padding:45px;text-align:center;width:270px;border-radius:5px;-o-border-radius:5px;-ms-border-radius:5px;-moz-border-radius:5px;-webkit-border-radius:5px;-webkit-background-clip:padding-box}
 body.upload #upload-file-container input{float:none}
-body.upload .help{background:url("images/icon_help.png") no-repeat;cursor:pointer;display:inline-block;height:18px;margin:5px 0 0 10px;position:relative;width:18px;}
+body.upload .help{background:url("images/icon_help.png") no-repeat;cursor:pointer;display:inline-block;height:18px;margin:5px 0 0 10px;position:relative;overflow:hidden;width:18px;}
+body.upload .help:hover{overflow:visible;}
 body.upload .help:hover .popup{left:-15px;bottom:25px;opacity:1}
 body.upload .help .popup{background:#f93;bottom:-9999px;color:#fff;cursor:default;font-style:italic;font-size:.9em;left:-9999px;opacity:0;padding:5px;position:absolute;width:125px;border-radius:5px;-o-border-radius:5px;-ms-border-radius:5px;-moz-border-radius:5px;-webkit-border-radius:5px;-webkit-background-clip:padding-box;transition:all .15s linear;-o-transition:all .15s linear;-ms-transition:all .15s linear;-moz-transition:all .15s linear;-webkit-transition:all .15s linear;transition-property:opacity;-o-transition-property:opacity;-ms-transition-property:opacity;-moz-transition-property:opacity;-webkit-transition-property:opacity}
 body.upload p.buttons{background:url("images/bg_shadow.png") no-repeat center top;margin:25px 0 0;padding:40px 0 0;text-align:center;}

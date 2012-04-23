@@ -12,15 +12,17 @@ hr.hidden
 			a.profile( href="/perfil/" ) perfil
 			|  o 
 			a.logout( href="/logout/" ) salir
-- else
 
-	aside
+- else if (original_url !== '/login' && original_url !== '/register')
+
+	aside#header-login
 		a#header-login-trigger.button Iniciar Sesión o Registrate
-		form#header-login( method="post", action="/login" )
+		
+		form.login( method="post", action="/login" )
 			span.bg
 			span.topbar
 
-			fieldset#header-login-fields
+			fieldset.fields
 				legend desde L4C.me
 				
 				p
@@ -32,33 +34,26 @@ hr.hidden
 					input#header-password( type="password", name="password", placeholder="Contraseña", required )
 				
 				p.buttons
+					a.forgot( href="/login/forgot" ) Lo olvid&eacute;
 					button( type="submit" ) Iniciar Sesión
 
-			fieldset#header-login-social
+			fieldset.social
 				legend desde otros sitios
 
 				p
-					a#header-facebook-link.zocial.facebook( href="/login/facebook" ) Logueate con Facebook
-					a#header-twitter-link.zocial.twitter( href="/login/twitter" ) Logueate con Twitter
-					a#header-googleplus-link.zocial.googleplus( href="#" ) Logueate con Google+
+					a.zocial.facebook( href="/login/facebook" ) Logueate con Facebook
+					a.zocial.twitter( href="/login/twitter" ) Logueate con Twitter
+					a.zocial.googleplus( href="#" ) Logueate con Google+
 				
 				p
-					//- a#header-facebook-link( href="#" )
-					//- 	img( src= helpers.image.blank, data-src="/images/facebook_32.png", alt="", width="32", height="32" )
-					//- a#header-twitter-link( href="#" )
-					//- 	img( src= helpers.image.blank, data-src="/images/twitter_32.png", alt="", width="32", height="32" )
-					//- a#header-googleplus-link( href="#" )
-					//- 	img( src= helpers.image.blank, data-src="/images/googleplus_32.png", alt="", width="32", height="32" )
-					//- br
-
-					a#header-cristalab-link.disabled( title="No disponible" )
+					a.cristalab.disabled( title="No disponible" )
 						img( src= helpers.image.blank, data-src="/images/cristalab_32.png", alt="", width="32", height="32" )
 					
-					a#header-mdw-link.disabled( title="No disponible" )
+					a.mdw.disabled( title="No disponible" )
 						img( src= helpers.image.blank, data-src="/images/mdw_32.png", alt="", width="32", height="32" )
 
 			hr.gray.nomargin
-			fieldset#header-register
+			fieldset.register
 				p
 					a.button.blue( href="/registro" ) Registrate en L4C.me
 					a.close( href="#" ) Cerrar
