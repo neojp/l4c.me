@@ -1,12 +1,25 @@
 {
 	"domains": {
-		"yourdomain.com": "app"
+		"localhost": "app"
+	},
+
+	"facebook": {
+		"clientID": "",
+		"clientSecret": "",
+		"callbackURL": "http://localhost/login/facebook/callback",
+		"permissions": ["email", "user_website"]
 	},
 
 	"mongodb": "mongodb://localhost/l4c",
 
 	"port": 3000,
 	"port_git": 3001,
+
+	"twitter": {
+		"callbackURL": "http://localhost/login/twitter/callback",
+		"consumerKey": "",
+		"consumerSecret": ""
+	},
 
 	"users": {
 		"default": {

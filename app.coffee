@@ -24,16 +24,24 @@ model = require './models'
 
 # Passport configuration
 passport = require 'passport'
-LocalStrategy = require('passport-local').Strategy
+passport_local = require('passport-local').Strategy
+passport_twitter = require('passport-twitter').Strategy
+passport_facebook = require('passport-facebook').Strategy
 
 passport.serializeUser (user, next) ->
-	next null, user.username
+	next null, user._id
 
-passport.deserializeUser (username, next) ->
-	model.user.deserialize username, next
+passport.deserializeUser (id, next) ->
+	model.user.deserialize id, next
 
-passport.use new LocalStrategy (username, password, next) ->
+passport.use new passport_local (username, password, next) ->
 	model.user.login username, password, next
+
+passport.use new passport_facebook config.facebook, (token, tokenSecret, profile, next) ->
+	model.user.facebook token, tokenSecret, profile, next
+
+passport.use new passport_twitter config.twitter, (token, tokenSecret, profile, next) ->
+	model.user.twitter token, tokenSecret, profile, next
 
 
 # Express configuration
@@ -280,7 +288,21 @@ app.get '/login', (req, res, next) ->
 
 
 app.post '/login', passport.authenticate('local', failureRedirect: '/login?failed'), (req, res, next) ->
-	flash = req.flash('auth_redirect')
+	flash = req.flash 'auth_redirect'
+	url = if _.size flash then _.first flash else '/'
+	res.redirect url
+
+
+app.get '/login/facebook', passport.authenticate('facebook', { scope: config.facebook.permissions })
+app.get '/login/facebook/callback', passport.authenticate('facebook', failureRedirect: '/login'), (req, res, next) ->
+	flash = req.flash 'auth_redirect'
+	url = if _.size flash then _.first flash else '/'
+	res.redirect url
+
+
+app.get '/login/twitter', passport.authenticate('twitter')
+app.get '/login/twitter/callback', passport.authenticate('twitter', failureRedirect: '/login'), (req, res, next) ->
+	flash = req.flash 'auth_redirect'
 	url = if _.size flash then _.first flash else '/'
 	res.redirect url
 

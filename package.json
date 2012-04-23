@@ -35,6 +35,8 @@
     "nib": "*",
     "passport": ">= 0.1.6",
     "passport-local": ">= 0.1.0",
+    "passport-twitter": "*",
+    "passport-facebook": "*",
     "socket.io": ">= 0.9.2",
     "stylus": ">= 0.24.0",
     "supervisor": ">= 0.3.0",

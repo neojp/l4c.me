@@ -1,10 +1,12 @@
-var Email, ObjectId, Schema, Url, encrypt_password, helpers, mongoose, mongooseTypes, user;
+var Email, ObjectId, Schema, Url, encrypt_password, helpers, invoke, mongoose, mongooseTypes, user, validate_url;
 
 mongoose = require('mongoose');
 
 mongooseTypes = require('mongoose-types');
 
 mongooseTypes.loadTypes(mongoose);
+
+invoke = require('invoke');
 
 helpers = require('../lib/helpers');
 
@@ -18,6 +20,10 @@ Url = mongoose.SchemaTypes.Url;
 
 encrypt_password = function(password) {
   return require('crypto').createHash('sha1').update(password + helpers.heart).digest('hex');
+};
+
+validate_url = function(v) {
+  return /^(https?|ftp):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(\#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i.test(value);
 };
 
 user = new Schema({
@@ -34,12 +40,14 @@ user = new Schema({
   },
   email: {
     lowercase: true,
-    required: true,
-    type: Email,
-    unique: true
+    type: Email
+  },
+  facebook: {
+    id: String,
+    email: Email,
+    username: String
   },
   password: {
-    required: true,
     set: encrypt_password,
     type: String
   },
@@ -51,14 +59,17 @@ user = new Schema({
     },
     type: Number
   },
+  twitter: {
+    id: String,
+    username: String
+  },
   url: {
-    type: Url
+    type: String,
+    validate: [validate_url, 'Please enter a valid URL']
   },
   username: {
     lowercase: true,
-    required: true,
-    type: String,
-    unique: true
+    type: String
   }
 });
 
@@ -75,12 +86,51 @@ user.statics.login = function(username, password, next) {
   });
 };
 
-user.statics.deserialize = function(username, next) {
+user.statics.deserialize = function(id, next) {
   return this.findOne({
-    username: username
+    _id: id
   }, function(err, doc) {
-    if (err) return next(null, false);
+    if (err || doc === null) return next(null, false);
     return next(null, doc);
+  });
+};
+
+user.statics.facebook = function(token, tokenSecret, profile, next) {
+  return this.findOne({
+    'facebook.id': profile.id
+  }, function(err, doc) {
+    var u, url;
+    if (!(err || doc === null)) return next(null, doc);
+    u = new (mongoose.model('user'));
+    u.email = profile._json.email;
+    u.facebook = {
+      email: profile._json.email,
+      id: profile.id,
+      username: profile.username
+    };
+    url = profile._json.website.split("\r\n")[0];
+    u.url = url;
+    u.username = profile.username;
+    u.save();
+    return next(null, u);
+  });
+};
+
+user.statics.twitter = function(token, tokenSecret, profile, next) {
+  return this.findOne({
+    'twitter.id': profile.id
+  }, function(err, doc) {
+    var u;
+    if (!(err || doc === null)) return next(null, doc);
+    u = new (mongoose.model('user'));
+    u.twitter = {
+      id: profile.id,
+      username: profile._json.screen_name
+    };
+    u.username = profile._json.screen_name;
+    if (profile._json.url != null) u.url = profile._json.url;
+    u.save();
+    return next(null, u);
   });
 };
 

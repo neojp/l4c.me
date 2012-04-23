@@ -1,4 +1,4 @@
-var LocalStrategy, app, available_apps, config, error_handler, express, helpers, invoke, lib, middleware, model, mongo_session, mongoose, nodejs_url, passport, server, underscore, _;
+var app, available_apps, config, error_handler, express, helpers, invoke, lib, middleware, model, mongo_session, mongoose, nodejs_url, passport, passport_facebook, passport_local, passport_twitter, server, underscore, _;
 
 _ = underscore = require('underscore');
 
@@ -32,18 +32,30 @@ model = require('./models');
 
 passport = require('passport');
 
-LocalStrategy = require('passport-local').Strategy;
+passport_local = require('passport-local').Strategy;
+
+passport_twitter = require('passport-twitter').Strategy;
+
+passport_facebook = require('passport-facebook').Strategy;
 
 passport.serializeUser(function(user, next) {
-  return next(null, user.username);
+  return next(null, user._id);
 });
 
-passport.deserializeUser(function(username, next) {
-  return model.user.deserialize(username, next);
+passport.deserializeUser(function(id, next) {
+  return model.user.deserialize(id, next);
 });
 
-passport.use(new LocalStrategy(function(username, password, next) {
+passport.use(new passport_local(function(username, password, next) {
   return model.user.login(username, password, next);
+}));
+
+passport.use(new passport_facebook(config.facebook, function(token, tokenSecret, profile, next) {
+  return model.user.facebook(token, tokenSecret, profile, next);
+}));
+
+passport.use(new passport_twitter(config.twitter, function(token, tokenSecret, profile, next) {
+  return model.user.twitter(token, tokenSecret, profile, next);
 }));
 
 app.configure(function() {
@@ -64,10 +76,7 @@ app.configure(function() {
   app.use(express.methodOverride());
   app.use(express.cookieParser(helpers.heart));
   app.use(express.session({
-    secret: helpers.heart,
-    store: new mongo_session({
-      url: 'mongodb://localhost/l4c/sessions'
-    })
+    secret: helpers.heart
   }));
   app.use(passport.initialize());
   app.use(passport.session());
@@ -285,6 +294,30 @@ app.get('/login', function(req, res, next) {
 
 app.post('/login', passport.authenticate('local', {
   failureRedirect: '/login?failed'
+}), function(req, res, next) {
+  var flash, url;
+  flash = req.flash('auth_redirect');
+  url = _.size(flash) ? _.first(flash) : '/';
+  return res.redirect(url);
+});
+
+app.get('/login/facebook', passport.authenticate('facebook', {
+  scope: config.facebook.permissions
+}));
+
+app.get('/login/facebook/callback', passport.authenticate('facebook', {
+  failureRedirect: '/login'
+}), function(req, res, next) {
+  var flash, url;
+  flash = req.flash('auth_redirect');
+  url = _.size(flash) ? _.first(flash) : '/';
+  return res.redirect(url);
+});
+
+app.get('/login/twitter', passport.authenticate('twitter'));
+
+app.get('/login/twitter/callback', passport.authenticate('twitter', {
+  failureRedirect: '/login'
 }), function(req, res, next) {
   var flash, url;
   flash = req.flash('auth_redirect');
