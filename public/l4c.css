@@ -88,6 +88,8 @@ form.login .register{margin:15px 0 0;text-align:center;}
 form.login .register p{margin:0}
 form.login .register a.button{font-size:1.4em;margin-right:25px;padding:.5em 1em}
 form.login a.forgot,form.login a.close{color:#666;border-bottom:2px solid #ccc}
+.message{background:#fff5eb;border:1px solid #fc9;padding:10px;margin:10px auto 35px;text-align:center;}
+.message .error{background:#ffe5e5;border-color:#ff8080}
 #footer{background:#242c33;padding:13px;position:relative;text-align:center;z-index:1;}
 #footer,#footer a{border:0;color:#fff}
 #footer ul{height:37px;list-style:none;margin:0;padding:0}
