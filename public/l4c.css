@@ -71,7 +71,7 @@ button.blue:focus,a.button.blue:focus,button.blue.focus,a.button.blue.focus{box-
 #header-login .social p{margin-bottom:10px}
 #header-login .zocial{font-size:1em}
 #header-login .register{margin:15px 0 0;padding:0}
-#header-login a.forgot,form.login a.forgot,#header-login a.close,form.login a.close{color:#666;border-bottom:2px solid #ccc}
+#header-login a.forgot,form.login a.forgot,#header-login a.close,form.login a.close,#header-login a.login,form.login a.login{color:#666;border-bottom:2px solid #ccc}
 form.login{margin:0 auto;width:886px;}
 form.login fieldset{border:0}
 form.login legend{color:#666;font-size:1.2em;margin:0;padding:0 0 1em;text-align:center;width:180px}
@@ -90,6 +90,7 @@ form.login .social img{vertical-align:bottom}
 form.login .register{padding:35px 0 50px;text-align:center;}
 form.login .register p{margin:0}
 form.login .register a.button{font-size:1.4em;margin-right:25px;padding:.5em 1em}
+form.register hr{margin:25px 0}
 .message{background:#fff5eb;border:1px solid #fc9;padding:10px;margin:10px auto 35px;text-align:center;}
 .message .error{background:#ffe5e5;border-color:#ff8080}
 #footer{background:#242c33;padding:13px;position:relative;text-align:center;z-index:1;}
