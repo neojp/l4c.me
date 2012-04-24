@@ -105,7 +105,7 @@ form.login .register a.button{font-size:1.4em;margin-right:25px;padding:.5em 1em
 #footer #dotgaia a{background-image:url("http://www.cristalab.com/images/icons/dotgaia.png")}
 #footer #p3 a{background-image:url("http://www.cristalab.com/images/icons/p3.png")}
 #inner{background:#fff;position:relative;z-index:2}
-#wrap{padding:25px 0}
+#wrap{margin:0 auto;max-width:1475px;padding:25px}
 #message{background:#ffc68c;border:2px solid #ff9a35;color:#fff;font-size:20px;margin:0 0 25px;padding:10px 45px;position:relative;text-align:center;border-radius:5px;-o-border-radius:5px;-ms-border-radius:5px;-moz-border-radius:5px;-webkit-border-radius:5px;-webkit-background-clip:padding-box;zoom:1;}
 #message:before,#message:after{content:"\0020";display:block;height:0;visibility:hidden}
 #message:after{clear:both}
