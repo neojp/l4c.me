@@ -37,10 +37,11 @@ button.blue,a.button.blue{background-color:#999;background-color:#009ccf;}
 button.blue:hover,a.button.blue:hover,button.blue:focus,a.button.blue:focus{background-color:#00a6dc}
 button.blue:focus,a.button.blue:focus,button.blue.focus,a.button.blue.focus{box-shadow:inset 0 0 0 1px #fff, 0 0 0 1px #00a6dc;-o-box-shadow:inset 0 0 0 1px #fff, 0 0 0 1px #00a6dc;-ms-box-shadow:inset 0 0 0 1px #fff, 0 0 0 1px #00a6dc;-moz-box-shadow:inset 0 0 0 1px #fff, 0 0 0 1px #00a6dc;-webkit-box-shadow:inset 0 0 0 1px #fff, 0 0 0 1px #00a6dc;-webkit-background-clip:padding-box}
 .wrap{margin:0 auto;position:relative;max-width:1250px}
-#header{background:#00b8f4;color:#fff;min-height:60px;position:relative;z-index:3;}
+#header{background:#00b8f4;min-height:60px;position:relative;z-index:3;}
 #header .wrap{zoom:1;}
 #header .wrap:before,#header .wrap:after{content:"\0020";display:block;height:0;visibility:hidden}
 #header .wrap:after{clear:both}
+#header,#header a{border:0;color:#fff}
 #header #logo{height:49px;left:15px;margin:0;position:absolute;top:5px;width:96px;}
 #header #logo a{background-repeat:no-repeat;height:100%;direction:ltr;display:block;overflow:hidden;text-align:left;text-indent:-999em;width:100%;text-indent:0}
 #header #nav-aside{float:right;font-size:1.2em;width:720px;width:75%}
@@ -59,7 +60,7 @@ button.blue:focus,a.button.blue:focus,button.blue.focus,a.button.blue.focus{box-
 #header aside a.profile{background-color:#c2ecfc;background-image:url("images/icon_profile.png");color:#0a93ca}
 #header aside a.logout{background-color:#0a93ca;background-image:url("images/icon_logout.png");color:#c2ecfc}
 #header-login.active #header-login-trigger{border-radius:5px 5px 0 0;-o-border-radius:5px 5px 0 0;-ms-border-radius:5px 5px 0 0;-moz-border-radius:5px 5px 0 0;-webkit-border-radius:5px 5px 0 0;-webkit-background-clip:padding-box}
-#header-login.active form.login{left:auto;opacity:1;right:0;top:48px}
+#header-login.active form.login{left:auto;opacity:1;right:0;top:47px}
 #header-login form.login{background:#f7f7f7;border-radius:0 0 5px 5px;-o-border-radius:0 0 5px 5px;-ms-border-radius:0 0 5px 5px;-moz-border-radius:0 0 5px 5px;-webkit-border-radius:0 0 5px 5px;-webkit-background-clip:padding-box;box-shadow:0 0 5px rgba(0,0,0,0.50);-o-box-shadow:0 0 5px rgba(0,0,0,0.50);-ms-box-shadow:0 0 5px rgba(0,0,0,0.50);-moz-box-shadow:0 0 5px rgba(0,0,0,0.50);-webkit-box-shadow:0 0 5px rgba(0,0,0,0.50);-webkit-background-clip:padding-box;box-sizing:border-box;left:-9999px;opacity:0;padding:15px;position:absolute;top:-9999px;width:636px;transition:opacity .15s linear;-o-transition:opacity .15s linear;-ms-transition:opacity .15s linear;-moz-transition:opacity .15s linear;-webkit-transition:opacity .15s linear}
 #header-login input{font-size:1em;padding:5px;width:165px}
 #header-login legend{font-size:1em;font-weight:bold;line-height:1;margin:0 0 10px}
@@ -69,6 +70,7 @@ button.blue:focus,a.button.blue:focus,button.blue.focus,a.button.blue.focus{box-
 #header-login .social{padding:0 0 0 15px;width:395px;}
 #header-login .social p{margin-bottom:10px}
 #header-login .zocial{font-size:1em}
+#header-login a.forgot,form.login a.forgot,#header-login a.close,form.login a.close{color:#666;border-bottom:2px solid #ccc}
 form.login{margin:0 auto;width:886px;}
 form.login fieldset{border:0}
 form.login legend{color:#666;font-size:1.2em;margin:0;padding:0 0 1em;text-align:center;width:180px}
@@ -87,7 +89,6 @@ form.login .social img{vertical-align:bottom}
 form.login .register{margin:15px 0 0;text-align:center;}
 form.login .register p{margin:0}
 form.login .register a.button{font-size:1.4em;margin-right:25px;padding:.5em 1em}
-form.login a.forgot,form.login a.close{color:#666;border-bottom:2px solid #ccc}
 .message{background:#fff5eb;border:1px solid #fc9;padding:10px;margin:10px auto 35px;text-align:center;}
 .message .error{background:#ffe5e5;border-color:#ff8080}
 #footer{background:#242c33;padding:13px;position:relative;text-align:center;z-index:1;}

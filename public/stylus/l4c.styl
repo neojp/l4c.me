@@ -91,7 +91,7 @@ a.button
 
 #header
 	background #00b8f4
-	color #fff
+	// color #fff
 	min-height 60px
 	position relative
 	z-index 3
@@ -99,8 +99,9 @@ a.button
 	.wrap
 		clearfix()
 
-	// &, a
-	//	border 0
+	&, a
+		border 0
+		color #fff
 
 	#logo
 		height 49px
@@ -202,7 +203,7 @@ a.button
 			left auto
 			opacity 1
 			right 0
-			top 48px
+			top 47px
 
 	form.login
 		background #F7F7F7
@@ -255,6 +256,13 @@ a.button
 	
 	.zocial
 		font-size 1em
+
+#header-login
+form.login
+	a.forgot
+	a.close
+		color #666
+		border-bottom 2px solid #ccc
 
 form.login
 	margin 0 auto
@@ -336,11 +344,6 @@ form.login
 			font-size 1.4em
 			margin-right 25px
 			padding 0.5em 1em
-
-	a.forgot
-	a.close
-		color #666
-		border-bottom 2px solid #ccc
 
 
 .message
