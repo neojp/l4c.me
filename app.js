@@ -350,18 +350,15 @@ app.get('/logout', function(req, res, next) {
   return res.redirect('/');
 });
 
-app.get('/registro', function(req, res, next) {
+app.get('/register', function(req, res, next) {
   return res.render('register');
 });
 
-app.post('/registro', function(req, res, next) {
+app.post('/register', function(req, res, next) {
   var d, u;
   d = req.body;
   u = new model.user;
   return invoke(function(data, callback) {
-    if (d.clab_boolean === 'yes') {
-      u.clab = d.clab;
-    }
     u.email = d.email;
     u.password = d.password;
     u.username = d.username;
@@ -375,7 +372,7 @@ app.post('/registro', function(req, res, next) {
   }).end(null, function(data) {
     return passport.authenticate('local', {
       successRedirect: '/perfil',
-      failureRedirect: '/registro?failed'
+      failureRedirect: '/register?failed'
     })(req, res);
   });
 });

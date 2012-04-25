@@ -312,16 +312,16 @@ app.get '/logout', (req, res, next) ->
 	res.redirect '/'
 
 
-app.get '/registro', (req, res, next) ->
+app.get '/register', (req, res, next) ->
 	res.render 'register'
 
 
-app.post '/registro', (req, res, next) ->
+app.post '/register', (req, res, next) ->
 	d = req.body
 	u = new model.user
 	
 	invoke (data, callback) ->
-		u.clab = d.clab  if d.clab_boolean == 'yes'
+		# u.clab = d.clab  if d.clab_boolean == 'yes'
 		u.email = d.email
 		u.password = d.password
 		u.username = d.username
@@ -331,7 +331,7 @@ app.post '/registro', (req, res, next) ->
 		next err  if err
 	
 	.end null, (data) ->
-		passport.authenticate('local', successRedirect: '/perfil', failureRedirect: '/registro?failed')(req, res)
+		passport.authenticate('local', successRedirect: '/perfil', failureRedirect: '/register?failed')(req, res)
 
 
 # Logged in user routes
