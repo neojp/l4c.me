@@ -1,36 +1,43 @@
-form( method="post", action="/profile" )
-	p
-		label Username
-			| 
-			input( type="text", name="username" )
+nav#breadcrumb
+	h1 Editar mi perfil
+
+hr
+
+
+form.profile( method="post", action="/profile" )
+	fieldset.fields
+		legend Nombre de usuario
+		
+		p
+			//- label( for="header-username" ) Nombre de usuario
+			input#header-username( type="text", name="username", placeholder="Nombre de usuario" )
+			br
+			label El nombre de usuario es usado en la URL de tu perfil y fotos
+				br
+				small
+					span#profile-url http://l4c.me/username
+					br
+					span#profile-url http://l4c.me/username/nombre-de-tu-foto
 	
-	p
-		label E-mail
-			| 
-			input( type="email", name="email" )
-	
-	p
-		label Password
-			| 
-			input( type="password", name="password" )
-	
-	p
-		label Repeat Password
-			| 
-			input( type="password", name="password_repeat" )
-	
-	p
-		label Are you a Cristalab member? 
-			input( type="radio", name="clab_boolean", value="yes" )
-			| Yes
-		| 
-		label
-			input( type="radio", name="clab_boolean", value="no", checked )
-			| No
-	
-	p
-		label Cristalab username 
-			input( type="text", name="clab" )
-	
-	p
-		button( type="submit" ) Submit
+	fieldset
+		legend Contraseña
+
+		p
+			| Te gustaria cambiar de contraseña?
+			br
+			button Cambiar contraseña
+
+		p.hidden
+			input#header-password( type="password", name="password", placeholder="Contraseña" )
+			a.cancel( href="#" ) Cancelar
+
+	fieldset
+		legend Email
+		p
+			//- label( for="header-email" ) Correo Electr&oacute;nico
+			input#header-email( type="email", name="email", placeholder="Correo Electr&oacute;nico" )
+			br
+			label Solo usamos tu correo para recuperar tu contraseña o enviar notificaciones de tu cuenta
+
+	p.buttons
+		button( type="submit" ) Editar mi perfil

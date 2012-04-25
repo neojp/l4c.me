@@ -20,7 +20,7 @@ a:focus,a:hover,a:active{text-decoration:none}
 p{margin:0 0 1em}
 h1,h2,h3,h4,h5,h6{margin:0 0 10px}
 h1{font-size:2em}
-label{cursor:pointer;font-weight:bold}
+label{cursor:pointer}
 input,textarea{border:2px solid #ccc;font:12px/1 Helvetica,Arial,sans-serif;margin:0 0 15px;padding:5px;width:160px;border-radius:5px;-o-border-radius:5px;-ms-border-radius:5px;-moz-border-radius:5px;-webkit-border-radius:5px;-webkit-background-clip:padding-box;box-shadow:inset 1px 1px 5px rgba(204,204,204,0.20);-o-box-shadow:inset 1px 1px 5px rgba(204,204,204,0.20);-ms-box-shadow:inset 1px 1px 5px rgba(204,204,204,0.20);-moz-box-shadow:inset 1px 1px 5px rgba(204,204,204,0.20);-webkit-box-shadow:inset 1px 1px 5px rgba(204,204,204,0.20);-webkit-background-clip:padding-box;transition:all .15s linear;-o-transition:all .15s linear;-ms-transition:all .15s linear;-moz-transition:all .15s linear;-webkit-transition:all .15s linear}
 textarea{height:115px;resize:none;width:260px}
 body{background:#242c33;color:#333}
@@ -75,8 +75,9 @@ button.blue:focus,a.button.blue:focus,button.blue.focus,a.button.blue.focus{box-
 form.login{margin:0 auto;width:886px;}
 form.login fieldset{border:0}
 form.login legend{color:#666;font-size:1.2em;margin:0;padding:0 0 1em;text-align:center;width:180px}
-form.login label{display:block}
-form.login input{margin:0;font-size:1.2em;padding:.75em;width:300px}
+form.login label{display:block;padding:5px}
+form.login input{margin:0;font-size:1.2em;padding:.75em;width:300px;}
+form.login input[type="checkbox"]{margin-right:5px;width:auto}
 form.login .fields{float:left;margin:0;padding:0;}
 form.login .fields p.buttons{text-align:right}
 form.login .fields a.forgot{margin-right:10px}
