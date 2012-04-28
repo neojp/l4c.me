@@ -3,7 +3,6 @@ nav#breadcrumb
 
 hr
 
-
 form.profile( method="post", action="/profile" )
 	fieldset.fields
 		legend Nombre de usuario
@@ -22,22 +21,23 @@ form.profile( method="post", action="/profile" )
 	fieldset
 		legend Contraseña
 
+		p Te gustaria cambiar de contraseña?
 		p
-			| Te gustaria cambiar de contraseña?
-			br
-			button Cambiar contraseña
+			label
+				input#change-password( type="checkbox", name="change-password", value="yes" ).hidden
+				button( type="button" ) Cambiar contraseña
 
-		p.hidden
+		p#password-container.hidden
 			input#header-password( type="password", name="password", placeholder="Contraseña" )
-			a.cancel( href="#" ) Cancelar
+			a.cancel( href="#change-password" ) Cancelar
 
 	fieldset
-		legend Email
+		legend Correo Electr&oacute;nico
 		p
 			//- label( for="header-email" ) Correo Electr&oacute;nico
 			input#header-email( type="email", name="email", placeholder="Correo Electr&oacute;nico" )
 			br
-			label Solo usamos tu correo para recuperar tu contraseña o enviar notificaciones de tu cuenta
+			| Solo usamos tu correo para recuperar tu contraseña o enviar notificaciones sobre tu cuenta
 
 	p.buttons
 		button( type="submit" ) Editar mi perfil

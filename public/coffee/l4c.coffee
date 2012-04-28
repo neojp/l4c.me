@@ -89,7 +89,13 @@ window.Site = $.extend {}, window.Site,
 
 	# check if current browser is safari mobile
 	mobile: () ->
-		return navigator.appVersion.toLowerCase().indexOf("mobile") > -1
+		navigator.appVersion.toLowerCase().indexOf("mobile") > -1
+
+	# register form
+	register: () ->
+		$pass = $('#password-container')
+		$('#change-password').on 'change', (e) ->
+			$pass.toggleClass 'hidden', this.checked
 
 
 	#############################################################################
@@ -104,6 +110,7 @@ window.Site = $.extend {}, window.Site,
 	init: () ->
 		log 'DOM Ready'
 		Site.login()
+		Site.register()
 
 
 	#############################################################################
