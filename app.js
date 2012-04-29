@@ -398,12 +398,13 @@ app.post('/comment', function(req, res, next) {
     comment.guest = false;
   }
   return invoke(function(data, callback) {
-    return model.photo.findOne({
+    return model.photo.update({
       slug: req.body.photo
-    }).populate('_user').run(function(err, photo) {
-      photo.comments.push(comment);
-      return photo.save(callback);
-    });
+    }, {
+      $push: {
+        comments: comment
+      }
+    }, false, callback);
   }).rescue(function(err) {
     return next(err);
   }).end(null, function(photo) {

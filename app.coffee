@@ -364,12 +364,7 @@ app.post '/comment', (req, res, next) ->
 		comment.guest = false
 
 	invoke (data, callback) ->
-		model.photo
-			.findOne( slug: req.body.photo )
-			.populate('_user')
-			.run (err, photo) ->
-				photo.comments.push comment
-				photo.save callback
+		model.photo.update({ slug: req.body.photo }, { $push: { comments: comment } }, false, callback)
 
 	.rescue (err) ->
 		next err
