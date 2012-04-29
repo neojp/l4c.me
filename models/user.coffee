@@ -68,6 +68,10 @@ user.statics.login = (username, password, next) ->
 			next null, doc
 
 
+user.statics.serialize = (user, next) ->
+	next null, user._id
+
+
 user.statics.deserialize = (id, next) ->
 	@findOne
 			_id: id
@@ -77,43 +81,65 @@ user.statics.deserialize = (id, next) ->
 
 
 user.statics.facebook = (token, tokenSecret, profile, next) ->
-	@findOne
+	model = this
+	model.findOne
 			'facebook.id': profile.id
 		, (err, doc) ->
 			return next null, doc unless err || doc == null
 
+			model.findOne
+					'email': profile._json.email
+				, (err, doc) ->
+					url = profile._json.website.split("\r\n")[0]
+					facebook =
+						email: profile._json.email
+						id: profile.id
+						username: profile.username
 
-			u = new (mongoose.model 'user')
-			u.email = profile._json.email
-			u.facebook =
-				email: profile._json.email
-				id: profile.id
-				username: profile.username
+					if doc
+						doc.facebook = facebook
+						doc.url = url  if !doc.url && url
+						doc.save()
+						return next null, doc
 
-			url = profile._json.website.split("\r\n")[0]
-			u.url = url
-			
-			u.username = profile.username
-			u.save()
-
-			next null, u
+					else
+						u = new (mongoose.model 'user')
+						u.email = facebook.email
+						u.facebook = facebook
+						u.url = url  if url
+						u.username = profile.username
+						u.save()
+						next null, u
 
 
 user.statics.twitter = (token, tokenSecret, profile, next) ->
-	@findOne
+	model = this
+	model.findOne
 			'twitter.id': profile.id
 		, (err, doc) ->
 			return next null, doc unless err || doc == null
 
-			u = new (mongoose.model 'user')
-			u.twitter =
-				id: profile.id
-				username: profile._json.screen_name
-			u.username = profile._json.screen_name
-			u.url = profile._json.url if profile._json.url?
-			u.save()
-			
-			next null, u
+			model.findOne
+					'username': profile._json.screen_name
+			, (err, doc) ->
+				url = profile._json.url?
+				twitter =
+					id: profile.id
+					username: profile._json.screen_name
+
+				if doc
+					doc.twitter = twitter
+					doc.url = url  if !doc.url && url
+					doc.save()
+					return next null, doc
+
+				else
+					u = new (mongoose.model 'user')
+					u.twitter = twitter
+					u.username = twitter.username
+					u.url = url  if url
+					u.save()
+					next null, u
 
 
 module.exports = mongoose.model 'user', user

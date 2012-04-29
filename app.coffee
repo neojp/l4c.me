@@ -29,7 +29,7 @@ passport_twitter = require('passport-twitter').Strategy
 passport_facebook = require('passport-facebook').Strategy
 
 passport.serializeUser (user, next) ->
-	next null, user._id
+	model.user.serialize user, next
 
 passport.deserializeUser (id, next) ->
 	model.user.deserialize id, next
@@ -289,22 +289,38 @@ app.get '/login', (req, res, next) ->
 
 app.post '/login', passport.authenticate('local', failureRedirect: '/login?failed'), (req, res, next) ->
 	flash = req.flash 'auth_redirect'
-	url = if _.size flash then _.first flash else '/'
+	url = if _.size flash then _.first flash else '/perfil'
 	res.redirect url
 
 
 app.get '/login/facebook', passport.authenticate('facebook', { scope: config.facebook.permissions })
 app.get '/login/facebook/callback', passport.authenticate('facebook', failureRedirect: '/login'), (req, res, next) ->
 	flash = req.flash 'auth_redirect'
-	url = if _.size flash then _.first flash else '/'
+	url = if _.size flash then _.first flash else '/perfil'
 	res.redirect url
+
+app.get '/login/facebook/remove', middleware.auth, (req, res, next) ->
+	model.user.update({ _id: req.user._id }, { $unset: { facebook: 1} }, false, -> res.redirect('/perfil'))
 
 
 app.get '/login/twitter', passport.authenticate('twitter')
 app.get '/login/twitter/callback', passport.authenticate('twitter', failureRedirect: '/login'), (req, res, next) ->
-	flash = req.flash 'auth_redirect'
-	url = if _.size flash then _.first flash else '/'
-	res.redirect url
+	# flash = req.flash 'auth_redirect'
+	# url = if _.size flash then _.first flash else '/perfil'
+	# res.redirect url
+	res.redirect '/userinfo'
+
+app.get '/login/twitter/remove', middleware.auth, (req, res, next) ->
+	model.user.update({ _id: req.user._id }, { $unset: { twitter: 1} }, false, -> res.redirect('/perfil'))
+
+	# model.user
+	# 	.findOne( _id: req.user._id )
+	# 	.run (err, user) ->
+	# 		user.twitter = null
+	# 		user.save -> res.redirect('/userinfo')
+
+app.get '/userinfo', (req, res, next) ->
+	res.json req.user
 
 
 app.get '/logout', (req, res, next) ->
@@ -425,8 +441,11 @@ app.post '/fotos/publicar', middleware.auth, (req, res, next) ->
 
 
 app.get '/perfil', middleware.auth, (req, res) ->
+	res.locals
+		body_class: 'profile'
+		user: req.user
+		username: req.user.username
 	res.render 'profile'
-	# res.send "GET /perfil", 'Content-Type': 'text/plain'
 
 
 app.put '/perfil', middleware.auth, (req, res) ->

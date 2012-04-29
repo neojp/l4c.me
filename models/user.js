@@ -86,6 +86,10 @@ user.statics.login = function(username, password, next) {
   });
 };
 
+user.statics.serialize = function(user, next) {
+  return next(null, user._id);
+};
+
 user.statics.deserialize = function(id, next) {
   return this.findOne({
     _id: id
@@ -96,41 +100,70 @@ user.statics.deserialize = function(id, next) {
 };
 
 user.statics.facebook = function(token, tokenSecret, profile, next) {
-  return this.findOne({
+  var model;
+  model = this;
+  return model.findOne({
     'facebook.id': profile.id
   }, function(err, doc) {
-    var u, url;
     if (!(err || doc === null)) return next(null, doc);
-    u = new (mongoose.model('user'));
-    u.email = profile._json.email;
-    u.facebook = {
-      email: profile._json.email,
-      id: profile.id,
-      username: profile.username
-    };
-    url = profile._json.website.split("\r\n")[0];
-    u.url = url;
-    u.username = profile.username;
-    u.save();
-    return next(null, u);
+    return model.findOne({
+      'email': profile._json.email
+    }, function(err, doc) {
+      var facebook, u, url;
+      url = profile._json.website.split("\r\n")[0];
+      facebook = {
+        email: profile._json.email,
+        id: profile.id,
+        username: profile.username
+      };
+      if (doc) {
+        doc.facebook = facebook;
+        if (!doc.url && url) doc.url = url;
+        doc.save();
+        return next(null, doc);
+      } else {
+        u = new (mongoose.model('user'));
+        u.email = facebook.email;
+        u.facebook = facebook;
+        if (url) u.url = url;
+        u.username = profile.username;
+        u.save();
+        return next(null, u);
+      }
+    });
   });
 };
 
 user.statics.twitter = function(token, tokenSecret, profile, next) {
-  return this.findOne({
+  var model;
+  model = this;
+  return model.findOne({
     'twitter.id': profile.id
   }, function(err, doc) {
-    var u;
     if (!(err || doc === null)) return next(null, doc);
-    u = new (mongoose.model('user'));
-    u.twitter = {
-      id: profile.id,
-      username: profile._json.screen_name
-    };
-    u.username = profile._json.screen_name;
-    if (profile._json.url != null) u.url = profile._json.url;
-    u.save();
-    return next(null, u);
+    return model.findOne({
+      'username': profile._json.screen_name
+    }, function(err, doc) {
+      var twitter, u, url;
+      url = profile._json.url != null;
+      twitter = {
+        id: profile.id,
+        username: profile._json.screen_name
+      };
+      if (doc) {
+        doc.twitter = twitter;
+        if (!doc.url && url) doc.url = url;
+        doc.save();
+        return next(null, doc);
+      } else {
+        u = new (mongoose.model('user'));
+        u.twitter = twitter;
+        u.username = twitter.username;
+        if (url) u.url = url;
+        u.save();
+        return next(null, u);
+      }
+    });
   });
 };
 

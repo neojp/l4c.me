@@ -39,7 +39,7 @@ passport_twitter = require('passport-twitter').Strategy;
 passport_facebook = require('passport-facebook').Strategy;
 
 passport.serializeUser(function(user, next) {
-  return next(null, user._id);
+  return model.user.serialize(user, next);
 });
 
 passport.deserializeUser(function(id, next) {
@@ -300,7 +300,7 @@ app.post('/login', passport.authenticate('local', {
 }), function(req, res, next) {
   var flash, url;
   flash = req.flash('auth_redirect');
-  url = _.size(flash) ? _.first(flash) : '/';
+  url = _.size(flash) ? _.first(flash) : '/perfil';
   return res.redirect(url);
 });
 
@@ -313,8 +313,20 @@ app.get('/login/facebook/callback', passport.authenticate('facebook', {
 }), function(req, res, next) {
   var flash, url;
   flash = req.flash('auth_redirect');
-  url = _.size(flash) ? _.first(flash) : '/';
+  url = _.size(flash) ? _.first(flash) : '/perfil';
   return res.redirect(url);
+});
+
+app.get('/login/facebook/remove', middleware.auth, function(req, res, next) {
+  return model.user.update({
+    _id: req.user._id
+  }, {
+    $unset: {
+      facebook: 1
+    }
+  }, false, function() {
+    return res.redirect('/perfil');
+  });
 });
 
 app.get('/login/twitter', passport.authenticate('twitter'));
@@ -322,10 +334,23 @@ app.get('/login/twitter', passport.authenticate('twitter'));
 app.get('/login/twitter/callback', passport.authenticate('twitter', {
   failureRedirect: '/login'
 }), function(req, res, next) {
-  var flash, url;
-  flash = req.flash('auth_redirect');
-  url = _.size(flash) ? _.first(flash) : '/';
-  return res.redirect(url);
+  return res.redirect('/userinfo');
+});
+
+app.get('/login/twitter/remove', middleware.auth, function(req, res, next) {
+  return model.user.update({
+    _id: req.user._id
+  }, {
+    $unset: {
+      twitter: 1
+    }
+  }, false, function() {
+    return res.redirect('/perfil');
+  });
+});
+
+app.get('/userinfo', function(req, res, next) {
+  return res.json(req.user);
 });
 
 app.get('/logout', function(req, res, next) {
@@ -444,6 +469,11 @@ app.post('/fotos/publicar', middleware.auth, function(req, res, next) {
 });
 
 app.get('/perfil', middleware.auth, function(req, res) {
+  res.locals({
+    body_class: 'profile',
+    user: req.user,
+    username: req.user.username
+  });
   return res.render('profile');
 });
 

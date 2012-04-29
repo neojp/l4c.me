@@ -33,6 +33,10 @@ a
 	border-bottom 2px solid #80c4e0
 	color #0a92ca
 
+	&.gray
+		border-color #ccc
+		color #999
+
 input, textarea
 	&:focus, &:active
 		border-color #FF9933
@@ -73,7 +77,6 @@ a.button
 		box-shadow( unquote("inset 0 0 0 1px #fff, 0 0 0 1px #FF9933") )
 
 	&.blue
-		background-color #999
 		background-color #009ccf // darken( #00B8F4, 15% )
 
 		&:hover, &:focus
@@ -81,6 +84,15 @@ a.button
 
 		&:focus, &.focus
 			box-shadow( unquote("inset 0 0 0 1px #fff, 0 0 0 1px #00a6dc") )
+
+	&.gray
+		background-color #999
+
+		&:hover, &:focus
+			background-color darken( #999, 10% )
+
+		&:focus, &.focus
+			box-shadow( unquote("inset 0 0 0 1px #fff, 0 0 0 1px " + darken( #999, 10% )) )
 
 .wrap
 	margin 0 auto
