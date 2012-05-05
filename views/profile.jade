@@ -38,7 +38,7 @@ form.profile( method="post", action="/profile" )
 		li
 			label
 				input#change-password( type="checkbox", name="change-password", value="yes" ).hidden
-				button.gray.change-password-trigger( type="button" ) Cambiar contraseña
+				button.gray.change-password-trigger( type="button" ) Cambia tu contraseña
 
 			#password-container.hidden
 				label( for="header-password" ) Contraseña
@@ -53,7 +53,7 @@ form.profile( method="post", action="/profile" )
 	.social
 		p.facebook
 			- if (!user.facebook.id)
-				a.zocial.facebook( href="/login/facebook" ) Enlazar Facebook
+				a.zocial.facebook( href="/login/facebook" ) Enlaza tu Facebook
 			- else
 				| Tu cuenta de Facebook 
 				strong= user.facebook.username
@@ -62,7 +62,7 @@ form.profile( method="post", action="/profile" )
 
 		p.twitter
 			- if (!user.twitter.id)
-				a.zocial.twitter( href="/login/twitter" ) Enlazar Twitter
+				a.zocial.twitter( href="/login/twitter" ) Enlaza tu Twitter
 			- else
 				| Tu cuenta de Twitter 
 				strong= user.twitter.username
@@ -71,7 +71,7 @@ form.profile( method="post", action="/profile" )
 
 		p.googleplus
 			- if (!user.google || !user.google.id)
-				a.zocial.googleplus.disabled( href="/login/google" ) Enlazar Google+
+				a.zocial.googleplus.disabled( href="/login/google" ) Enlaza tu Google+
 			- else
 				| Tu cuenta de Google+ 
 				strong= user.google.username
