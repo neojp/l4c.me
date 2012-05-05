@@ -40,6 +40,7 @@ button.blue:focus,a.button.blue:focus,button.blue.focus,a.button.blue.focus{box-
 button.gray,a.button.gray{background-color:#999;}
 button.gray:hover,a.button.gray:hover,button.gray:focus,a.button.gray:focus{background-color:#8a8a8a}
 button.gray:focus,a.button.gray:focus,button.gray.focus,a.button.gray.focus{box-shadow:inset 0 0 0 1px #fff, 0 0 0 1px #8a8a8a;-o-box-shadow:inset 0 0 0 1px #fff, 0 0 0 1px #8a8a8a;-ms-box-shadow:inset 0 0 0 1px #fff, 0 0 0 1px #8a8a8a;-moz-box-shadow:inset 0 0 0 1px #fff, 0 0 0 1px #8a8a8a;-webkit-box-shadow:inset 0 0 0 1px #fff, 0 0 0 1px #8a8a8a;-webkit-background-clip:padding-box}
+.zocial.disabled{cursor:default;opacity:.5}
 .wrap{margin:0 auto;position:relative;max-width:1250px}
 #header{background:#00b8f4;min-height:60px;position:relative;z-index:3;}
 #header .wrap{zoom:1;}
@@ -65,15 +66,16 @@ button.gray:focus,a.button.gray:focus,button.gray.focus,a.button.gray.focus{box-
 #header aside a.logout{background-color:#0a93ca;background-image:url("images/icon_logout.png");color:#c2ecfc}
 #header-login.active #header-login-trigger{border-radius:5px 5px 0 0;-o-border-radius:5px 5px 0 0;-ms-border-radius:5px 5px 0 0;-moz-border-radius:5px 5px 0 0;-webkit-border-radius:5px 5px 0 0;-webkit-background-clip:padding-box}
 #header-login.active form.login{left:auto;opacity:1;right:0;top:47px}
-#header-login form.login{background:#f7f7f7;border-radius:0 0 5px 5px;-o-border-radius:0 0 5px 5px;-ms-border-radius:0 0 5px 5px;-moz-border-radius:0 0 5px 5px;-webkit-border-radius:0 0 5px 5px;-webkit-background-clip:padding-box;box-shadow:0 0 5px rgba(0,0,0,0.50);-o-box-shadow:0 0 5px rgba(0,0,0,0.50);-ms-box-shadow:0 0 5px rgba(0,0,0,0.50);-moz-box-shadow:0 0 5px rgba(0,0,0,0.50);-webkit-box-shadow:0 0 5px rgba(0,0,0,0.50);-webkit-background-clip:padding-box;box-sizing:border-box;left:-9999px;opacity:0;padding:15px;position:absolute;top:-9999px;width:636px;transition:opacity .15s linear;-o-transition:opacity .15s linear;-ms-transition:opacity .15s linear;-moz-transition:opacity .15s linear;-webkit-transition:opacity .15s linear}
+#header-login form.login{background:#f7f7f7;border-radius:0 0 5px 5px;-o-border-radius:0 0 5px 5px;-ms-border-radius:0 0 5px 5px;-moz-border-radius:0 0 5px 5px;-webkit-border-radius:0 0 5px 5px;-webkit-background-clip:padding-box;box-shadow:0 0 5px rgba(0,0,0,0.50);-o-box-shadow:0 0 5px rgba(0,0,0,0.50);-ms-box-shadow:0 0 5px rgba(0,0,0,0.50);-moz-box-shadow:0 0 5px rgba(0,0,0,0.50);-webkit-box-shadow:0 0 5px rgba(0,0,0,0.50);-webkit-background-clip:padding-box;box-sizing:border-box;left:-9999px;opacity:0;padding:15px;position:absolute;top:-9999px;width:421px;transition:opacity .15s linear;-o-transition:opacity .15s linear;-ms-transition:opacity .15s linear;-moz-transition:opacity .15s linear;-webkit-transition:opacity .15s linear}
 #header-login input{font-size:1em;padding:5px;width:165px}
 #header-login legend{font-size:1em;font-weight:bold;line-height:1;margin:0 0 10px}
 #header-login span.bg,#header-login span.topbar{background:#00b8f4;height:5px;left:0;position:absolute;right:0;top:-5px}
 #header-login span.topbar{background:#f93;left:0;right:0}
 #header-login .fields button{font-size:1em}
-#header-login .social{padding:0 0 0 15px;width:395px;}
-#header-login .social p{margin-bottom:10px}
-#header-login .zocial{font-size:1em}
+#header-login .social{padding:0 0 0 15px;width:180px;}
+#header-login .social p{margin:0}
+#header-login .zocial{font-size:1em;margin:5px 0;width:160px;}
+#header-login .zocial:before{width:15px}
 #header-login .register{margin:15px 0 0;padding:0}
 fieldset{border:0}
 legend{color:#666;font-size:1.2em;margin:0;padding:0 0 1em;text-align:center}
@@ -91,13 +93,25 @@ form.login .zocial{font-size:1.2em}
 form.login .social{background:url("images/bg_vr_gray.png") repeat-y left top;float:right;margin:0;padding:0 0 15px 15px;text-align:center;width:500px;}
 form.login .social p{margin:0 0 20px}
 form.login .social a{border:0;display:inline-block;margin:5px;}
-form.login .social a.disabled{cursor:default;margin:0 10px;opacity:.5}
+form.login .social a.disabled{margin:0 10px}
 form.login .social img{vertical-align:bottom}
 form.login .register{padding:35px 0 50px;text-align:center;}
 form.login .register p{margin:0}
 form.login .register a.button{font-size:1.4em;margin-right:25px;padding:.5em 1em}
 form.register hr{margin:25px 0}
-form.profile{margin:0 auto;width:500px}
+form.profile{margin:0 auto;padding:0 350px 0 150px;width:215px;}
+form.profile .gravatar{float:left;margin:0 0 0 -150px;text-align:center;}
+form.profile .gravatar p.img{background:#ddd;margin:0 0 5px;}
+form.profile .gravatar p.img a{border:0}
+form.profile .gravatar img{height:125px;vertical-align:bottom;width:125px}
+form.profile .fields{list-style:none;margin:0;padding:0;}
+form.profile .fields input{margin:.5em 0 0}
+form.profile li{margin:0 0 15px;position:relative}
+form.profile input,form.profile textarea{width:200px}
+form.profile .info{font-size:.9em;position:absolute;right:-350px;top:1.7em;width:325px}
+form.profile .cancel{display:block;margin:5px 5px 0 0;text-align:right}
+form.profile .zocial{box-sizing:border-box;text-align:left;width:100%;}
+form.profile .zocial:before{width:18px}
 .message{background:#fff5eb;border:1px solid #fc9;padding:10px;margin:10px auto 35px;text-align:center;}
 .message .error{background:#ffe5e5;border-color:#ff8080}
 #footer{background:#242c33;padding:13px;position:relative;text-align:center;z-index:1;}

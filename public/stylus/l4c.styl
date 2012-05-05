@@ -94,6 +94,10 @@ a.button
 		&:focus, &.focus
 			box-shadow( unquote("inset 0 0 0 1px #fff, 0 0 0 1px " + darken( #999, 10% )) )
 
+.zocial.disabled
+	cursor default
+	opacity 0.5
+
 .wrap
 	margin 0 auto
 	position relative
@@ -227,7 +231,7 @@ a.button
 		padding 15px
 		position absolute
 		top -9999px
-		width (180px + 15) + (395px + 16) + 30
+		width (180px + 15) + (180px + 16) + 30
 		transition( opacity .150s linear )
 
 	input
@@ -261,13 +265,19 @@ a.button
 
 	.social
 		padding 0 0 0 15px
-		width 395px
+		// width 395px
+		width 180px
 
 		p
-			margin-bottom 10px
+			margin 0
 	
 	.zocial
 		font-size 1em
+		margin 5px 0
+		width 160px
+
+		&:before
+			width 15px
 
 	.register
 		margin 15px 0 0
@@ -350,9 +360,7 @@ form.login
 			margin 5px
 
 			&.disabled
-				cursor default
 				margin 0 10px
-				opacity 0.5
 
 		img
 			vertical-align bottom
@@ -375,7 +383,61 @@ form.register hr
 
 form.profile
 	margin 0 auto
-	width 500px
+	padding 0 350px 0 150px
+	width 215px
+
+	.gravatar
+		float left
+		margin 0 0 0 -150px
+		text-align center
+
+		p.img
+			background #ddd
+			margin 0 0 5px
+
+			a
+				border 0
+
+		img
+			height 125px
+			vertical-align bottom
+			width 125px
+
+	.fields
+		list-style none
+		margin 0
+		padding 0
+
+		input
+			margin 0.5em 0 0
+
+	li
+		margin 0 0 15px
+		position relative
+
+	input
+	textarea
+		width 200px
+
+	.info
+		font-size 0.9em
+		position absolute
+		right -350px
+		top 1.7em
+		width 325px
+
+	.cancel
+		display block
+		margin 5px 5px 0 0
+		text-align right
+
+	.zocial
+		box-sizing border-box
+		text-align left
+		width 100%
+
+		&:before
+			width 18px
 
 
 .message

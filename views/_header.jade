@@ -8,15 +8,15 @@ hr.hidden
 	aside
 		p Hola 
 			a.username( href= "/" + logged_user.username )= logged_user.username
-			|, puedes editar tu 
-			a.profile( href="/perfil/" ) perfil
+			|, puedes 
+			a.profile( href="/profile" ) editar tu perfil
 			|  o 
-			a.logout( href="/logout/" ) salir
+			a.logout( href="/logout" ) salir
 
 - else if (original_url.indexOf('/login') !== 0 && original_url.indexOf('/registro') !== 0)
 
 	aside#header-login
-		a#header-login-trigger.button Iniciar Sesión o Registrate
+		a#header-login-trigger.button( href="#header-login" ) Entra o Registrate
 		
 		form.login( method="post", action="/login" )
 			span.bg
@@ -41,16 +41,16 @@ hr.hidden
 				legend desde otros sitios
 
 				p
-					a.zocial.facebook( href="/login/facebook" ) Logueate con Facebook
-					a.zocial.twitter( href="/login/twitter" ) Logueate con Twitter
-					a.zocial.googleplus( href="#" ) Logueate con Google+
+					a.zocial.facebook( href="/login/facebook" ) Entra con Facebook
+					a.zocial.twitter( href="/login/twitter" ) Entra con Twitter
+					a.zocial.googleplus.disabled( href="#", tabindex="-1" ) Entra con Google+
 				
-				p
-					a.cristalab.disabled( title="No disponible" )
-						img( src= helpers.image.blank, data-src="/images/cristalab_32.png", alt="", width="32", height="32" )
+				//- p
+				//- 	a.cristalab.disabled( title="No disponible" )
+				//- 		img( src= helpers.image.blank, data-src="/images/cristalab_32.png", alt="", width="32", height="32" )
 					
-					a.mdw.disabled( title="No disponible" )
-						img( src= helpers.image.blank, data-src="/images/mdw_32.png", alt="", width="32", height="32" )
+				//- 	a.mdw.disabled( title="No disponible" )
+				//- 		img( src= helpers.image.blank, data-src="/images/mdw_32.png", alt="", width="32", height="32" )
 
 			hr.gray.nomargin
 			fieldset.register

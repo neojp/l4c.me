@@ -35,10 +35,16 @@ $.getScript = ( url, callback, options ) ->
 
 
 window.Site = $.extend {}, window.Site,
+
+	#
+	disabled: () ->
+		$('a.disabled').on 'click', (e) ->
+			e.preventDefault()
+			e.stopPropagation()
 	
 	# add ie fallback elements
 	ie_fallback: () ->
-		log 'Y U NO STOP USING IE!!'
+		log 'Y U NO STOP USING IE!! ლ(ಠ益ಠლ)'
 	
 	# base64 - 1x1 pixel transparent image
 	blank: 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=='
@@ -62,19 +68,25 @@ window.Site = $.extend {}, window.Site,
 
 		open = (e) ->
 			e.stopPropagation()
+			e.preventDefault()
 			return if active
 
 			$aside.addClass('active')
 			active = true
+
+			$aside.find('#header-username').trigger('focus')
 
 			if first
 				$aside.find('img[data-src]').lazyload( load: true )
 				first = false
 
 		close = (e) ->
-			if active
-				$aside.removeClass('active')
-				active = false
+			if !active
+				return
+			
+			$aside.removeClass('active')
+			$trigger.trigger('focus')
+			active = false
 
 		$trigger
 			.on('click.login', open)
@@ -91,11 +103,33 @@ window.Site = $.extend {}, window.Site,
 	mobile: () ->
 		navigator.appVersion.toLowerCase().indexOf("mobile") > -1
 
-	# register form
-	register: () ->
+	# profile form
+	profile: () ->
 		$pass = $('#password-container')
-		$('#change-password').on 'change', (e) ->
-			$pass.toggleClass 'hidden', this.checked
+		$change = $('#change-password')
+
+		$change.on 'change', (e) ->
+			checked = this.checked
+			$pass.toggleClass 'hidden', !checked
+			$(this).parent().toggleClass 'hidden', checked
+			
+			if checked
+				$('#header-password').trigger 'focus'
+			else
+				$('.change-password-trigger').trigger 'focus'
+
+		$('.change-password-trigger').on 'click', (e) ->
+			e.stopPropagation()
+			e.preventDefault()
+			log this
+			
+			change = $change[0]
+			change.checked = !change.checked
+			$change.trigger 'change'
+
+		$('.cancel').on 'click', 'a', (e) ->
+			e.preventDefault()
+			$('.change-password-trigger').trigger 'click'
 
 
 	#############################################################################
@@ -110,7 +144,8 @@ window.Site = $.extend {}, window.Site,
 	init: () ->
 		log 'DOM Ready'
 		Site.login()
-		Site.register()
+		Site.profile()
+		Site.disabled()
 
 
 	#############################################################################

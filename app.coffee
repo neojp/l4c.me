@@ -289,29 +289,29 @@ app.get '/login', (req, res, next) ->
 
 app.post '/login', passport.authenticate('local', failureRedirect: '/login?failed'), (req, res, next) ->
 	flash = req.flash 'auth_redirect'
-	url = if _.size flash then _.first flash else '/perfil'
+	url = if _.size flash then _.first flash else '/profile'
 	res.redirect url
 
 
 app.get '/login/facebook', passport.authenticate('facebook', { scope: config.facebook.permissions })
 app.get '/login/facebook/callback', passport.authenticate('facebook', failureRedirect: '/login'), (req, res, next) ->
 	flash = req.flash 'auth_redirect'
-	url = if _.size flash then _.first flash else '/perfil'
+	url = if _.size flash then _.first flash else '/profile'
 	res.redirect url
 
 app.get '/login/facebook/remove', middleware.auth, (req, res, next) ->
-	model.user.update({ _id: req.user._id }, { $unset: { facebook: 1} }, false, -> res.redirect('/perfil'))
+	model.user.update({ _id: req.user._id }, { $unset: { facebook: 1} }, false, -> res.redirect('/profile'))
 
 
 app.get '/login/twitter', passport.authenticate('twitter')
 app.get '/login/twitter/callback', passport.authenticate('twitter', failureRedirect: '/login'), (req, res, next) ->
 	# flash = req.flash 'auth_redirect'
-	# url = if _.size flash then _.first flash else '/perfil'
+	# url = if _.size flash then _.first flash else '/profile'
 	# res.redirect url
 	res.redirect '/userinfo'
 
 app.get '/login/twitter/remove', middleware.auth, (req, res, next) ->
-	model.user.update({ _id: req.user._id }, { $unset: { twitter: 1} }, false, -> res.redirect('/perfil'))
+	model.user.update({ _id: req.user._id }, { $unset: { twitter: 1} }, false, -> res.redirect('/profile'))
 
 	# model.user
 	# 	.findOne( _id: req.user._id )
@@ -328,6 +328,7 @@ app.get '/logout', (req, res, next) ->
 	res.redirect '/'
 
 
+app.get '/registro', (req, res, next) -> res.redirect '/register'
 app.get '/register', (req, res, next) ->
 	res.render 'register'
 
@@ -347,7 +348,7 @@ app.post '/register', (req, res, next) ->
 		next err  if err
 	
 	.end null, (data) ->
-		passport.authenticate('local', successRedirect: '/perfil', failureRedirect: '/register?failed')(req, res)
+		passport.authenticate('local', successRedirect: '/profile', failureRedirect: '/register?failed')(req, res)
 
 
 # Logged in user routes
@@ -435,7 +436,7 @@ app.post '/fotos/publicar', middleware.auth, (req, res, next) ->
 		res.redirect "/#{user.username}/#{photo.slug}"
 
 
-app.get '/perfil', middleware.auth, (req, res) ->
+app.get '/profile', middleware.auth, (req, res) ->
 	res.locals
 		body_class: 'profile'
 		user: req.user
@@ -443,8 +444,8 @@ app.get '/perfil', middleware.auth, (req, res) ->
 	res.render 'profile'
 
 
-app.put '/perfil', middleware.auth, (req, res) ->
-	res.send "PUT /perfil", 'Content-Type': 'text/plain'
+app.put '/profile', middleware.auth, (req, res) ->
+	res.send "PUT /profile", 'Content-Type': 'text/plain'
 
 
 app.get '/tweets', middleware.auth, (req, res) ->
