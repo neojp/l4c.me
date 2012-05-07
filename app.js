@@ -501,16 +501,40 @@ app.post('/fotos/publicar', middleware.auth, function(req, res, next) {
 app.get('/profile', middleware.auth, function(req, res) {
   res.locals({
     body_class: 'profile',
-    user: req.user,
-    username: req.user.username
+    user: req.user
   });
   return res.render('profile');
 });
 
 app.put('/profile', middleware.auth, function(req, res) {
-  return res.send("PUT /profile", {
-    'Content-Type': 'text/plain'
-  });
+  var has_update, p, updated;
+  has_update = false;
+  updated = {};
+  if (req.user.username !== req.body.username && (has_update = true)) {
+    updated.username = req.body.username;
+  }
+  if (req.user.email !== req.body.email && (has_update = true)) {
+    updated.email = req.body.email;
+  }
+  if (req.body['change-password'] === 'yes') {
+    p = model.user.encrypt_password(req.body.password);
+    if (req.user.password !== p && (has_update = true)) {
+      updated.password = p;
+    }
+  }
+  if (has_update) {
+    console.log('if ', has_update, updated);
+    return model.user.update({
+      _id: req.user._id
+    }, {
+      $set: updated
+    }, false, function() {
+      return res.redirect('/profile');
+    });
+  } else {
+    console.log('else ', has_update, updated);
+    return res.redirect('/profile');
+  }
 });
 
 app.get('/tweets', middleware.auth, function(req, res) {

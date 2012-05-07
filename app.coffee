@@ -440,12 +440,26 @@ app.get '/profile', middleware.auth, (req, res) ->
 	res.locals
 		body_class: 'profile'
 		user: req.user
-		username: req.user.username
 	res.render 'profile'
 
 
 app.put '/profile', middleware.auth, (req, res) ->
-	res.send "PUT /profile", 'Content-Type': 'text/plain'
+	has_update = false
+	updated = {}
+
+	updated.username = req.body.username  if req.user.username != req.body.username && has_update = true
+	updated.email = req.body.email  if req.user.email != req.body.email && has_update = true
+
+	if req.body['change-password'] == 'yes'
+		p = model.user.encrypt_password req.body.password
+		updated.password = p  if req.user.password != p && has_update = true
+
+	if has_update
+		console.log 'if ', has_update, updated
+		model.user.update({ _id: req.user._id }, { $set: updated }, false, -> res.redirect('/profile'))
+	else
+		console.log 'else ', has_update, updated
+		res.redirect('/profile')
 
 
 app.get '/tweets', middleware.auth, (req, res) ->
