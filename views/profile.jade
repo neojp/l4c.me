@@ -9,7 +9,7 @@ form.profile( method="post", action="/profile" )
 	.gravatar
 		p.img
 			a( href="//gravatar.com/gravatars/new", target="_blank" )
-				- src = (user.email) ? helpers.gravatar(user.email, 100) : helpers.image.blank
+				- src = (user.email) ? helpers.gravatar(user.email, 125) : helpers.image.blank
 				img( data-src=src, src= helpers.image.blank )
 		p
 			a.gray( href="//gravatar.com/gravatars/new", target="_blank" ) Cambia tu avatar
