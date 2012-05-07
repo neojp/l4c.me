@@ -5,8 +5,6 @@ hr
 
 form.profile( method="post", action="/profile" )
 	input( type="hidden", name="_method", value="put" )
-	input( type="hidden", name="original[username]", value= user.username )
-	input( type="hidden", name="original[email]", value= user.email )
 
 	.gravatar
 		p.img
