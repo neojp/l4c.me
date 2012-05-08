@@ -3,8 +3,5 @@
 Thumbs.db
 node_modules
 public/uploads/*
-./*.js
-models/*.js
-lib/*.js
+build/*
 config.json
-logs/*

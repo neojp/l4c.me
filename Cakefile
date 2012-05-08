@@ -13,7 +13,7 @@ task 'build:stylus', 'Watch Stylus source files and build CSS files', ->
 		'--compress',
 		'--watch',
 
-		# Output files on /public
+		# Output files to /public
 		'--out',
 		'public'
 	]
@@ -52,14 +52,16 @@ task 'build:coffee-src', 'Watch CoffeeScript source files and build JS files', -
 		# watch and compress
 		'--bare',
 		'--watch',
-		'--compile'
+		'--compile',
+
+		# Output files to /build
+		'--output',
+		'build/'
 	]
 
 	# list of files to compile
 	files = [
-		'app',
-		'lib/',
-		'models'
+		'src'
 	]
 
 	# merge args & files
@@ -130,7 +132,7 @@ task 'supervisor', 'Watch source files and restart the server upon changes', ->
 	# option arguments
 	options = [
 		'--watch',
-		'.,lib,models',
+		'.,build/,build/lib/,build/models/',
 		'--exec',
 		'node',
 		'app.js'
@@ -159,7 +161,7 @@ task 'mkdir', 'Create directories and set permissions', ->
 	fs   = require 'fs'
 	path = require 'path'
 
-	directories = ['public/uploads', 'logs']
+	directories = ['public/uploads', 'logs', 'build']
 
 	directories.forEach (dir) ->
 		fs.mkdirSync dir unless path.existsSync dir

@@ -75,14 +75,16 @@ module.exports =
 
 		ip_address = req.headers['x-forwarded-for'] ? req.connection.remoteAddress
 
-		return '' +
-			'\033[' + color + 'm' + res.statusCode +
-			' \033[90m' + date + '  ' +
-			' \033[90m' + req.method +
-			' \033[0m' + req.originalUrl +
-			' \033[90m' + (new Date - req._startTime) + 'ms' +
-			'          \033[90m' + ip_address +
-			'\033[0m'
+		# return '' +
+		# 	'\033[' + color + 'm' + res.statusCode +
+		# 	' \033[90m' + date + '  ' +
+		# 	' \033[90m' + req.method +
+		# 	' \033[0m' + req.originalUrl +
+		# 	' \033[90m' + (new Date - req._startTime) + 'ms' +
+		# 	'          \033[90m' + ip_address +
+		# 	'\033[0m'
+
+		return "#{res.statusCode} #{date} #{req.method} #{req.originalUrl} #{(new Date - req._startTime)}ms          #{ip_address}"
 
 	markdown: (str) ->
 		marked(str) if _.isString(str)

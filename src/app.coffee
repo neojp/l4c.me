@@ -7,8 +7,8 @@ nodejs_url  = require 'url'
 
 
 # L4C library
-config = require('./config.json')
-app = module.exports = express.createServer()
+config = require('../config.json')
+app = module.exports.app = express.createServer()
 lib = require './lib'
 helpers = lib.helpers
 error_handler = lib.error_handler
@@ -46,7 +46,7 @@ passport.use new passport_twitter config.twitter, (token, tokenSecret, profile, 
 
 # Express configuration
 app.configure ->
-	app.set 'views', __dirname + '/views'
+	app.set 'views', __dirname + '/../views'
 	app.set 'view engine', 'jade'
 	app.set 'strict routing', true
 	app.set 'static options',
@@ -56,7 +56,7 @@ app.configure ->
 	# app.enable 'view cache'
 
 	app.use express.favicon()
-	app.use middleware.static( __dirname + '/public' )
+	app.use middleware.static( __dirname + '/../public' )
 	app.use middleware.static( app.set('views'), urlPrefix: '/templates' )
 
 	app.use express.logger helpers.logger_format
@@ -455,10 +455,8 @@ app.put '/profile', middleware.auth, (req, res) ->
 		updated.password = p  if req.user.password != p && has_update = true
 
 	if has_update
-		console.log 'if ', has_update, updated
 		model.user.update({ _id: req.user._id }, { $set: updated }, false, -> res.redirect('/profile'))
 	else
-		console.log 'else ', has_update, updated
 		res.redirect('/profile')
 
 
@@ -646,8 +644,7 @@ app.delete '/:user/:slug', middleware.auth, (req, res) ->
 
 
 
-# Only listen on $ node app.js
-if (!module.parent)
+module.exports.listen = listen = () ->
 	server = express.createServer()
 	available_apps =
 		app: app
@@ -674,3 +671,7 @@ if (!module.parent)
 			try
 				process.setumask user.umask
 				console.log "process.setumask #{user.umask}"
+
+# Only listen on $ node app.js
+if (!module.parent)
+	listen()
