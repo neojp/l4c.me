@@ -18,7 +18,7 @@ error500 = (err, req, res) ->
 	# if req.accepts('html')
 	# 	return res.render '500', error: err
 
-	if req.accepts 'json'
+	if !req.accepts 'html' && req.accepts 'json'
 		return res.json error: err
 
 	headers = 'Content-Type': 'text/plain'
@@ -32,7 +32,9 @@ module.exports = (err, req, res, next) ->
 		status = err.status ? err
 		res.statusCode = status
 
-		return res.end()  if 'HEAD' == method || req.accepts 'json'
+		console.log 404, 'ERROR!!!!!!!!!!!!!!!!!!!!!!', method, req.accepts('html')
+		return res.end()  if 'HEAD' == method
+		return res.json { error:{ status: status } }  if !req.accepts 'html' && req.accepts 'json'
 		return res.send "#{helper.heart} Error #{status}: Cannot #{method} #{req.originalUrl}", 'Content-Type': 'text/plain'
 
 	# if err is a number and not 500
