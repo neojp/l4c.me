@@ -108,14 +108,14 @@ methods =
 			return next new Error 'Image size required'
 
 		doc = this
-		path = nodejs_path.normalize "#{__dirname}/../public/uploads/#{doc._id}_#{size.size}.#{doc.ext}"
+		path = nodejs_path.normalize "#{__dirname}/../../public/uploads/#{doc._id}_#{size.size}.#{doc.ext}"
 
 		im[size.action]
 			dstPath: path
 			filter: 'Cubic'  #  Lagrange is only available on v6.3.7-1
 			format: doc.ext
 			height: size.height
-			srcPath: nodejs_path.normalize "#{__dirname}/../public/uploads/#{doc._id}_o.#{doc.ext}"
+			srcPath: nodejs_path.normalize "#{__dirname}/../../public/uploads/#{doc._id}_o.#{doc.ext}"
 			width: size.width
 		, (err, stdout, stderr) ->
 			console.log "photo resize #{size.size}"
@@ -141,7 +141,7 @@ methods =
 		console.log 'photo upload', file.path
 
 		doc = this
-		upload_path = nodejs_path.normalize "#{__dirname}/../public/uploads/#{doc._id}_o.#{doc.ext}"
+		upload_path = nodejs_path.normalize "#{__dirname}/../../public/uploads/#{doc._id}_o.#{doc.ext}"
 
 		alternate_upload = (path1, path2) ->
 			origin = fs.createReadStream path1
