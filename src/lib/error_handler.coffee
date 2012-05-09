@@ -32,7 +32,6 @@ module.exports = (err, req, res, next) ->
 		status = err.status ? err
 		res.statusCode = status
 
-		console.log 404, 'ERROR!!!!!!!!!!!!!!!!!!!!!!', method, req.accepts('html')
 		return res.end()  if 'HEAD' == method
 		return res.json { error:{ status: status } }  if !req.accepts 'html' && req.accepts 'json'
 		return res.send "#{helper.heart} Error #{status}: Cannot #{method} #{req.originalUrl}", 'Content-Type': 'text/plain'

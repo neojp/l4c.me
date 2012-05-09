@@ -133,6 +133,8 @@ app.all '*', middleware.remove_trailing_slash, (req, res, next) ->
 	next('route')
 
 
+app.get '/500', (req, res) -> res.send test
+
 app.get '/', middleware.hmvc('/fotos/:sort?')
 
 
@@ -481,7 +483,7 @@ app.get '/:user/:slug', (req, res, next) ->
 			.populate('comments._user')
 			.run (err, data) ->
 				return callback err  if err
-				return error_handler(404)(req, res)  if !data && data._user.username != username
+				return error_handler(404)(req, res)  if data == null || data._user.username != username
 
 				user = data._user
 				photo = data
