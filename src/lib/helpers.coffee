@@ -1,6 +1,7 @@
 _ = underscore = require 'underscore'
 _.str = underscore.str = require 'underscore.string'
 gravatar = require 'gravatar'
+colors = require 'colors'
 
 marked = require 'marked'
 marked.setOptions
@@ -64,27 +65,24 @@ module.exports =
 
 	logger_format: (tokens, req, res) ->
 		status = res.statusCode
-		color = 
-			if status >= 500 then 31
-			else if status >= 400 then 33
-			else if status >= 300 then 36
-			else 32
+		color  =
+			if status >= 500
+				'red'
+			else if status >= 400
+				'yellow'
+			else if status >= 300
+				'cyan'
+			else
+				'green'
 
-		d = moment()
-		date = d.format 'YYYY/MM/DD HH:mm:ss ZZ'
+		status     = colors[color] status
+		date       = colors.grey moment().format 'YYYY/MM/DD HH:mm:ss ZZ'
+		method     = colors.grey req.method
+		url        = colors.white req.originalUrl
+		time       = colors.grey (new Date() - req._startTime) + 'ms'
+		ip_address = colors.grey req.headers['x-forwarded-for'] ? req.connection.remoteAddress
 
-		ip_address = req.headers['x-forwarded-for'] ? req.connection.remoteAddress
-
-		# return '' +
-		# 	'\033[' + color + 'm' + res.statusCode +
-		# 	' \033[90m' + date + '  ' +
-		# 	' \033[90m' + req.method +
-		# 	' \033[0m' + req.originalUrl +
-		# 	' \033[90m' + (new Date - req._startTime) + 'ms' +
-		# 	'          \033[90m' + ip_address +
-		# 	'\033[0m'
-
-		return "#{res.statusCode} #{date} #{req.method} #{req.originalUrl} #{(new Date - req._startTime)}ms          #{ip_address}"
+		return "#{status}  #{date}   #{method}  #{url}  #{time}          #{ip_address}"
 
 	markdown: (str) ->
 		marked(str) if _.isString(str)
