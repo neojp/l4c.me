@@ -4,7 +4,6 @@ mongooseTypes.loadTypes mongoose
 
 helpers = require '../lib/helpers'
 _ = underscore = require 'underscore'
-im = require 'imagemagick'
 invoke = require 'invoke'
 model_tag = require './tag'
 fs = require 'fs'
@@ -108,18 +107,41 @@ methods =
 			return next new Error 'Image size required'
 
 		doc = this
-		path = nodejs_path.normalize "#{__dirname}/../../public/uploads/#{doc._id}_#{size.size}.#{doc.ext}"
+		dest = nodejs_path.normalize "#{__dirname}/../../public/uploads/#{doc._id}_#{size.size}.#{doc.ext}"
+		src = nodejs_path.normalize "#{__dirname}/../../public/uploads/#{doc._id}_o.#{doc.ext}"
 
-		im[size.action]
-			dstPath: path
-			filter: 'Cubic'  #  Lagrange is only available on v6.3.7-1
-			format: doc.ext
-			height: size.height
-			srcPath: nodejs_path.normalize "#{__dirname}/../../public/uploads/#{doc._id}_o.#{doc.ext}"
-			width: size.width
-		, (err, stdout, stderr) ->
-			console.log "photo resize #{size.size}"
-			next err, path
+		callback = (err, stdout, stderr) ->
+			console.log "photo #{size.action} end #{size.size}"
+			next err, dest
+
+		# imagemagick module
+		imagemagick = ->
+			im = require 'imagemagick'
+			im[size.action]
+				dstPath: dest
+				filter: 'Cubic'  #  Lagrange is only available on v6.3.7-1
+				format: doc.ext
+				height: size.height
+				srcPath: src
+				width: size.width
+			, callback
+
+		# graphicsmagick module
+		graphicsmagick = ->
+			gm = require 'gm'
+			if size.action == 'resize'
+				console.log "photo resize start #{size.size}"
+				gm(src).autoOrient().resize(size.width, size.height).write(dest, callback)
+			else if size.action == 'crop'
+				console.log "photo crop start #{size.size}"
+				gm(src).autoOrient().thumb size.width, size.height, dest, 80 , ->
+					gm(dest).crop(size.width, size.height).write(dest, callback)
+			else
+				next new Error "No hay accion disponible: #{size.action}"
+
+		# resize or crop images
+		graphicsmagick()
+
 
 	resize_photos: (next) ->
 		doc = this
