@@ -165,7 +165,7 @@ form.profile .zocial:before{width:18px}
 .grid{list-style:none;margin:20px auto 0;padding:0;text-align:center;zoom:1;}
 .grid:before,.grid:after{content:"\0020";display:block;height:0;visibility:hidden}
 .grid:after{clear:both}
-.grid li{display:inline-block;height:220px;margin:20px;width:200px;vertical-align:middle}
+.grid li{display:inline-block;height:188px;margin:15px;width:178px;vertical-align:middle}
 .grid a{color:inherit;border:0}
 .grid div.img{display:inline-block;}
 .grid div.img a,.grid div.img img{display:inline-block;position:relative;vertical-align:middle}

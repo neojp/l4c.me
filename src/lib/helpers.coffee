@@ -37,11 +37,6 @@ module.exports =
 			'image/png': 'png'
 
 		sizes:
-			# l:
-			# 	action: 'resize'
-			# 	height: 960
-			# 	size: 'l'
-			# 	width: 1280
 			l:
 				action: 'resize'
 				height: 720
@@ -54,9 +49,9 @@ module.exports =
 				width: 720
 			s:
 				action: 'crop'
-				height: 143
+				height: 128
 				size: 's'
-				width: 190
+				width: 170
 			t:
 				action: 'crop'
 				height: 75
