@@ -48,15 +48,6 @@
 	.img-info
 		!= helpers.markdown(photo.description)
 	
-		- if (photo._tags.length > 0)
-			p.tags Tags: 
-				- _.each( photo._tags, function(tag) {
-
-					a( href="/tags/#{tag.name}" )= tag.name 
-					| 
-
-				- });
-		
 		p.info Ha sido vista 
 			- if (photo.views == 1)
 				strong #{photo.views} vez. 

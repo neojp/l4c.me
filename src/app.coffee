@@ -218,64 +218,6 @@ app.get '/fotos/galeria', (req, res, next) ->
 		res.render 'gallery'
 
 
-app.get '/tags/:tag/pag/:page?', middleware.paged('/tags/:tag')
-app.get '/tags/:tag', (req, res) ->
-	tag_slug = req.params.tag
-	page = parseInt req.param 'page', 1
-	per_page = helpers.pagination
-	tag = null
-	photos = null
-
-	invoke (data, callback) ->
-		model.tag.findOne slug: tag_slug, callback
-
-	.then (data, callback) ->
-		return error_handler(404)(req, res)  if (!data)
-		tag = data
-
-		model.photo
-			.find( _tags: tag._id )
-			.limit(per_page)
-			.skip(per_page * (page - 1))
-			.desc('created_at')
-			.populate('_user')
-			.run callback
-
-	.rescue (err) ->
-		next err  if err
-	
-	.end null, (data) ->
-		count = tag.count
-		photos = data
-		console.log photos
-
-		res.locals
-			body_class: 'gallery tag'
-			pages: Math.ceil count / per_page
-			path: "/tags/#{tag.slug}"
-			photos: photos
-			tag: tag
-			sort: null
-			total: count
-
-		res.render 'gallery'
-
-
-app.get '/tags', (req, res) ->
-	per_page = helpers.pagination
-	model.tag
-		.find()
-		.desc('count')
-		.asc('name')
-		.run (err, tags) ->
-			res.locals
-				body_class: 'gallery tags'
-				path: "/tags"
-				tags: tags
-
-			res.render 'tags'
-
-
 app.get '/feed/:user', (req, res) ->
 	user = req.param 'user'
 	res.send "GET /feed/#{user}", 'Content-Type': 'text/plain'
@@ -376,28 +318,23 @@ app.post '/comment', (req, res, next) ->
 		res.redirect "/#{photo._user.username}/#{photo.slug}#c#{_.last(photo.comments)._id}"
 
 
-app.get '/publicar', (req, res) -> res.redirect '/fotos/publicar'
-app.get '/fotos/publicar', middleware.auth, (req, res) ->
+app.get '/upload', middleware.auth, (req, res) ->
 	res.locals
 		body_class: 'upload'
 
 	res.render 'gallery_upload'
 
 
-app.post '/fotos/publicar', middleware.auth, (req, res, next) ->
+app.post '/upload', middleware.auth, (req, res, next) ->
 	user = req.user
 	name = req.body.name
 	description = req.body.description
-	tags = _.str.trim req.body.tags
-	tags = if tags.length > 0 then tags.split(' ') else []
 
 	file = req.files.file
 	file_ext = helpers.image.extensions[file.type]
 	file_path = ""
 
 	photo = new model.photo
-	photo_tags = []
-
 
 	queue = invoke (data, callback) ->
 		photo.name = name
@@ -414,11 +351,6 @@ app.post '/fotos/publicar', middleware.auth, (req, res, next) ->
 		photo.upload_photo file, (err) ->
 			return callback err  if err
 			photo.resize_photos callback
-
-	# tags - create tag and update tags count
-	if tags.length > 0
-		queue.and (data, callback) ->
-			photo.set_tags tags, callback 
 
 	# set photo slug
 	queue.and (data, callback) ->
@@ -479,7 +411,6 @@ app.get '/:user/:slug', (req, res, next) ->
 		model.photo
 			.findOne( slug: slug )
 			.populate('_user')
-			.populate('_tags')
 			.populate('comments._user')
 			.run (err, data) ->
 				return callback err  if err
@@ -533,7 +464,6 @@ app.get '/:user/:slug/sizes/:size', (req, res) ->
 	model.photo
 		.findOne( slug: slug )
 		.populate('_user')
-		.populate('_tags')
 		.run (err, photo) ->
 			return next err  if err
 			return error_handler(404)(req, res)  if !photo
@@ -611,7 +541,6 @@ app.get '/:user/:slug/editar', middleware.auth, (req, res) ->
 		model.photo
 			.findOne( _user: user._id, slug: slug )
 			.populate('_user')
-			.populate('_tags')
 			.run callback
 
 	.then (data, callback) ->

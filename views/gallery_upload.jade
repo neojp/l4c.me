@@ -5,7 +5,7 @@
 	hr
 
 	#content
-		form( method="post", action="/fotos/publicar", enctype="multipart/form-data" )
+		form( method="post", action="/upload", enctype="multipart/form-data" )
 			p
 				label( for="upload-title" ) Titulo 
 					em (requerido)
@@ -41,14 +41,5 @@
 					//- a( href="#upload-placeholder-container" ) cargador avanzado
 					//- em &nbsp;con "Drag &amp; Drop"
 
-			p
-				label( for="upload-tags" ) Tags 
-					em Separalos con espacios, NO uses comas
-				
-				input#upload-tags( type="text", name="tags" )
-
-				span.help
-					span.popup Los tags son palabras clave que identifican la imagen.
-			
 			p.buttons
 				button( type="submit" ) Subir

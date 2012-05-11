@@ -5,7 +5,6 @@ mongooseTypes.loadTypes mongoose
 helpers = require '../lib/helpers'
 _ = underscore = require 'underscore'
 invoke = require 'invoke'
-model_tag = require './tag'
 fs = require 'fs'
 util = require 'util'
 nodejs_path = require 'path'
@@ -41,62 +40,6 @@ methods =
 					model.count slug: new_slug, slug_lookup
 				
 				slug_lookup err, count
-
-	# tags - create tag and update tags count
-	set_tags: (tags, next) ->
-		doc = this
-		queue = null
-		photo_tags = []
-
-		if _.isArray tags
-			tags = tags
-		else if _.isString tags
-			tags = _.str.trim tags
-			tags = if tags.length > 0 then tags.split(' ') else []
-		else if !tags.length
-			return next()
-
-		_.each tags, (tag, index) ->
-			console.log "each tags: ", tag
-			fn = (data, callback) ->
-				name = tag
-				slug = helpers.slugify tag
-				model_tag.findOne slug: slug, (err, tag) ->
-					return callback err  if err
-
-					if tag
-						console.log "tag update:start #{tag.name}"
-						tag.count = tag.count + 1
-						tag.save (err) ->
-							console.log "tag update:save #{tag.name}"
-							photo_tags.push tag
-							callback err
-					else
-						console.log "tag create:start #{name}"
-						tag = new model_tag
-						tag.name = name
-						tag.slug = slug
-						tag.count = 1
-						tag.save (err) ->
-							console.log "tag create:save #{tag.name}"
-							photo_tags.push tag
-							callback err
-			
-			if !index
-				queue = invoke fn
-			else
-				queue.and fn
-
-		queue.then (data, callback) ->
-			return callback()  if !photo_tags.length
-
-			console.log "photo update tags"
-			photo_tags = _.sortBy photo_tags, (tag) -> tag.name
-			doc._tags = _.pluck photo_tags, '_id'
-			doc.save callback
-		
-		queue.rescue next
-		queue.end null, (data) -> next null, photo_tags
 
 	resize_photo: (size, next) ->
 		if _.isString size
@@ -199,10 +142,6 @@ comment.virtual('pretty_date').get methods.pretty_date
 
 
 photo = new Schema
-	_tags: [
-		type: ObjectId
-		ref: 'tag'
-	]
 	_user:
 		type: ObjectId
 		ref: 'user'
@@ -251,7 +190,6 @@ photo.virtual('pretty_date').get methods.pretty_date
 
 
 photo.methods.set_slug = methods.set_slug
-photo.methods.set_tags = methods.set_tags
 photo.methods.resize_photo = methods.resize_photo
 photo.methods.resize_photos = methods.resize_photos
 photo.methods.upload_photo = methods.upload_photo
