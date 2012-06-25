@@ -299,6 +299,7 @@ app.post '/register', (req, res, next) ->
 app.post '/comment', (req, res, next) ->
 	comment =
 		body: req.body.comment
+		guest: true
 		user:
 			email: req.body.email
 			name: req.body.name
@@ -308,24 +309,33 @@ app.post '/comment', (req, res, next) ->
 		comment._user = req.user._id
 		comment.guest = false
 
+	console.log comment
+
 	invoke (data, callback) ->
-		model.photo.update({ slug: req.body.photo }, { $push: { comments: comment } }, false, callback)
+		# model.photo.update({ slug: req.body.photo }, { $push: { comments: comment } }, false, callback)
+		# model.photo.update({ slug: req.body.photo }, { $push: { comments: comment } }, false, callback)
+		model.photo.findOne({ slug: req.body.photo }, callback).populate('_user')
+
+	.then (data, callback) ->
+		data.comments.push comment
+		data.save callback
 
 	.rescue (err) ->
 		next err
 
 	.end null, (photo) ->
+		# return res.json photo
 		res.redirect "/#{photo._user.username}/#{photo.slug}#c#{_.last(photo.comments)._id}"
 
 
-app.get '/upload', middleware.auth, (req, res) ->
+app.get '/fotos/publicar', middleware.auth, (req, res) ->
 	res.locals
 		body_class: 'upload'
 
 	res.render 'gallery_upload'
 
 
-app.post '/upload', middleware.auth, (req, res, next) ->
+app.post '/fotos/publicar', middleware.auth, (req, res, next) ->
 	user = req.user
 	name = req.body.name
 	description = req.body.description
@@ -454,7 +464,7 @@ app.get '/:user/:slug', (req, res, next) ->
 			user: user
 			username: user.username
 		
-		res.render 'gallery_single'
+		res.render 'gallery_single', { layout: false }
 
 
 app.get '/:user/:slug/sizes/:size', (req, res) ->

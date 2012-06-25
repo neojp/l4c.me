@@ -1,18 +1,29 @@
+header.clearfix
+	h2 Comentarios 
+		small: a#comments-toggle( href="#" ) [show/hide]
+
+	p#leave-comment-link
+		a.button.gray( href="#dejar-comentario" ) Dejar un comentario
+
 - if (photo.comments.length)
-	#comments.comments
+	.comments
 		- _.each(photo.comments, function(comment, index, comments){
 			article.comment( id= "c#{comment._id}" )
-				p.comment-author
-					- if (!comment.guest)
-						| Por 
-						a( href="/#{comment._user.username}" )= comment._user.username
-					- else
-						= comment.user.name
+				p.comment-head
+					strong.comment-author
+						- if (!comment.guest)
+							a( href="/#{comment._user.username}" )= comment._user.username
+						- else
+							span= comment.user.name
+					|  
+					small.comment-date &middot; hace #{comment.pretty_date}
 
 				p.gravatar
-					img( src= helpers.gravatar(comment._user.email, 50) )
-
-				p.comment-date Hace #{comment.pretty_date}
+					- if (!comment.guest)
+						a( href="/#{comment._user.username}")
+							img( src= helpers.gravatar(comment._user.email, 50) )
+					- else
+						img( src= helpers.gravatar(comment.user.email, 50) )
 
 				.comment-body!= helpers.markdown(comment.body)
 		- });
@@ -20,28 +31,44 @@
 	hr.hidden
 
 
+a#dejar-comentario
 #comments-form.comments
-	h2.hidden Comentarios
+	h2.hidden Deja un Comentario
+
 	form.clearfix( method="post", action="/comment" )
 		input( type="hidden", name="photo", value=photo.slug )
 		
-		.col.col-2
-			p
-				label Nombre
-					br
-					input( type="text", name="name" )
-			
-			p
-				label Email
-					br
-					input( type="email", name="email" )
+		- if (logged_user)
+			//- p= logged_user
+			p Estas logueado como 
+				//- a( href="/#{logged_user.username}" )= logged_user.username
+				strong= logged_user.username
+				|  &nbsp; &mdash; &nbsp; 
+				a( href="/logout" ) Salir?
 
-		.col.col-1
 			p
-				label Comentario
-					br
+				label
 					textarea( name="comment" )
+
+		- else
+			.col.col-1
+				p
+					label Nombre
+						br
+						input( type="text", name="name" )
+				
+				p
+					label Email
+						br
+						input( type="email", name="email" )
+
+			.col.col-2
+				p
+					label Comentario
+						br
+						textarea( name="comment" )
 		
-		.col.col-2
-			p.buttons
-				button( type="submit" ) Comentar
+		p.buttons
+			button( type="submit" ) Enviar Comentario
+			- if (!logged_user)
+				a.gray( href="/login" ) Entra o registrate

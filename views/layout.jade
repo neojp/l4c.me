@@ -8,6 +8,7 @@ html( lang="es" )
 		meta( name="description", value="L4C" )
 		script( src="/js/modernizr-1.7.min.js" )
 	
+	- body_class += logged_user ? ' logged-in' : '';
 	body( class= body_class )
 		script document.body.className += ' js-enable ';
 
@@ -19,14 +20,19 @@ html( lang="es" )
 			hr.hidden
 
 			section#inner
+				block before-wrap
+
 				#wrap
 					
 					//- p#message No te pierdas lo nuevo de L4C, un concurso nuevo cada mes. 
 					//- 	a.more( href="/concursos/" ) Leer m&aacute;s
 					//- 	a.close Cerrar [x]
-				
+
 					#container.clearfix
-						!= body
+						- if (typeof body !== 'undefined')
+							!= body
+						
+						block content
 			
 			hr.hidden
 			

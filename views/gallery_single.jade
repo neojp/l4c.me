@@ -1,76 +1,96 @@
-#img
-	.img
-		a( href="/#{username}/#{slug}/sizes/o" )
-			img( src= helpers.image.blank, data-src= "/uploads/#{photo._id}_m.#{photo.ext}" )
-		.icons
-			a.icon-zoom( href="/#{username}/#{slug}/sizes/g" )
-			- // a.icon-edit( href="/#{username}/#{slug}/editar" )
+extends layout
 
-#content-sidebar-wrap.wrap
-	#content
-		nav.pagination
-			span
-				a.prev( href="/#{username}/#{slug}" )
-					span.hidden &laquo;&nbsp;
-					| Anterior
-			span.hidden
-				|  &nbsp; 
-			span
-				a.next( href="/#{username}/#{slug}" )
-					| Siguiente
-					span.hidden &nbsp;&raquo;
+block before-wrap
+	#img-info
+		.wrap
+			.col
+				h1= photo.name
+				p.photo-author Por 
+					a.gravatar( href="/#{photo._user.username}" )
+						img( src= helpers.gravatar(photo._user.email, 50) )
+					|  
+					a( href="/#{photo._user.username}")= photo._user.username
 
-		.img-info
-			h1= photo.name
-			!= helpers.markdown(photo.description)
-		
-		//- #social-bar
+			p.photo-info
+				a.info-comments( href="#comentarios" ) 30
+					span.hidden  comentarios
+				span.info-views 20 
+					span.hidden visitas
+				span.info-date= photo.pretty_date
 
-	hr.hidden
+	#img
+		.img
+			a( href="/#{username}/#{slug}/sizes/o" )
+				//- img( src= helpers.image.blank, data-src= "/uploads/#{photo._id}_m.#{photo.ext}" )
+				img( src= "/uploads/#{photo._id}_m.#{photo.ext}" )
+			.icons
+				a.icon-zoom( href="/#{username}/#{slug}/sizes/g" )
+				- // a.icon-edit( href="/#{username}/#{slug}/editar" )
 
-	
-	#sidebar
-		- var size = helpers.image.sizes.t;
-		.widget
-			h2 Otras fotos de 
-				a( href="/#{username}" )= user.username
-				| 
-				a.icon-rss( href="/feed/#{username}" ) [RSS]
+			nav.pagination
+				a.prev( href="/#{username}/#{slug}" ) &laquo;&nbsp; Anterior
+				span.hidden
+					|  &nbsp; 
+				a.next( href="/#{username}/#{slug}" ) Siguiente &nbsp;&raquo;
+
+block content
+	#content-sidebar-wrap.wrap
+		#content
+			.img-info
+				h1= photo.name
+				- if (!_.isEmpty(photo.description))
+					div.img-description
+						!= helpers.markdown(photo.description)
+				- else
+					div.img-description.no-description
 			
-			- var from_user = photos.from_user.length ? photos.from_user : [photo];
-			ul.grid
-				- _.each(from_user, function(photo){
-					li
-						a( href="/#{username}/#{photo.slug}" )
-							img( src= helpers.image.blank, data-src= "/uploads/#{photo._id}_t.#{photo.ext}", height= size.height, width= size.width )
-							span.icon-zoom
-				- });
+			//- #social-bar
 
+		hr.hidden
 
-			p.alignright
-				a( href="/#{username}" ) Ver galer&iacute;a completa
-
-		#upload
-			a( href="/fotos/publicar" ) Sube una foto
-
-		- if (photos.from_all.length)
+		
+		#sidebar
+			- var size = helpers.image.sizes.t;
 			.widget
-				h2 Otras im&aacute;genes en L4C.me
+				h2 Otras fotos de 
+					a( href="/#{username}" )= user.username
+					| 
+					a.icon-rss( href="/feed/#{username}" ) [RSS]
 				
+				- var from_user = photos.from_user.length ? photos.from_user : [photo];
 				ul.grid
-					- _.each(photos.from_all, function(photo){
+					- _.each(from_user, function(photo){
 						li
-							a( href="/#{photo._user.username}/#{photo.slug}" )
+							a( href="/#{username}/#{photo.slug}" )
 								img( src= helpers.image.blank, data-src= "/uploads/#{photo._id}_t.#{photo.ext}", height= size.height, width= size.width )
 								span.icon-zoom
 					- });
-				
+
+
 				p.alignright
-					a( href="/fotos" ) Ver m&aacute;s
+					a( href="/#{username}" ) Ver galer&iacute;a completa
 
-	#comments
-		hr
+			#upload
+				a( href="/fotos/publicar" ) Sube una foto
 
-		a#comentarios
-		
-		!= partial('_comments', res.locals)
+			- if (photos.from_all.length)
+				.widget
+					h2 Otras im&aacute;genes en L4C.me
+					
+					ul.grid
+						- _.each(photos.from_all, function(photo){
+							li
+								a( href="/#{photo._user.username}/#{photo.slug}" )
+									img( src= helpers.image.blank, data-src= "/uploads/#{photo._id}_t.#{photo.ext}", height= size.height, width= size.width )
+									span.icon-zoom
+						- });
+					
+					p.alignright
+						a( href="/fotos" ) Ver m&aacute;s
+
+		#comments
+			hr
+
+			a#comentarios
+			
+			!= partial('_comments', res.locals)
