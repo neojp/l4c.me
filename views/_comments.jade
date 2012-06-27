@@ -2,8 +2,9 @@ header.clearfix
 	h2 Comentarios 
 		//- small: a#comments-toggle( href="#" ) [show/hide]
 
-	p#leave-comment-link
-		a.button.gray( href="#dejar-comentario" ) Dejar un comentario
+	- if (photo.comments.length > 3)
+		p#leave-comment-link
+			a.button.gray( href="#dejar-comentario" ) Dejar un comentario
 
 - if (photo.comments.length)
 	.comments

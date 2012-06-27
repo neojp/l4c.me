@@ -304,7 +304,7 @@ div.comments article{border:1px solid #ddd;border-radius:5px;-o-border-radius:5p
 div.comments .gravatar{float:left;margin-left:-63px;margin-top:-2.25em;}
 div.comments .gravatar,div.comments .gravatar img{background:#ddd;border-radius:5px;-o-border-radius:5px;-ms-border-radius:5px;-moz-border-radius:5px;-webkit-border-radius:5px;-webkit-background-clip:padding-box}
 div.comments .gravatar a{border:0;display:inline-block}
-div.comments .gravatar img{height:50px;vertical-align:border-top;width:50px}
+div.comments .gravatar img{height:50px;vertical-align:bottom;width:50px}
 div.comments .comment-author a,div.comments form a.logout{color:#333;border-color:#999}
 div.comments .icon-logout{font-size:.8em;margin-left:2px}
 div.comments .comment-date{color:#666;font-size:.9em}
