@@ -1,9 +1,9 @@
 extends layout
 
-- user = photo._user
-- username = user.username
-
 block before-wrap
+	- user = photo._user
+	- username = user.username
+
 	#img-info
 		nav#breadcrumb
 			.col
