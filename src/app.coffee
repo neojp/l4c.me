@@ -133,7 +133,9 @@ app.all '*', middleware.remove_trailing_slash, (req, res, next) ->
 	next('route')
 
 
-app.get '/500', (req, res) -> res.send test
+app.get '/500', (req, res) ->
+	throw new Error('test')
+	res.send ''
 
 app.get '/', middleware.hmvc('/fotos/:sort?')
 
