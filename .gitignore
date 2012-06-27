@@ -5,3 +5,4 @@ node_modules
 public/uploads/*
 build/*
 config.json
+logs/*
