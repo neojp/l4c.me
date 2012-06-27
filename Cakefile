@@ -192,10 +192,11 @@ task 'mkdir', 'Create directories and set permissions', ->
 	console.log "\n=== MKDIR ===\n"
 
 	fs   = require 'fs'
+	path = require 'path'
 	directories = ['public/uploads', 'logs', 'build']
 
 	directories.forEach (dir) ->
-		fs.mkdirSync dir unless fs.existsSync dir
+		fs.mkdirSync dir unless path.existsSync dir
 		fs.chmodSync dir, parseInt '0777'
 
 
