@@ -1,6 +1,6 @@
 header.clearfix
 	h2 Comentarios 
-		small: a#comments-toggle( href="#" ) [show/hide]
+		//- small: a#comments-toggle( href="#" ) [show/hide]
 
 	p#leave-comment-link
 		a.button.gray( href="#dejar-comentario" ) Dejar un comentario
@@ -21,9 +21,9 @@ header.clearfix
 				p.gravatar
 					- if (!comment.guest)
 						a( href="/#{comment._user.username}")
-							img( src= helpers.gravatar(comment._user.email, 50) )
+							img( src= helpers.image.blank, data-src= helpers.gravatar(comment._user.email, 50) )
 					- else
-						img( src= helpers.gravatar(comment.user.email, 50) )
+						img( src= helpers.image.blank, data-src= helpers.gravatar(comment.user.email, 50) )
 
 				.comment-body!= helpers.markdown(comment.body)
 		- });
@@ -44,7 +44,9 @@ a#dejar-comentario
 				//- a( href="/#{logged_user.username}" )= logged_user.username
 				strong= logged_user.username
 				|  &nbsp; &mdash; &nbsp; 
-				a( href="/logout" ) Salir?
+				a.logout( href="/logout" ) Salir?
+				| 
+				span.icon-logout
 
 			p
 				label

@@ -7,16 +7,18 @@ block before-wrap
 				h1= photo.name
 				p.photo-author Por 
 					a.gravatar( href="/#{photo._user.username}" )
-						img( src= helpers.gravatar(photo._user.email, 50) )
+						img( src= helpers.image.blank, data-src= helpers.gravatar(photo._user.email, 50) )
 					|  
 					a( href="/#{photo._user.username}")= photo._user.username
 
 			p.photo-info
-				a.info-comments( href="#comentarios" ) 30
+				a.info-comments( href="#comentarios", title="30 comentarios" ) 30
 					span.hidden  comentarios
-				span.info-views 20 
+				span.info-views( title="20 visitas" ) 20 
 					span.hidden visitas
-				span.info-date= photo.pretty_date
+				span.info-date( title= photo.created_at )
+					span.hidden hace 
+					= photo.pretty_date
 
 	#img
 		.img
@@ -28,10 +30,16 @@ block before-wrap
 				- // a.icon-edit( href="/#{username}/#{slug}/editar" )
 
 			nav.pagination
-				a.prev( href="/#{username}/#{slug}" ) &laquo;&nbsp; Anterior
+				a.prev( href="/#{username}/#{slug}" )
+					span &#x3c; 
+					span.hidden &nbsp; Anterior
+
 				span.hidden
 					|  &nbsp; 
-				a.next( href="/#{username}/#{slug}" ) Siguiente &nbsp;&raquo;
+				
+				a.next( href="/#{username}/#{slug}" )
+					span.hidden Siguiente &nbsp;
+					span &#x3e;
 
 block content
 	#content-sidebar-wrap.wrap
@@ -55,7 +63,7 @@ block content
 				h2 Otras fotos de 
 					a( href="/#{username}" )= user.username
 					| 
-					a.icon-rss( href="/feed/#{username}" ) [RSS]
+					a.icon-rss( href="/feed/#{username}" ): span.hidden [RSS]
 				
 				- var from_user = photos.from_user.length ? photos.from_user : [photo];
 				ul.grid
@@ -88,9 +96,8 @@ block content
 					p.alignright
 						a( href="/fotos" ) Ver m&aacute;s
 
+		a#comentarios
 		#comments
 			hr
-
-			a#comentarios
 			
 			!= partial('_comments', res.locals)

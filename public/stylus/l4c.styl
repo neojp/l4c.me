@@ -2,17 +2,16 @@
 /* L4C.me */
 @import url("zocial/zocial.css");
 }
+
 @import "classes"
 @import "reset"
-// @import "boilerplate"
+@import "icons"
+
+font_icomoon = 'IcoMoon'
 
 body
 	background #242c33
 	color #333
-	// min-width 1000px
-
-// #overflow
-// 	overflow hidden
 
 hr
 	background url(images/bg_hr.png) repeat-x left bottom
@@ -47,28 +46,15 @@ a.button
 
 button
 a.button
-	// background #FF9933 url(images/icon_comments_white.png) no-repeat 90% 50%
 	background #FF9933 no-repeat
 	border 0
 	color #fff
 	cursor pointer
 	font bold 12px/1 Helvetica, Arial, sans-serif
-	// height 25px
-	// line-height 25px
-	// padding 0 35px 0 10px
 	padding 6px 10px
 	border-radius()
 	transition()
 
-	// &:after
-	// 	content: "|"
-	// 	font-size 16px
-	// 	color #FFC993
-	// 	height 20px
-	// 	margin-left 8px
-	// 	overflow hidden
-	// 	width 0
-	
 	&:hover, &:focus
 		background-color lighten( #ff9933, 10% )
 
@@ -98,17 +84,20 @@ a.button
 	cursor default
 	opacity 0.5
 
+.icomoon
+	display inline-block
+	font-family font_icomoon
+	font-style normal
+	margin-right 0.5em
+	speak none
+
 .wrap
 	margin 0 auto
 	position relative
-	// max-width 1250px
 	max-width 1475px
-	// min-width 1000px
-	// width 90%
 
 #header
 	background #00b8f4
-	// color #fff
 	min-height 60px
 	position relative
 	z-index 3
@@ -185,31 +174,31 @@ a.button
 				border-color #fff
 		
 		a.profile, a.logout
-			background none no-repeat 90% 50%
 			display inline-block
 			height 25px
 			margin 0 3px
-			padding 0 25px 0 10px
+			padding 0 10px
 			border-radius( 5px )
-			
-			&:after
-				content: "|"
-				font-size 16px
-				color #37cdff
+
+			span
+				border-left 1px solid #37cdff
 				height 20px
 				margin-left 8px
-				overflow hidden
-				width 0
-		
+				padding 0 0 0 5px
+
 		a.profile
-			background-color #c2ecfc
-			background-image url(images/icon_profile.png)
+			background #c2ecfc
 			color #0a93ca
 		
 		a.logout
-			background-color #0a93ca
-			background-image url(images/icon_logout.png)
+			background #0a93ca
 			color #c2ecfc
+
+#header-login-trigger
+	@extends .icon-login
+
+	&:before
+		margin-right 0.5em
 
 #header-login
 	&.active
@@ -266,7 +255,6 @@ a.button
 
 	.social
 		padding 0 0 0 15px
-		// width 395px
 		width 180px
 
 		p
@@ -367,7 +355,6 @@ form.login
 			vertical-align bottom
 
 	.register
-		// margin 15px 0 0
 		padding 35px 0 50px
 		text-align center
 
@@ -468,7 +455,7 @@ form.profile
 		list-style none
 		margin 0
 		padding 0
-	
+
 	li
 		display inline-block
 		height 37px
@@ -476,12 +463,21 @@ form.profile
 		margin 0 0 0 18px
 		vertical-align middle
 	
+	#claborg a
+	ul a:before
+		background-image url("../images/sprite.png")
+		background-repeat no-repeat
+		content " "
+		display inline-block
+		height 16px
+		margin-right 0.5em
+		vertical-align middle
+		width 16px
+	
 	a
-		background none no-repeat left center
 		display inline-block
 		height 16px
 		line-height 16px
-		padding-left 20px
 		text-decoration none
 		vertical-align middle
 	
@@ -493,26 +489,44 @@ form.profile
 
 		a
 			ir()
-			// background-image url("http://www.cristalab.com/images/general/label-cristalab-org.png")
+			background-position 0 100%
 			display inline-block
 			height 37px
 			padding 0
 			width 136px
+
+			&:before
+				content ""
+				display none
 	
-	// #cristalab a
-	// 	background-image url("http://www.cristalab.com/images/icons/icon-logo.png")
-	// 
-	// #l4c a
-	// 	background-image url("http://www.cristalab.com/images/icons/l4c.png")
-	// 
-	// #tiaxime a
-	// 	background-image url("http://www.cristalab.com/images/icons/tiaxime.png")
-	// 
-	// #dotgaia a
-	// 	background-image url("http://www.cristalab.com/images/icons/dotgaia.png")
-	// 
-	// #p3 a
-	// 	background-image url("http://www.cristalab.com/images/icons/p3.png")
+	#cristalab a:before
+		background-position 0 0
+	
+	#l4c a:before
+		background-position -16px*1 0
+	
+	#tiaxime a:before
+		background-position -16px*2 0
+	
+	#dotgaia a:before
+		background-position -16px*3 0
+	
+	#p3 a:before
+		background-position -16px*4 0
+
+#github
+	@extends .icon-github
+	text-align center
+	
+	&:before
+		font-size 1.2em
+		margin-right 0.5em
+		vertical-align middle
+
+	a
+		color #ccc
+		border-color #666
+		padding 0
 
 #inner
 	background #fff
@@ -570,7 +584,6 @@ form.profile
 
 
 	ul
-		//float left
 		list-style none
 		margin 0
 		padding 0
@@ -610,6 +623,10 @@ form.profile
 		padding 0 24px
 		border-radius( 5px )
 		transition()
+
+		@extends .icon-photo
+		&:before
+			margin-right 0.5em
 
 		&:hover
 			background-color lighten( #ff9933, 10% )
@@ -708,7 +725,6 @@ form.profile
 	
 		a, img
 			display inline-block
-			//outline 1px solid red
 			position relative
 			vertical-align middle
 		
@@ -718,15 +734,24 @@ form.profile
 			transition()
 
 	span.icon-zoom
-		background rgba(#FF9933, 0.8) url(images/icon_zoom.png) no-repeat center
+		@extends .icon-zoom-in
+		background rgba(#FF9933, 0.8)
 		bottom 4px
+		color #fff
+		font-size 26px
 		height 36px
+		line-height 36px
+		margin 0
 		opacity 0
 		position absolute
 		right 4px
 		width 36px
 		transition()
-	
+
+		&:before
+			line-height 43px
+			margin 0
+
 	div.info
 		color #333
 		padding 5px 0 0 0
@@ -738,15 +763,16 @@ form.profile
 			vertical-align middle
 	
 	a.comments
-		ir()
-		background url(images/icon_comments.png) no-repeat center
+		@extends .icon-comment-bubbles
 		border-left 1px solid #ccc
+		color #ff9933
+		font-size 22px
 		height 18px
-		margin-left 5px
+		margin-left 8px
 		opacity 0
 		width 0
 		transition()
-	
+
 	li:hover
 		.img img
 			border-color #ccc
@@ -761,12 +787,7 @@ form.profile
 #container
 	margin 0 auto
 	position relative
-	// width 1000px
 	width auto
-
-// body.liquid, body.gallery
-// 	#container
-// 		width auto
 
 #content-sidebar-wrap
 	max-width 1475px
@@ -805,10 +826,10 @@ form.profile
 		width 336px
 
 		.icon-rss
-			ir()
-			background url(images/icon_rss.png) no-repeat
 			border 0
+			color #fe9832
 			float right
+			font-size 19px
 			height 22px
 			width 22px
 			transition()
@@ -906,7 +927,7 @@ form.profile
 		background darken(#00B8F4, 15%)
 		border-radius()
 		bottom 0
-		padding 10px
+		padding 10px 10px 10px 15px
 		position absolute
 		right 0
 
@@ -914,11 +935,24 @@ form.profile
 		> a
 			border 0
 			display inline-block
-			padding-left 15px
-			margin-left 5px
+			margin-left 1em
 
 			&:first-child
 				margin-left 0
+
+			&:before
+				font-size 1.2em
+				margin-right 0.5em
+				vertical-align middle
+
+	.info-comments
+		@extends .icon-comment-bubbles
+
+	.info-views
+		@extends .icon-view
+
+	.info-date
+		@extends .icon-calendar
 
 #img
 	background #333
@@ -957,24 +991,49 @@ form.profile
 			width 30px
 		
 		.icon-zoom
-			background-image url(images/icon_zoom.png)
+			@extends .icon-zoom-in
+			color #fff
+			font-size 24px
+			line-height 25px
+
+			&:before
+				line-height 33px
+				margin 0
 		
-		.icon-edit
-			background-image url(images/icon_edit.png)
+		// .icon-edit
+		// 	@extends .icon-edit
+		// 	background-image url(images/icon_edit.png)
 
 	.pagination
 		height 0
 
 		a
 			background none
+			color #ccc
+			font-family font_icomoon
+			font-size 550%
 			height 50%
-			outline 1px dotted #fff
+			opacity 0.25
 			overflow hidden
 			padding 0
 			position absolute
-			text-indent -9999px
 			top 25%
 			width 90px
+			transition()
+
+			&:hover
+				opacity 0.5
+
+				span
+					width 80%
+
+			span
+				left 0
+				position absolute
+				text-align center
+				top 42%
+				width 100%
+				transition()
 
 		.prev
 			left -105px
@@ -982,17 +1041,16 @@ form.profile
 		.next
 			right -105px
 
-.img-info
-	//padding-bottom 15px
+			span
+				left auto
+				right 0
 
+.img-info
 	p
 		font-size 1.2em
 
-	.img-description.no-description:before
-		content "Sin descripción"
-		color #999
-		display block
-		font-style italic
+	.img-description.no-description
+		display none
 
 #social-bar
 	background url(images/social.png) no-repeat
@@ -1009,14 +1067,17 @@ form.profile
 	float none
 
 	h2
+		@extends .icon-comment-bubbles
 		float left
+
+		&:before
+			margin-right 0.5em
+			vertical-align bottom
 
 #leave-comment-link
 	float right
 
 div.comments
-	// padding 0 15px
-
 	article
 		@extends .clearfix
 		border 1px solid #ddd
@@ -1030,28 +1091,36 @@ div.comments
 		margin-left -63px
 		margin-top -2.25em
 
-		a
-			border 0
-
+		&
 		img
 			background #ddd
 			border-radius 5px
+
+		a
+			border 0
+			display inline-block
+
+		img
 			height 50px
+			vertical-align border-top
 			width 50px
 
 	.comment-author a
+	form a.logout
 		color #333
 		border-color #999
+
+	.icon-logout
+		font-size 0.8em
+		margin-left 2px
 
 	.comment-date
 		color #666
 		font-size 0.9em
-		// margin-left 0.5em
 
 	form
 		background #F7F7F7
 		border 2px solid #FBE3CC
-		// padding 25px 30px 15px
 		padding 15px 20px 5px
 		border-radius()
 	
@@ -1063,9 +1132,6 @@ div.comments
 				box-sizing border-box
 				height 150px
 				width 100%
-		
-		// p
-		// 	font-size 1.2em
 		
 		label
 			color #666
@@ -1107,9 +1173,6 @@ body.single
 	#wrap
 		padding-top 0
 
-	// #container
-	// 	width 1000px
-
 	#content-sidebar-wrap nav.pagination
 		float right
 		margin 0
@@ -1119,9 +1182,6 @@ body.single
 		text-align center
 
 body.sizes
-	// #container
-	// 	width 970px
-	
 	#breadcrumb
 		margin-bottom 10px
 
@@ -1171,7 +1231,6 @@ body.upload
 	#upload-placeholder-container,
 	#upload-file-container
 		color #0A92CA
-		//font-size 14px
 		margin-bottom 1em
 		padding-left 115px
 		clearfix()
@@ -1236,21 +1295,10 @@ body.upload
 		text-align center
 
 		button
-			background-image url(images/icon_submit.png)
-			background-position 80% 50%
 			height 45px
 			font-size 24px
-			padding 0 35px 0 0
-			width 155px
+			padding 0 25px 0 15px
 
-			&:after
-				content ""
-				display none
-
-#github
-	padding-bottom 20px
-	text-align center
-
-	a
-		color #ccc
-		border-color #666
+			@extends .icon-photo
+			&:before
+				margin-right 0.5em

@@ -149,13 +149,9 @@ window.Site = $.extend({}, window.Site, {
     return Site.disabled();
   },
   load_scripts: function() {
-    return invoke(function(data, callback) {
-      return $.getScript('/js/jquery.hoverIntent.minified.js', function() {
-        return callback();
-      });
-    }).rescue(function(err) {
-      return log('error: ', err);
-    }).end(null, Site.init);
+    return $.getScript('/js/jquery.hoverIntent.minified.js', function() {
+      return Site.init();
+    });
   }
 });
 

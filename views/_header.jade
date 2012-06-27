@@ -10,8 +10,10 @@ hr.hidden
 			a.username( href= "/" + logged_user.username )= logged_user.username
 			|, puedes 
 			a.profile( href="/profile" ) editar tu perfil
+				span.icon-profile
 			|  o 
 			a.logout( href="/logout" ) salir
+				span.icon-logout
 
 - else if (original_url.indexOf('/login') !== 0 && original_url.indexOf('/registro') !== 0)
 

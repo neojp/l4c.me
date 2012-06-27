@@ -20,14 +20,14 @@ hr
 
 					div.info
 						span.photo-name
-							a.photo( href= url )= photo.name.replace(/ /g, '&nbsp;') + '&nbsp;'
-								small (#{helpers.format_number(photo.views)})
+							a.photo( href= url )= photo.name.replace(/ /g, '&nbsp;') //+ '&nbsp;'
+								//- small (#{helpers.format_number(photo.views)})
 							br
 							span.by por&nbsp;
 							strong.username
 								a( href= "/#{user.username}" )= user.username
 
-						a.comments( href= url ) Comentarios
+						a.comments( href= url ): span.hidden Comentarios
 
 			- });
 	- else

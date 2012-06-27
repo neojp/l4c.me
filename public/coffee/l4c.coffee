@@ -153,14 +153,8 @@ window.Site = $.extend {}, window.Site,
 
 	# load 3rd party scripts
 	load_scripts: () ->
-		invoke (data, callback) ->
-			# hoverIntent
-			$.getScript '/js/jquery.hoverIntent.minified.js', -> callback()
-		
-		.rescue (err) ->
-			log 'error: ', err
-		
-		.end null, Site.init
+		# hoverIntent
+		$.getScript '/js/jquery.hoverIntent.minified.js', -> Site.init()
 
 
 #############################################################################
