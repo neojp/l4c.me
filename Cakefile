@@ -1,4 +1,17 @@
-task 'build:stylus', 'Watch Stylus source files and build CSS files', ->
+option '-w', '--watch', 'Watch files for changes and rebuild them'
+
+task 'build', 'Build all source files', ->
+	invoke 'mkdir'
+
+	setTimeout (-> invoke 'build:stylus'), 0
+	setTimeout (-> invoke 'build:coffee-src'), 1000
+	setTimeout (-> invoke 'build:coffee-static'), 2000
+
+
+
+task 'build:stylus', 'Look for Stylus source files and build CSS files', (o) ->
+
+	console.log "\n=== BUILD: STYLUS ==="
 
 	# script
 	command = ['node_modules/stylus/bin/stylus']
@@ -11,12 +24,15 @@ task 'build:stylus', 'Watch Stylus source files and build CSS files', ->
 
 		# watch and compress
 		'--compress',
-		'--watch',
-
+		
 		# Output files to /public
 		'--out',
 		'public'
 	]
+
+	# watch files
+	if (o.watch)
+		options.push '--watch'
 
 	# list of files to compile
 	files = [
@@ -38,11 +54,13 @@ task 'build:stylus', 'Watch Stylus source files and build CSS files', ->
 	# exit process
 	proc.on 'exit', (code, signal) ->
 		process.exit(1) if code > 0
-		console.log 'child process terminated due to receipt of code ' + code
+		# console.log 'child process terminated due to receipt of code ' + code
 
 
 
-task 'build:coffee-src', 'Watch CoffeeScript source files and build JS files', ->
+task 'build:coffee-src', 'Watch CoffeeScript source files and build JS files', (o) ->
+
+	console.log "\n=== BUILD: COFFEESCRIPT-SRC (Server side) ==="
 
 	# script
 	command = ['node_modules/coffee-script/bin/coffee']
@@ -51,13 +69,16 @@ task 'build:coffee-src', 'Watch CoffeeScript source files and build JS files', -
 	options = [
 		# watch and compress
 		'--bare',
-		'--watch',
 		'--compile',
 
 		# Output files to /build
 		'--output',
 		'build/'
 	]
+
+	# watch files
+	if (o.watch)
+		options.push '--watch'
 
 	# list of files to compile
 	files = [
@@ -79,11 +100,13 @@ task 'build:coffee-src', 'Watch CoffeeScript source files and build JS files', -
 	# exit process
 	proc.on 'exit', (code, signal) ->
 		process.exit(1) if code > 0
-		console.log 'child process terminated due to receipt of code ' + code
+		# console.log 'child process terminated due to receipt of code ' + code
 
 
 
-task 'build:coffee-static', 'Watch CoffeeScript source files and build JS files', ->
+task 'build:coffee-static', 'Watch CoffeeScript source files and build JS files', (o) ->
+
+	console.log "\n=== BUILD: COFFEESCRIPT-STATIC (Client side) ==="
 
 	# script
 	command = ['node_modules/coffee-script/bin/coffee']
@@ -92,13 +115,16 @@ task 'build:coffee-static', 'Watch CoffeeScript source files and build JS files'
 	options = [
 		# watch and compress
 		'--bare',
-		'--watch',
 		'--compile',
 
 		# Output files on /public/js
 		'--output',
 		'public/js/'
 	]
+
+	# watch files
+	if (o.watch)
+		options.push '--watch'
 
 	# list of files to compile
 	files = [
@@ -120,11 +146,13 @@ task 'build:coffee-static', 'Watch CoffeeScript source files and build JS files'
 	# exit process
 	proc.on 'exit', (code, signal) ->
 		process.exit(1) if code > 0
-		console.log 'child process terminated due to receipt of code ' + code
+		# console.log 'child process terminated due to receipt of code ' + code
 
 
 
-task 'supervisor', 'Watch source files and restart the server upon changes', ->
+task 'supervisor', 'Watch source files and restart the server upon changes', (o) ->
+
+	console.log "\n=== SUPERVISOR ==="
 
 	# script
 	command = ['node_modules/supervisor/lib/cli-wrapper.js']
@@ -133,8 +161,10 @@ task 'supervisor', 'Watch source files and restart the server upon changes', ->
 	options = [
 		'--watch',
 		'.,build/,build/lib/,build/models/',
+
 		'--exec',
 		'node',
+		
 		'app.js'
 	]
 
@@ -153,26 +183,24 @@ task 'supervisor', 'Watch source files and restart the server upon changes', ->
 	# exit process
 	proc.on 'exit', (code, signal) ->
 		process.exit(1) if code > 0
-		console.log 'child process terminated due to receipt of code ' + code
+		# console.log 'child process terminated due to receipt of code ' + code
 
 
 
 task 'mkdir', 'Create directories and set permissions', ->
-	fs   = require 'fs'
-	path = require 'path'
+	
+	console.log "\n=== MKDIR ===\n"
 
+	fs   = require 'fs'
 	directories = ['public/uploads', 'logs', 'build']
 
 	directories.forEach (dir) ->
-		fs.mkdirSync dir unless path.existsSync dir
+		fs.mkdirSync dir unless fs.existsSync dir
 		fs.chmodSync dir, parseInt '0777'
 
 
 
-task 'start', 'Build and run all scripts', ->
-	invoke 'mkdir'
-
-	setTimeout (-> invoke 'build:stylus'), 0
-	setTimeout (-> invoke 'build:coffee-src'), 1000
-	setTimeout (-> invoke 'build:coffee-static'), 2000
+task 'start', 'Build and run all scripts', (options) ->
+	options.watch = true
+	setTimeout (-> invoke 'build'), 0
 	setTimeout (-> invoke('supervisor')), 3000
