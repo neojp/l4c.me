@@ -63,7 +63,7 @@ app.configure ->
 	app.use express.bodyParser()
 	app.use express.methodOverride()
 	app.use express.cookieParser helpers.heart
-	app.use express.session( secret: helpers.heart, store: new mongo_session( url: 'mongodb://localhost/l4c/sessions' ))
+	app.use express.session( secret: helpers.heart, store: new mongo_session( url: config.mongodb + '/sessions' ))
 	app.use passport.initialize()
 	app.use passport.session()
 	app.use app.router
