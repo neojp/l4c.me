@@ -6,3 +6,5 @@ public/uploads/*
 build/*
 config.json
 logs/*
+public/l4c.css
+public/js/l4c.js
