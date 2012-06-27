@@ -490,7 +490,7 @@ app.get '/:user/:slug/sizes/:size', (req, res) ->
 				slug: slug
 				user: user
 
-			res.render 'gallery_sizes', locals: locals
+			res.render 'gallery_sizes', { layout: false, locals: locals }
 
 
 app.get '/:user/pag/:page?', middleware.paged('/:user')

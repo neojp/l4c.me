@@ -960,7 +960,7 @@ form.profile
 	border-top 1px solid #333
 	margin-bottom 25px
 	overflow hidden
-	padding 0 10px
+	// padding 0 10px
 	position relative
 	text-align center
 
@@ -1190,14 +1190,41 @@ body.single
 
 body.sizes
 	#breadcrumb
-		margin-bottom 10px
+		line-height 1
+		margin-bottom 0
+
+		.col
+			float left
+
+			h1
+				margin-top 0.25em
+
+		ul.col
+			float right
+			line-height 45px
+
+		a
+			color #fff
 
 		ul
 			float right
 			font-size 1.2em
+
+		li
+			background-image url("../images/sep_white.png")
+			
+			&:first-child
+				background none
+
+		li.active a
+			border-color #fff
+			color #fff
 	
-	.img-info
-		padding 10px 15px
+	#content
+		text-align center
+
+	// .img-info
+	// 	padding 10px 15px
 
 body.upload
 	#inner
