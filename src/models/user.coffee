@@ -8,7 +8,7 @@ helpers = require '../lib/helpers'
 Schema = mongoose.Schema
 ObjectId = Schema.ObjectId
 Email = mongoose.SchemaTypes.Email
-Url = mongoose.SchemaTypes.Url
+# Url = mongoose.SchemaTypes.Url
 
 encrypt_password = (password) ->
 	require('crypto').createHash('sha1').update(password + helpers.heart).digest('hex')
@@ -30,6 +30,7 @@ user = new Schema
 		# required: true
 		type: Email,
 		# unique: true
+		get: (v) -> v || ''
 	facebook:
 		id: String
 		email: Email
@@ -48,7 +49,7 @@ user = new Schema
 		username: String
 	url:
 		type: String
-		validate: [validate_url, 'Please enter a valid URL']
+		# validate: [validate_url, 'Please enter a valid URL']
 	username:
 		lowercase: true
 		# required: true

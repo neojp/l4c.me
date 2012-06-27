@@ -251,10 +251,10 @@ app.get '/login/facebook/remove', middleware.auth, (req, res, next) ->
 
 app.get '/login/twitter', passport.authenticate('twitter')
 app.get '/login/twitter/callback', passport.authenticate('twitter', failureRedirect: '/login'), (req, res, next) ->
-	# flash = req.flash 'auth_redirect'
-	# url = if _.size flash then _.first flash else '/profile'
-	# res.redirect url
-	res.redirect '/userinfo'
+	flash = req.flash 'auth_redirect'
+	url = if _.size flash then _.first flash else '/profile'
+	res.redirect url
+	# res.redirect '/userinfo'
 
 app.get '/login/twitter/remove', middleware.auth, (req, res, next) ->
 	model.user.update({ _id: req.user._id }, { $unset: { twitter: 1} }, false, -> res.redirect('/profile'))
