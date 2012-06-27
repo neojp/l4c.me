@@ -1,6 +1,7 @@
 .nodester.appconfig
 .nodester.rc
 Thumbs.db
+.DS_Store
 node_modules
 public/uploads/*
 build/*
