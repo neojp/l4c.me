@@ -319,6 +319,7 @@ div.comments .buttons{clear:both;text-align:right;}
 div.comments .buttons button{float:right;font-size:1.25em}
 div.comments .buttons a{line-height:2.5;margin-right:1.2em}
 body.single #wrap{padding-top:0}
+body.single #img-info .wrap,body.single #content-sidebar-wrap{max-width:1000px}
 body.single #content-sidebar-wrap nav.pagination{float:right;margin:0;padding:0}
 body.single #sidebar #upload{text-align:center}
 body.sizes #breadcrumb{margin-bottom:10px;}
