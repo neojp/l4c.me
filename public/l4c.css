@@ -296,6 +296,7 @@ form.profile .zocial:before{width:18px}
 .img-info .img-description.no-description{display:none}
 #social-bar{background:url("images/social.png") no-repeat;font-size:10px;height:145px;left:-55px;position:absolute;text-align:right;top:55px;width:50px}
 #comments{float:none;}
+#comments hr{margin-top:15px}
 #comments h2{float:left;}
 #comments h2:before{margin-right:.5em;vertical-align:bottom}
 #leave-comment-link{float:right}
