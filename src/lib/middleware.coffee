@@ -52,6 +52,15 @@ module.exports = (app) -> middleware =
 		
 		next()
 
+	redirect_subdomain: (req, res, next) ->
+		domain = req.headers.host
+		if domain.indexOf('www.') == 0
+			domain = domain.substring 4
+			url = 'http://' + domain + req.originalUrl
+			return res.redirect url, 301
+		
+		next()
+
 	# extends express.static with a url prefix to map static files
 	# eg. static(_dirname + '/views', { urlPrefix: '/templates', maxAge: 31556926000 })
 	# will look for urls like this: /templates/layout.jade and send the file: _dirname + '/views/layout.jade'

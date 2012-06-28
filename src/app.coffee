@@ -115,7 +115,7 @@ app.param 'user', (req, res, next, id) ->
 
 
 # Routes
-app.all '*', middleware.remove_trailing_slash, (req, res, next) ->
+app.all '*', middleware.redirect_subdomain, middleware.remove_trailing_slash, (req, res, next) ->
 	res.locals
 		_: underscore
 		body_class: ''
