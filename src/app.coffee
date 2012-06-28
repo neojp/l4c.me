@@ -53,7 +53,7 @@ app.configure ->
 		maxAge: 31556926000 # 1 year on milliseconds
 		ignoreExtensions: 'styl coffeee'
 
-	# app.enable 'view cache'
+	app.enable 'view cache'
 
 	app.use express.favicon()
 	app.use middleware.static( __dirname + '/../public' )
