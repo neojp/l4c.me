@@ -1,4 +1,6 @@
 {
+	"google_analytics": "",
+
 	"domains": {
 		"localhost": "app"
 	},

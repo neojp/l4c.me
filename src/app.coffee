@@ -128,6 +128,7 @@ app.all '*', middleware.remove_trailing_slash, (req, res, next) ->
 		res: res
 		sort: null
 		query_vars: nodejs_url.parse(req.url, true).query
+		google_analytics: config.google_analytics
 	
 	# res.locals helpers
 	next('route')
