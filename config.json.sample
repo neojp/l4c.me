@@ -12,6 +12,23 @@
 		"permissions": ["email", "user_website"]
 	},
 
+	"mailer": {
+		"name": "",
+		"email": "",
+		"username": "",
+		"password": "",
+		"imap": {
+			"host": "",
+			"port": 143,
+			"secure": false
+		},
+		"smtp": {
+			"host": "",
+			"port": 25,
+			"ssl": false
+		}
+	},
+
 	"mongodb": "mongodb://localhost/l4c",
 
 	"port": 3000,

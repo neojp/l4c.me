@@ -73,10 +73,10 @@ methods =
 		graphicsmagick = ->
 			gm = require 'gm'
 			if size.action == 'resize'
-				console.log "photo resize start #{size.size}"
+				console.log "photo resize start #{size.size} - #{doc._id}_#{size.size}.#{doc.ext}"
 				gm(src).autoOrient().resize(size.width, size.height).write(dest, callback)
 			else if size.action == 'crop'
-				console.log "photo crop start #{size.size}"
+				console.log "photo crop start #{size.size} - #{doc._id}_#{size.size}.#{doc.ext}"
 				gm(src).autoOrient().thumb size.width, size.height, dest, 80 , ->
 					gm(dest).crop(size.width, size.height).write(dest, callback)
 			else
@@ -102,8 +102,8 @@ methods =
 		queue.rescue next
 		queue.end null, (data) -> next(null, data)
 
-	upload_photo: (file, next) ->
-		console.log 'photo upload', file.path
+	upload_photo: (file_path, next) ->
+		console.log 'photo upload', file_path
 
 		doc = this
 		upload_path = nodejs_path.normalize "#{__dirname}/../../public/uploads/#{doc._id}_o.#{doc.ext}"
@@ -114,8 +114,8 @@ methods =
 			util.pump origin, upload, (err) ->
 				fs.unlink path1, (err) -> next err
 
-		fs.rename file.path, upload_path, (err) ->
-			return alternate_upload file.path, upload_path if err
+		fs.rename file_path, upload_path, (err) ->
+			return alternate_upload file_path, upload_path if err
 			next err
 
 	pretty_date: () ->
@@ -172,7 +172,7 @@ photo = new Schema
 	slug:
 		# required: true
 		type: String
-		unique: true
+		# unique: true
 	views:
 		default: 0
 		type: Number

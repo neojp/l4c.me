@@ -361,7 +361,7 @@ app.post '/fotos/publicar', middleware.auth, (req, res, next) ->
 	# image upload - move file from /tmp to /public/uploads
 	# image manipulation - resize & crop images asynchronously
 	.then (data, callback) ->
-		photo.upload_photo file, (err) ->
+		photo.upload_photo file.path, (err) ->
 			return callback err  if err
 			photo.resize_photos callback
 

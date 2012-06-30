@@ -6,6 +6,7 @@ task 'build', 'Build all source files', ->
 	setTimeout (-> invoke 'build:stylus'), 0
 	setTimeout (-> invoke 'build:coffee-src'), 1000
 	setTimeout (-> invoke 'build:coffee-static'), 2000
+	setTimeout (-> invoke 'build:coffee-scripts'), 3000
 
 
 
@@ -150,6 +151,48 @@ task 'build:coffee-static', 'Watch CoffeeScript source files and build JS files'
 
 
 
+task 'build:coffee-scripts', 'Watch CoffeeScript source files and build JS files', (o) ->
+
+	console.log "\n=== BUILD: COFFEESCRIPT-SCRIPTS (Server side utils) ==="
+
+	# script
+	command = ['node_modules/coffee-script/bin/coffee']
+
+	# option arguments
+	options = [
+		# watch and compress
+		'--bare',
+		'--compile'
+	]
+
+	# watch files
+	if (o.watch)
+		options.push '--watch'
+
+	# list of files to compile
+	files = [
+		'scripts/'
+	]
+
+	# merge args & files
+	args = [].concat command, options, files
+
+	# spawn the new process
+	spawn = require('child_process').spawn
+	proc = spawn 'node', args
+
+	# log output and errors
+	logBuffer = (buffer) -> console.log buffer.toString()
+	proc.stdout.on 'data', logBuffer
+	proc.stderr.on 'data', logBuffer
+
+	# exit process
+	proc.on 'exit', (code, signal) ->
+		process.exit(1) if code > 0
+		# console.log 'child process terminated due to receipt of code ' + code
+
+
+
 task 'supervisor', 'Watch source files and restart the server upon changes', (o) ->
 
 	console.log "\n=== SUPERVISOR ==="
@@ -193,7 +236,7 @@ task 'mkdir', 'Create directories and set permissions', ->
 
 	fs   = require 'fs'
 	path = require 'path'
-	directories = ['public/uploads', 'logs', 'build']
+	directories = ['public/uploads', 'logs', 'build', 'tmp']
 
 	directories.forEach (dir) ->
 		fs.mkdirSync dir unless path.existsSync dir
@@ -204,4 +247,4 @@ task 'mkdir', 'Create directories and set permissions', ->
 task 'start', 'Build and run all scripts', (options) ->
 	options.watch = true
 	setTimeout (-> invoke 'build'), 0
-	setTimeout (-> invoke('supervisor')), 3000
+	setTimeout (-> invoke('supervisor')), 4000
