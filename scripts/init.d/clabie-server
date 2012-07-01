@@ -3,16 +3,16 @@
 # initd-example      Node init.d 
 #
 # chkconfig: 345 80 20
-# description: Clabie server
-# processname: clabie-server
+# description: Clabie server dev
+# processname: clabie-server-dev
 #
 
 # Source function library.
 . /lib/lsb/init-functions
 
 USER=clabie
-NAME=clabie-server                               # Unique name for the application
-INSTANCE_DIR=/home/$USER/l4c.me                  # Location of the application source
+NAME=clabie-server-dev                           # Unique name for the application
+INSTANCE_DIR=/home/$USER/l4c.dev                 # Location of the application source
 SOURCE_NAME=$INSTANCE_DIR/app.js                 # Name os the applcation entry point script
 FOREVER_ID=$INSTANCE_DIR/scripts/forever-id.js   # Node.js script used to check for the status of the process and return the forever id
 
