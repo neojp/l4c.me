@@ -3,7 +3,7 @@
 var http   = require('http')
     exec   = require('child_process').exec,
     dir    = require('path').dirname(__dirname + '../'),
-    cmd    = 'cd ' + dir + ' && git pull origin master && npm install && cake build',
+    cmd    = 'cd ' + dir + ' && git pull origin dev && npm install && cake build',
     config = require('../config.json');
 
 
