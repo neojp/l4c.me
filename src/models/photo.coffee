@@ -41,7 +41,11 @@ methods =
 				
 				slug_lookup err, count
 
-	resize_photo: (size, next) ->
+	resize_photo: (size, src, next) ->
+		if _.isFunction src
+			next = src
+			src = null
+
 		if _.isString size
 			size = helpers.image.sizes[size]
 		else if _.isObject size
@@ -51,10 +55,10 @@ methods =
 
 		doc = this
 		dest = nodejs_path.normalize "#{__dirname}/../../public/uploads/#{doc._id}_#{size.size}.#{doc.ext}"
-		src = nodejs_path.normalize "#{__dirname}/../../public/uploads/#{doc._id}_o.#{doc.ext}"
+		src = nodejs_path.normalize "#{__dirname}/../../public/uploads/#{doc._id}_o.#{doc.ext}"  if _.isNull src
 
 		callback = (err, stdout, stderr) ->
-			console.log "photo #{size.action} end #{size.size}"
+			console.log "photo #{size.action} end #{size.size}", stdout, stderr
 			next err, dest
 
 		# imagemagick module
@@ -70,20 +74,20 @@ methods =
 			, callback
 
 		# graphicsmagick module
-		graphicsmagick = ->
+		graphicsmagick = (src, dest) ->
 			gm = require 'gm'
 			if size.action == 'resize'
-				console.log "photo resize start #{size.size} - #{doc._id}_#{size.size}.#{doc.ext}"
+				console.log "photo resize start #{size.size} - #{src} -> #{dest}"
 				gm(src).autoOrient().resize(size.width, size.height).write(dest, callback)
 			else if size.action == 'crop'
-				console.log "photo crop start #{size.size} - #{doc._id}_#{size.size}.#{doc.ext}"
+				console.log "photo crop start #{size.size} - #{src} -> #{dest}"
 				gm(src).autoOrient().thumb size.width, size.height, dest, 80 , ->
 					gm(dest).crop(size.width, size.height).write(dest, callback)
 			else
 				next new Error "No hay accion disponible: #{size.action}"
 
 		# resize or crop images
-		graphicsmagick()
+		graphicsmagick(src, dest)
 
 
 	resize_photos: (next) ->
@@ -103,9 +107,9 @@ methods =
 		queue.end null, (data) -> next(null, data)
 
 	upload_photo: (file_path, next) ->
-		console.log 'photo upload', file_path
-
 		doc = this
+		console.log 'photo upload', file_path, '->', "#{doc._id}_o.#{doc.ext}"
+
 		upload_path = nodejs_path.normalize "#{__dirname}/../../public/uploads/#{doc._id}_o.#{doc.ext}"
 
 		alternate_upload = (path1, path2) ->
