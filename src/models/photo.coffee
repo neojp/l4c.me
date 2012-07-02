@@ -125,6 +125,23 @@ methods =
 	pretty_date: () ->
 		helpers.pretty_date this.created_at
 
+	prev_next: (next) ->
+		photo = this
+		created_at = photo.created_at
+
+		invoke (data, callback) ->
+			model.findOne({ _user: photo._user, created_at: { $lt: created_at } }, { slug: 1 })
+				.desc('created_at')
+				.run callback
+
+		.and (data, callback) ->
+			model.findOne({ _user: photo._user, created_at: { $gt: created_at } }, { slug: 1 })
+				.asc('created_at')
+				.run callback
+
+		.end null, (data) ->
+			next(null, data)
+
 comment = new Schema
 	_user:
 		type: ObjectId
@@ -197,5 +214,6 @@ photo.methods.set_slug = methods.set_slug
 photo.methods.resize_photo = methods.resize_photo
 photo.methods.resize_photos = methods.resize_photos
 photo.methods.upload_photo = methods.upload_photo
+photo.methods.prev_next = methods.prev_next
 
 module.exports = model = mongoose.model 'photo', photo

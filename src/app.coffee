@@ -434,6 +434,7 @@ app.get '/:user/:slug', (req, res, next) ->
 				photo.views += 1
 				photo.save callback
 
+	# more user photos
 	.then (data, callback) ->
 		model.photo
 			.find( _user: user._id )
@@ -443,6 +444,7 @@ app.get '/:user/:slug', (req, res, next) ->
 			.limit(6)
 			.run callback
 
+	# random photos
 	.and (data, callback) ->
 		model.photo
 			.find()
@@ -453,10 +455,18 @@ app.get '/:user/:slug', (req, res, next) ->
 			.populate('_user')
 			.run callback
 
+	# prev / next photos from user
+	.and (data, callback) ->
+		# console.log 'photo', photo
+		photo.prev_next(callback)
+
 	.rescue (err) ->
 		next err
 
 	.end null, (data) ->
+		photo.prev = data[2][0]
+		photo.next = data[2][1]
+		
 		res.locals
 			body_class: 'user single'
 			photo: photo

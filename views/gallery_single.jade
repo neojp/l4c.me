@@ -33,17 +33,22 @@ block before-wrap
 				a.icon-zoom( href="/#{username}/#{slug}/sizes/g" )
 				- // a.icon-edit( href="/#{username}/#{slug}/editar" )
 
-			nav.pagination
-				a.prev( href="/#{username}/#{slug}" )
-					span &#x3c; 
-					span.hidden &nbsp; Anterior
+			- if (photo.prev || photo.next)
+				nav.pagination
 
-				span.hidden
-					|  &nbsp; 
-				
-				a.next( href="/#{username}/#{slug}" )
-					span.hidden Siguiente &nbsp;
-					span &#x3e;
+					- if (photo.prev)
+						a.prev( href="/#{username}/#{photo.prev.slug}" )
+							span &#x3c; 
+							span.hidden &nbsp; Anterior
+
+					- if (photo.prev && photo.next)
+						span.hidden
+							|  &nbsp; 
+					
+					- if (photo.next)
+						a.next( href="/#{username}/#{photo.next.slug}" )
+							span.hidden Siguiente &nbsp;
+							span &#x3e;
 
 block content
 	#content-sidebar-wrap.wrap
