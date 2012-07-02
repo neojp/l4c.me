@@ -5,6 +5,7 @@ invoke = require "invoke"
 imap = require("imap").ImapConnection
 mailparser = require("mailparser").MailParser
 fs = require "fs"
+nodejs_path = require "path"
 
 
 # L4C Library
@@ -121,7 +122,7 @@ get_new_emails = (server) ->
 				photo.name = name
 				photo.description = description  if description && description != ''
 				photo.ext = file_ext
-				photo.slug = 'from mail: ' + uid + ' - ' + photo.name
+				photo.slug = 'from-mail-' + uid + '-' + nodejs_path.normalize(photo.name) + '-' + Math.random()
 				photo._user = user._id
 				photo.save (err) ->
 					console.log "photo from email: create - #{name}"
