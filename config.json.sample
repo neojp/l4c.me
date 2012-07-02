@@ -12,7 +12,7 @@
 		"permissions": ["email", "user_website"]
 	},
 
-	"git_pull": "git pull origin master",
+	"git_pull": "git pull origin dev",
 
 	"mailer": {
 		"name": "",
