@@ -1,0 +1,89 @@
+# twitter module
+
+# Module dependencies
+_ = underscore = require "underscore"
+_.str = underscore.str = require "underscore.string"
+invoke = require "invoke"
+ntwitter = require "ntwitter"
+
+# L4C Library
+config = require "../config.json"
+helpers = require "../build/lib/helpers"
+
+# Mongoose configuration
+mongo_session = require 'connect-mongo'
+mongoose = require 'mongoose'
+mongoose.connect config.mongodb
+
+model = 
+	user: require "../build/models/user"
+	photo: require "../build/models/photo"
+
+
+# tweet_photo
+module.exports.tweet_photo = tweet_photo = (photo_id) ->
+	twit = null
+	photo = null
+	user = null
+
+	invoke (data, callback) ->
+		# console.log 'init find photo'
+		model.photo.findOne _id: photo_id, callback
+
+
+	.then (data, callback) ->
+		# console.log 'then find user'
+		photo = data
+		model.user.findOne _id: photo._user, callback
+
+
+	.then (data, callback) ->
+		# console.log 'then verify credentials'
+		user = data
+
+		if not user.twitter
+			return callback new Error('This user has no twitter account')
+
+		twit = new ntwitter
+			consumer_key: config.twitter.consumerKey
+			consumer_secret: config.twitter.consumerSecret
+			access_token_key: user.twitter.token
+			access_token_secret: user.twitter.token_secret
+
+		twit.verifyCredentials callback
+
+
+	.then (data, callback) ->
+		# create photo url
+		photo_url = "http://#{_.first(_.keys(config.domains))}/#{user.username}/#{photo.slug}"
+		
+		# tweet format
+		tweet_format = "#{helpers.heart} %s [pic] %s #{config.twitter.hashtag}"
+		
+		# substract whatever whatever amount of characters we introduced with the heart, hashtag, [pic] and url
+		# tweets can't be over 120
+		# twitter urls are 20 characters long
+		url_length = 20
+		length = 120 - (_.str.sprintf(tweet_format, '', '').length + url_length)
+
+		# photo names will be truncated with 3 character ellipses
+		photo_name = _.str.truncate photo.name, length
+
+		# create tweet status
+		tweet = _.str.sprintf tweet_format, photo_name, photo_url
+		# console.log 'then tweet status'
+
+		# post tweet status
+		twit.updateStatus tweet, callback
+
+
+	.rescue (err) ->
+		# console.error 'error ----------------->'
+		# console.error err
+		process.exit(1)
+
+
+	.end null, (data) ->
+		# console.log 'end ---------------------------------------> '
+		# console.log data
+		process.exit(1)

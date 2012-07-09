@@ -46,6 +46,8 @@ user = new Schema
 		type: Number
 	twitter:
 		id: String
+		token: String
+		token_secret: String
 		username: String
 	url:
 		type: String
@@ -126,6 +128,8 @@ user.statics.twitter = (token, tokenSecret, profile, next) ->
 				url = profile._json.url?
 				twitter =
 					id: profile.id
+					token: token
+					token_secret: tokenSecret
 					username: profile._json.screen_name
 
 				if doc

@@ -39,7 +39,8 @@
 	"twitter": {
 		"callbackURL": "http://localhost/login/twitter/callback",
 		"consumerKey": "",
-		"consumerSecret": ""
+		"consumerSecret": "",
+		"hashtag": "#l4c"
 	},
 
 	"users": {
