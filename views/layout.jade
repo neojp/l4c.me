@@ -1,12 +1,24 @@
 !!! 5
 html( lang="es" )
 	head
+		- document_title = helpers.heart + ' ' + document_title + ' &nbsp; ' + twitter_config.hashtag
 		meta( charset="utf-8" )
 		title= document_title
-			|  &hearts;
+		meta( name="description", value= document_description )
+
+		block before-head-meta
+
 		link( rel="stylesheet", href="/l4c.css")
-		meta( name="description", value="L4C" )
 		script( src="/js/modernizr-1.7.min.js" )
+
+		meta( name="twitter:site", content= twitter_config.username )
+		meta( name="twitter:creator", content="@cristalab" )
+
+		meta( property="og:title", content= document_title )
+		meta( property="og:description", content= document_description )
+		meta( property="og:image", content= document_image )
+
+		block after-head-meta
 	
 	- body_class += logged_user ? ' logged-in' : '';
 	body( class= body_class )

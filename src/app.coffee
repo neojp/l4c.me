@@ -13,6 +13,7 @@ lib = require './lib'
 helpers = lib.helpers
 error_handler = lib.error_handler
 middleware = lib.middleware(app)
+url_domain = null
 
 
 # Mongoose configuration
@@ -53,9 +54,8 @@ app.configure ->
 		maxAge: 31556926000 # 1 year on milliseconds
 		ignoreExtensions: 'styl coffeee'
 
-	app.enable 'view cache'
+	# app.enable 'view cache'
 
-	app.use express.favicon()
 	app.use middleware.static( __dirname + '/../public' )
 	app.use middleware.static( app.set('views'), urlPrefix: '/templates' )
 
@@ -119,7 +119,10 @@ app.all '*', middleware.redirect_subdomain, middleware.remove_trailing_slash, (r
 	res.locals
 		_: underscore
 		body_class: ''
-		document_title: 'L4C.me'
+		document_description: config.info.description
+		document_image: url_domain + '/images/logo.png'
+		document_title: config.info.name
+		document_url: url_domain
 		helpers: helpers
 		logged_user: if req.isAuthenticated() then req.user else null
 		original_url: req.originalUrl
@@ -129,7 +132,10 @@ app.all '*', middleware.redirect_subdomain, middleware.remove_trailing_slash, (r
 		sort: null
 		query_vars: nodejs_url.parse(req.url, true).query
 		google_analytics: config.google_analytics
-	
+		twitter_config:
+			hashtag: config.twitter.hashtag
+			username: config.twitter.username
+
 	# res.locals helpers
 	next('route')
 
@@ -469,6 +475,10 @@ app.get '/:user/:slug', (req, res, next) ->
 		
 		res.locals
 			body_class: 'user single'
+			document_descrition: photo.description || ''
+			document_image: "#{url_domain}/uploads/#{photo._id}_m.#{photo.ext}"
+			document_title: photo.name
+			document_url: "#{url_domain}/#{username}/#{photo._id}"
 			photo: photo
 			photos:
 				from_user: data[0]
@@ -606,6 +616,7 @@ module.exports.listen = listen = () ->
 	_.each config.domains, (value, key, list) ->
 		if available_apps[value]
 			server.use express.vhost key, available_apps[value]
+			url_domain = 'http://' + key  if _.isNull url_domain
 	
 	server.listen config.port || 3000, ->
 		console.log "Listening on port %d \n\n", server.address().port
