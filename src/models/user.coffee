@@ -120,7 +120,8 @@ user.statics.twitter = (token, tokenSecret, profile, next) ->
 	model.findOne
 			'twitter.id': profile.id
 		, (err, doc) ->
-			return next null, doc unless err || doc == null
+			return next err  if err
+			return next null, doc  if doc != null && doc.twitter != null && doc.twitter.token != null
 
 			model.findOne
 					'username': profile._json.screen_name
