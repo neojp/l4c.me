@@ -64,15 +64,16 @@ module.exports.tweet_photo = tweet_photo = function(photo_id, callback) {
     });
     return twit.verifyCredentials(callback);
   }).then(function(data, callback) {
-    var length, photo_name, photo_url, tweet, tweet_format, url_length;
-    create(photo(url));
+    var hashtag, length, photo_name, photo_url, tweet, tweet_format, url_length;
     photo_url = "http://" + (_.first(_.keys(config.domains))) + "/" + user.username + "/" + photo.slug;
-    tweet_format = "" + helpers.heart + " %s [pic] %s " + config.twitter.hashtag;
+    hashtag = config.twitter.hashtag ? ' ' + config.twitter.hashtag : '';
+    tweet_format = "" + helpers.heart + " %s [pic] %s%s";
     url_length = 20;
-    length = 120 - (_.str.sprintf(tweet_format, '', '').length + url_length);
+    length = 120 - (_.str.sprintf(tweet_format, '', '', hashtag).length + url_length);
     photo_name = _.str.truncate(photo.name, length);
-    tweet = _.str.sprintf(tweet_format, photo_name, photo_url);
+    tweet = _.str.sprintf(tweet_format, photo_name, photo_url, hashtag);
     console.log('then tweet status');
+    console.log(tweet);
     twit.updateStatus(tweet, callback);
     return console.log("tweet status " + photo._id + " - " + photo.slug);
   }).rescue(function(err) {
@@ -80,8 +81,8 @@ module.exports.tweet_photo = tweet_photo = function(photo_id, callback) {
     console.error(err);
     return callback(err);
   }).end(null, function(data) {
-    callback(null, data);
-    return console.log("tweet end " + photo._id + " - " + photo.slug);
+    console.log("tweet end " + photo._id + " - " + photo.slug);
+    return callback(null, data);
   });
 };
 
@@ -99,6 +100,6 @@ if (!module.parent) {
   });
   queue.end(null, function(data) {
     console.log("done");
-    return process.exit(1);
+    return process.exit();
   });
 }

@@ -4,6 +4,8 @@ _.str = underscore.str = require 'underscore.string'
 invoke = require 'invoke'
 express = require 'express'
 nodejs_url  = require 'url'
+fs  = require 'fs'
+spawn = require('child_process').spawn
 
 
 # L4C library
@@ -380,9 +382,18 @@ app.post '/fotos/publicar', middleware.auth, (req, res, next) ->
 	# tweet photo
 	queue.then (data, callback) ->
 		if req.user.twitter and req.user.twitter.share
-			spawn = require('child_process').spawn
-			spawn 'node', ['../scripts/twitter.js', photo._id]
-		
+			console.log __dirname + '/../scripts/twitter.js'
+			proc = spawn 'node', ['scripts/twitter.js', photo._id]
+			
+			# log output and errors
+			logBuffer = (buffer) -> console.log buffer.toString()
+			proc.stdout.on 'data', logBuffer
+			proc.stderr.on 'data', logBuffer
+
+			# exit process
+			# proc.on 'exit', (code, signal) ->
+			# 	callback()
+
 		callback()
 
 	# rescue

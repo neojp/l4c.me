@@ -64,24 +64,28 @@ module.exports.tweet_photo = tweet_photo = (photo_id, callback) ->
 
 
 	.then (data, callback) ->
-		create photo url
+		# create photo url
 		photo_url = "http://#{_.first(_.keys(config.domains))}/#{user.username}/#{photo.slug}"
+
+		# hashtag
+		hashtag = if config.twitter.hashtag then ' ' + config.twitter.hashtag else ''
 		
 		# tweet format
-		tweet_format = "#{helpers.heart} %s [pic] %s #{config.twitter.hashtag}"
+		tweet_format = "#{helpers.heart} %s [pic] %s%s"
 		
 		# substract whatever whatever amount of characters we introduced with the heart, hashtag, [pic] and url
 		# tweets can't be over 120
 		# twitter urls are 20 characters long
 		url_length = 20
-		length = 120 - (_.str.sprintf(tweet_format, '', '').length + url_length)
+		length = 120 - (_.str.sprintf(tweet_format, '', '', hashtag).length + url_length)
 
 		# photo names will be truncated with 3 character ellipses
 		photo_name = _.str.truncate photo.name, length
 
 		# create tweet status
-		tweet = _.str.sprintf tweet_format, photo_name, photo_url
+		tweet = _.str.sprintf tweet_format, photo_name, photo_url, hashtag
 		console.log 'then tweet status'
+		console.log tweet
 
 		# post tweet status
 		twit.updateStatus tweet, callback
@@ -99,8 +103,8 @@ module.exports.tweet_photo = tweet_photo = (photo_id, callback) ->
 		# console.log 'end ---------------------------------------> '
 		# console.log data
 		# process.exit(1)
-		callback null, data
 		console.log "tweet end #{photo._id} - #{photo.slug}"
+		callback null, data
 
 
 if !module.parent
@@ -116,4 +120,4 @@ if !module.parent
 
 	queue.end null, (data) ->
 		console.log "done"
-		process.exit 1
+		process.exit()
