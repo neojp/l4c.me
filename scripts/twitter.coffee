@@ -1,7 +1,14 @@
 # twitter module
 
-# Module dependencies
+photo_ids = process.argv.slice 2
 _ = underscore = require "underscore"
+
+if !module.parent && _.isEmpty(photo_ids)
+	throw new Error('No photo ids were passed')
+	return process.exit(1)
+
+
+# Module dependencies
 _.str = underscore.str = require "underscore.string"
 invoke = require "invoke"
 ntwitter = require "ntwitter"
@@ -21,24 +28,27 @@ model =
 
 
 # tweet_photo
-module.exports.tweet_photo = tweet_photo = (photo_id) ->
+module.exports.tweet_photo = tweet_photo = (photo_id, callback) ->
 	twit = null
 	photo = null
 	user = null
 
+	unless _.isFunction callback
+		callback = () ->
+
 	invoke (data, callback) ->
-		# console.log 'init find photo'
+		console.log 'init find photo'
 		model.photo.findOne _id: photo_id, callback
 
 
 	.then (data, callback) ->
-		# console.log 'then find user'
+		console.log 'then find user'
 		photo = data
 		model.user.findOne _id: photo._user, callback
 
 
 	.then (data, callback) ->
-		# console.log 'then verify credentials'
+		console.log 'then verify credentials'
 		user = data
 
 		if not user.twitter
@@ -54,7 +64,7 @@ module.exports.tweet_photo = tweet_photo = (photo_id) ->
 
 
 	.then (data, callback) ->
-		# create photo url
+		create photo url
 		photo_url = "http://#{_.first(_.keys(config.domains))}/#{user.username}/#{photo.slug}"
 		
 		# tweet format
@@ -71,19 +81,39 @@ module.exports.tweet_photo = tweet_photo = (photo_id) ->
 
 		# create tweet status
 		tweet = _.str.sprintf tweet_format, photo_name, photo_url
-		# console.log 'then tweet status'
+		console.log 'then tweet status'
 
 		# post tweet status
 		twit.updateStatus tweet, callback
+		console.log "tweet status #{photo._id} - #{photo.slug}"
 
 
 	.rescue (err) ->
-		# console.error 'error ----------------->'
-		# console.error err
-		process.exit(1)
+		console.error 'error ----------------->'
+		console.error err
+		# process.exit(1)
+		callback err
 
 
 	.end null, (data) ->
 		# console.log 'end ---------------------------------------> '
 		# console.log data
-		process.exit(1)
+		# process.exit(1)
+		callback null, data
+		console.log "tweet end #{photo._id} - #{photo.slug}"
+
+
+if !module.parent
+	queue = invoke (data, callback) ->
+		callback()
+
+	_.each photo_ids, (value, key, list) ->
+		queue.and (data, callback) ->
+			tweet_photo value, callback
+
+	queue.rescue (err) ->
+		process.exit 1
+
+	queue.end null, (data) ->
+		console.log "done"
+		process.exit 1

@@ -377,6 +377,14 @@ app.post '/fotos/publicar', middleware.auth, (req, res, next) ->
 			console.log "photo set slug - #{photo_slug}"
 			callback null, photo_slug
 
+	# tweet photo
+	queue.then (data, callback) ->
+		if req.user.twitter and req.user.twitter.share
+			spawn = require('child_process').spawn
+			spawn 'node', ['../scripts/twitter.js', photo._id]
+		
+		callback()
+
 	# rescue
 	.rescue (err) ->
 		console.log "photo error"
@@ -400,13 +408,30 @@ app.put '/profile', middleware.auth, (req, res) ->
 	has_update = false
 	updated = {}
 
+	# user & email
 	updated.username = req.body.username  if req.user.username != req.body.username && has_update = true
 	updated.email = req.body.email  if req.user.email != req.body.email && has_update = true
 
-	if req.body['change-password'] == 'yes'
+	# password
+	if not _.isUndefined req.body['change-password']
 		p = model.user.encrypt_password req.body.password
 		updated.password = p  if req.user.password != p && has_update = true
 
+	# twitter sharing
+	if twitter = true
+		new_twitter_share = not _.isUndefined(req.body.twitter_share)
+		current_twitter_share = req.user.twitter.share  if _.isObject(req.user.twitter)
+
+		if current_twitter_share
+			if current_twitter_share != new_twitter_share
+				has_update = true
+				updated['twitter.share'] = new_twitter_share
+		
+		else if new_twitter_share
+			has_update = true
+			updated['twitter.share'] = new_twitter_share
+
+	# update
 	if has_update
 		model.user.update({ _id: req.user._id }, { $set: updated }, false, -> res.redirect('/profile'))
 	else

@@ -49,6 +49,7 @@ user = new Schema
 		token: String
 		token_secret: String
 		username: String
+		share: Boolean
 	url:
 		type: String
 		# validate: [validate_url, 'Please enter a valid URL']
