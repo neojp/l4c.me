@@ -97,6 +97,7 @@ get_new_emails = (server) ->
 	upload_photo = (data) ->
 		return if not data.attachments
 
+		user = null
 		uid = _.uniqueId()
 		email = _.first(data.from).address
 		name = data.subject
@@ -116,9 +117,11 @@ get_new_emails = (server) ->
 			photo = new model.photo
 			queue = invoke (data, callback) ->
 				console.log "photo from email: find user by email - #{email}"
-				model.user.findOne email: email, (err, user) -> callback err, user
+				model.user.findOne email: email, callback
 
-			.then (user, callback) ->
+			.then (data, callback) ->
+				user = data
+
 				photo.name = name
 				photo.description = description  if description && description != ''
 				photo.ext = file_ext
@@ -154,6 +157,23 @@ get_new_emails = (server) ->
 					console.log "photo from email: set slug - #{photo_slug}"
 					callback null, photo_slug
 
+			# tweet photo
+			queue.then (data, callback) ->
+				if user.twitter && user.twitter.share
+					script = fs.realpathSync __dirname + '/twitter.js'
+					proc = spawn 'node', [script, photo._id]
+					
+					# log output and errors
+					logBuffer = (buffer) -> console.log buffer.toString()
+					proc.stdout.on 'data', logBuffer
+					proc.stderr.on 'data', logBuffer
+
+					# exit process
+					# proc.on 'exit', (code, signal) ->
+					# 	callback()
+
+				callback()
+
 			# rescue
 			.rescue (err) ->
 				console.log "photo from email: error"
@@ -161,4 +181,4 @@ get_new_emails = (server) ->
 			
 			# end
 			.end null, (data) ->
-			console.log "photo from email: end - #{name}"
+				console.log "photo from email: end - #{name}"
