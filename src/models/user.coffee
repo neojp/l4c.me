@@ -122,7 +122,7 @@ user.statics.twitter = (token, tokenSecret, profile, next) ->
 			'twitter.id': profile.id
 		, (err, doc) ->
 			return next err  if err
-			return next null, doc  if doc != null && doc.twitter != null && doc.twitter.token != null
+			return next null, doc  if doc && doc.twitter && doc.twitter.token && doc.twitter.token_secret
 
 			model.findOne
 					'username': profile._json.screen_name
