@@ -62,14 +62,31 @@ form.profile( method="post", action="/profile" )
 				|  ha sido asociada con esta cuenta. 
 				a.gray.remove() Remover?
 
-		p.twitter
+		hr
+
+		.twitter
 			- if (!user.twitter.id)
-				a.zocial.twitter( href="/login/twitter" ) Enlaza tu Twitter
+				p
+					a.zocial.twitter( href="/login/twitter" ) Enlaza tu Twitter
 			- else
-				| Tu cuenta de Twitter 
-				strong= user.twitter.username
-				|  ha sido asociada a esta cuenta.
-				a.gray.remove( href="//twitter.com/settings/applications" ) Remover?
+				//- | Tu cuenta de Twitter 
+				//- strong= user.twitter.username
+				//- |  ha sido asociada a esta cuenta.
+				//- a.gray.remove( href="//twitter.com/settings/applications" ) Remover?
+				//- br
+				//- br
+				
+				p
+					strong Tu cuenta de Twitter
+				p
+					label
+						- if (!user.twitter.share)
+							input.checkbox( type="checkbox", name="twitter_share" ) 
+						- else
+							input.checkbox( type="checkbox", name="twitter_share", checked ) 
+						| Compartir fotos en Twitter
+
+		hr
 
 		p.googleplus
 			- if (!user.google || !user.google.id)

@@ -46,7 +46,10 @@ user = new Schema
 		type: Number
 	twitter:
 		id: String
+		token: String
+		token_secret: String
 		username: String
+		share: Boolean
 	url:
 		type: String
 		# validate: [validate_url, 'Please enter a valid URL']
@@ -118,7 +121,8 @@ user.statics.twitter = (token, tokenSecret, profile, next) ->
 	model.findOne
 			'twitter.id': profile.id
 		, (err, doc) ->
-			return next null, doc unless err || doc == null
+			return next err  if err
+			return next null, doc  if doc != null && doc.twitter != null && doc.twitter.token != null
 
 			model.findOne
 					'username': profile._json.screen_name
@@ -126,6 +130,8 @@ user.statics.twitter = (token, tokenSecret, profile, next) ->
 				url = profile._json.url?
 				twitter =
 					id: profile.id
+					token: token
+					token_secret: tokenSecret
 					username: profile._json.screen_name
 
 				if doc
