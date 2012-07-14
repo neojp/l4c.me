@@ -6,6 +6,7 @@ imap = require("imap").ImapConnection
 mailparser = require("mailparser").MailParser
 fs = require "fs"
 nodejs_path = require "path"
+spawn = require('child_process').spawn
 
 
 # L4C Library
