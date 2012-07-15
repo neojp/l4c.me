@@ -230,8 +230,66 @@ app.get '/fotos/galeria', (req, res, next) ->
 
 
 app.get '/feed/:user', (req, res) ->
-	user = req.param 'user'
-	res.send "GET /feed/#{user}", 'Content-Type': 'text/plain'
+	username = req.param 'user'
+	feed = null
+	photos = null
+	user = null
+
+	# find user
+	invoke (data, callback) ->
+		model.user.findOne { username: username }, (err, doc) ->
+			return callback err  if err
+			return error_handler(404)(req, res)  if doc == null || doc.username != username
+			
+			user = doc
+			callback null, user
+
+	# find photos
+	.then (data, callback) ->
+		model.photo
+			.find(_user: user._id)
+			.sort('created_at', -1)
+			.limit(config.rss.limit)
+			.exec callback
+
+	# create rss feed
+	.then (data, callback) ->
+		photos = data
+
+		rss = require 'rss'
+		feed = new rss
+			author: username
+			description: "Fotos de #{username}"
+			feed_url: "#{url_domain}/feed/#{username}"
+			image_url: "#{url_domain}/favicon.ico"
+			site_url: "#{url_domain}/#{username}"
+			title: "#{helpers.heart} #{config.info.name} - Fotos de #{username}"
+
+		callback null, feed
+
+	# add feed items
+	.then (data, callback) ->
+		_.each photos, (photo) ->
+			url = "#{url_domain}/#{username}/#{photo.slug}"
+			
+			body = if _.isEmpty(photo.description) then '' else helpers.markdown(photo.description)
+			body += """
+				<p><a href="#{url}"><img src="#{url_domain}/uploads/#{photo._id}_m.#{photo.ext}"></p>
+			"""
+
+			feed.item
+				date: photo.created_at
+				description: body
+				guid: photo._id
+				title: photo.name
+				url: url
+
+		callback null, feed
+
+	# send xml
+	.end null, (data) ->
+		xml = feed.xml()
+		res.send xml, 'Content-Type': 'application/rss+xml'
 
 
 app.get '/login', (req, res, next) ->

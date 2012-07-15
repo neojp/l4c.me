@@ -38,6 +38,7 @@
     "mongoose": ">= 2.5.9",
     "mongoose-types": ">= 1.0.3",
     "nib": "*",
+    "rss": "*",
     "ntwitter": "*",
     "passport": ">= 0.1.6",
     "passport-local": ">= 0.1.0",
