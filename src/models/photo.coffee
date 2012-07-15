@@ -131,13 +131,13 @@ methods =
 
 		invoke (data, callback) ->
 			model.findOne({ _user: photo._user, created_at: { $lt: created_at } }, { slug: 1 })
-				.desc('created_at')
-				.run callback
+				.sort('created_at', -1)
+				.exec callback
 
 		.and (data, callback) ->
 			model.findOne({ _user: photo._user, created_at: { $gt: created_at } }, { slug: 1 })
-				.asc('created_at')
-				.run callback
+				.sort('created_at', 1)
+				.exec callback
 
 		.end null, (data) ->
 			next(null, data)

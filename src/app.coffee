@@ -170,9 +170,9 @@ app.get '/fotos/:sort?', (req, res, next) ->
 			.skip(per_page * (page - 1))
 			.populate('_user')
 		
-		photos.desc('created_at')  if sort == 'ultimas'
-		photos.desc('views', 'created_at')  if sort == 'top'
-		photos.run callback
+		photos.sort('created_at', -1)  if sort == 'ultimas'
+		photos.sort('views', -1, 'created_at', -1)  if sort == 'top'
+		photos.exec callback
 
 	.rescue (err) ->
 		next err  if err
@@ -207,11 +207,11 @@ app.get '/fotos/galeria', (req, res, next) ->
 	.and (data, callback) ->
 		model.photo
 			.find(query)
-			.desc('created_at')
+			.sort('created_at', -1)
 			.limit(per_page)
 			.skip(per_page * (page - 1))
 			.populate('_user')
-			.run callback
+			.exec callback
 
 	.rescue (err) ->
 		next err  if err
@@ -330,7 +330,7 @@ app.get '/login/twitter/remove', middleware.auth, (req, res, next) ->
 
 	# model.user
 	# 	.findOne( _id: req.user._id )
-	# 	.run (err, user) ->
+	# 	.exec (err, user) ->
 	# 		user.twitter = null
 	# 		user.save -> res.redirect('/userinfo')
 
@@ -527,7 +527,7 @@ app.get '/:user/:slug', (req, res, next) ->
 			.findOne( slug: slug )
 			.populate('_user')
 			.populate('comments._user')
-			.run (err, data) ->
+			.exec (err, data) ->
 				return callback err  if err
 				return error_handler(404)(req, res)  if data == null || data._user.username != username
 
@@ -540,7 +540,7 @@ app.get '/:user/:slug', (req, res, next) ->
 	.then (data, callback) ->
 		model.photo
 			.find( _user: user._id )
-			.notEqualTo('_id', photo._id)
+			.ne('_id', photo._id)
 			.sort('created_at', -1)
 			.limit(6)
 			.exec callback
@@ -549,8 +549,8 @@ app.get '/:user/:slug', (req, res, next) ->
 	.and (data, callback) ->
 		model.photo
 			.find()
-			.notEqualTo('_user', photo._user._id)
-			.$or( helpers.random_query() )
+			.ne('_user', photo._user._id)
+			.or( helpers.random_query() )
 			.limit(6)
 			.populate('_user')
 			.exec callback
@@ -630,9 +630,9 @@ app.get '/:user', (req, res, next) ->
 			.find( _user: user._id )
 			.limit(per_page)
 			.skip(per_page * (page - 1))
-			.desc('created_at')
+			.sort('created_at', -1)
 			.populate('_user')
-			.run callback
+			.exec callback
 
 	.rescue (err) ->
 		next err  if err
