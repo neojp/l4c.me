@@ -20,7 +20,8 @@ hr
 
 					div.info
 						span.photo-name
-							a.photo( href= url )= photo.name.replace(/ /g, '&nbsp;') //+ '&nbsp;'
+							//- a.photo( href= url )= photo.name.replace(/ /g, '&nbsp;') //+ '&nbsp;'
+							a.photo( href= url )= photo.name
 								//- small (#{helpers.format_number(photo.views)})
 							br
 							span.by por&nbsp;

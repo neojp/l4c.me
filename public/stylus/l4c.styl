@@ -721,8 +721,9 @@ form.profile
 		display inline-block
 		height 188px
 		margin 15px
-		width 178px
+		text-align center
 		vertical-align middle
+		width 178px
 	
 	a
 		color inherit
@@ -769,19 +770,21 @@ form.profile
 		a.comments
 			display inline-block
 			vertical-align middle
+		
+		span.photo-name
+			max-width 178px - 50
 	
 	a.comments
 		@extends .icon-comment-bubbles
-		border-left 1px solid #ccc
 		color #ff9933
 		font-size 22px
-		height 18px
-		margin-left 8px
+		height 22px
 		opacity 0
 		width 0
 		transition()
 
 	li:hover
+	.hover & li
 		.img img
 			border-color #ccc
 
@@ -789,6 +792,8 @@ form.profile
 			opacity 1
 		
 		a.comments
+			border-left 1px solid #ccc
+			margin-left 8px
 			opacity 1
 			width 35px
 
