@@ -541,10 +541,9 @@ app.get '/:user/:slug', (req, res, next) ->
 		model.photo
 			.find( _user: user._id )
 			.notEqualTo('_id', photo._id)
-			.$or( helpers.random_query() )
-			# .desc('created_at')
+			.sort('created_at', -1)
 			.limit(6)
-			.run callback
+			.exec callback
 
 	# random photos
 	.and (data, callback) ->
@@ -552,10 +551,9 @@ app.get '/:user/:slug', (req, res, next) ->
 			.find()
 			.notEqualTo('_user', photo._user._id)
 			.$or( helpers.random_query() )
-			# .desc('created_at')
 			.limit(6)
 			.populate('_user')
-			.run callback
+			.exec callback
 
 	# prev / next photos from user
 	.and (data, callback) ->
