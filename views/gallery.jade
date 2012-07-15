@@ -1,42 +1,48 @@
-!= partial('_breadcrumb')
+extends layout
 
-hr
+block after-head-meta
+	link( rel="alternate", title="#{helpers.heart} #{site_name} - Fotos de #{username}", href="#{site_domain}/feed/#{username}", type="application/rss+xml" )
 
-!= partial('_pagination')
+block content
+	!= partial('_breadcrumb')
 
-#content
-	- if (photos.length)
-		ul.grid
-			- size = helpers.image.sizes.s
-			- _.each( photos, function(photo) {
-				- user = photo._user;
-				- url = '/' + user.username + '/' + photo.slug;
+	hr
 
-				li
-					div.img
-						a( href= url )
-							img( src= helpers.image.blank, data-src= "/uploads/#{photo._id}_#{size.size}.#{photo.ext}", height= size.height, width= size.width )
-							span.icon-zoom
+	!= partial('_pagination')
 
-					div.info
-						span.photo-name
-							//- a.photo( href= url )= photo.name.replace(/ /g, '&nbsp;') //+ '&nbsp;'
-							a.photo( href= url )= photo.name
-								//- small (#{helpers.format_number(photo.views)})
-							br
-							span.by por&nbsp;
-							strong.username
-								a( href= "/#{user.username}" )= user.username
+	#content
+		- if (photos.length)
+			ul.grid
+				- size = helpers.image.sizes.s
+				- _.each( photos, function(photo) {
+					- user = photo._user;
+					- url = '/' + user.username + '/' + photo.slug;
 
-						a.comments( href= url ): span.hidden Comentarios
+					li
+						div.img
+							a( href= url )
+								img( src= helpers.image.blank, data-src= "/uploads/#{photo._id}_#{size.size}.#{photo.ext}", height= size.height, width= size.width )
+								span.icon-zoom
 
-			- });
-	- else
-		p.aligncenter No hay imagenes disponibles.
-			br
-			strong Y U NO UPLOAD MOAR PICTURES?! 
-				= helpers.yuno
+						div.info
+							span.photo-name
+								//- a.photo( href= url )= photo.name.replace(/ /g, '&nbsp;') //+ '&nbsp;'
+								a.photo( href= url )= photo.name
+									//- small (#{helpers.format_number(photo.views)})
+								br
+								span.by por&nbsp;
+								strong.username
+									a( href= "/#{user.username}" )= user.username
 
-hr
+							a.comments( href= url ): span.hidden Comentarios
 
-!= partial('_pagination')
+				- });
+		- else
+			p.aligncenter No hay imagenes disponibles.
+				br
+				strong Y U NO UPLOAD MOAR PICTURES?! 
+					= helpers.yuno
+
+	hr
+
+	!= partial('_pagination')

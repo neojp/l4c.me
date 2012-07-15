@@ -125,6 +125,8 @@ app.all '*', middleware.redirect_subdomain, middleware.remove_trailing_slash, (r
 		document_image: url_domain + '/images/logo.png'
 		document_title: config.info.name
 		document_url: url_domain
+		site_domain: url_domain
+		site_name: config.info.name
 		helpers: helpers
 		logged_user: if req.isAuthenticated() then req.user else null
 		original_url: req.originalUrl
@@ -643,12 +645,14 @@ app.get '/:user', (req, res, next) ->
 		
 		res.locals
 			body_class: 'gallery user'
+			layout: false
 			pages: Math.ceil count / per_page
 			path: "/#{user.username}"
 			photos: photos
 			sort: null
 			total: count
 			user: user
+			username: username
 
 		res.render 'gallery'
 

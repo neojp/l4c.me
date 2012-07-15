@@ -2,6 +2,7 @@ extends layout
 
 block after-head-meta
 	meta( name="twitter:card", content="photo" )
+	link( rel="alternate", title="#{helpers.heart} #{site_name} - Fotos de #{username}", href="#{site_domain}/feed/#{username}", type="application/rss+xml" )
 
 block before-wrap
 	#img-info
