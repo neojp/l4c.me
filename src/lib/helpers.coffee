@@ -82,8 +82,6 @@ module.exports =
 	markdown: (str) ->
 		marked(str) if _.isString(str)
 
-	pagination: 20
-
 	pretty_date: (date) ->
 		moment(date).fromNow(true)
 

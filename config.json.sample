@@ -38,6 +38,8 @@
 
 	"mongodb": "mongodb://localhost/l4c",
 
+	"pagination": 50,
+
 	"port": 3000,
 	"port_git": 3001,
 
