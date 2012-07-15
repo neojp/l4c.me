@@ -189,7 +189,7 @@ app.get '/fotos/:sort?', (req, res, next) ->
 			sort: sort
 			total: count
 
-		res.render 'gallery'
+		res.render 'gallery', { layout: false }
 
 
 # TODO: Show list of users with his latest 6 photos
@@ -228,7 +228,7 @@ app.get '/fotos/galeria', (req, res, next) ->
 			sort: sort
 			total: count
 
-		res.render 'gallery'
+		res.render 'gallery', { layout: false }
 
 
 app.get '/feed/:user', (req, res) ->
@@ -645,7 +645,6 @@ app.get '/:user', (req, res, next) ->
 		
 		res.locals
 			body_class: 'gallery user'
-			layout: false
 			pages: Math.ceil count / per_page
 			path: "/#{user.username}"
 			photos: photos
@@ -654,7 +653,7 @@ app.get '/:user', (req, res, next) ->
 			user: user
 			username: username
 
-		res.render 'gallery'
+		res.render 'gallery', { layout: false }
 
 
 app.get '/:user/:slug/editar', middleware.auth, (req, res) ->

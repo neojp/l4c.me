@@ -1,7 +1,8 @@
 extends layout
 
 block after-head-meta
-	link( rel="alternate", title="#{helpers.heart} #{site_name} - Fotos de #{username}", href="#{site_domain}/feed/#{username}", type="application/rss+xml" )
+	- if (typeof username !== 'undefined')
+		link( rel="alternate", title="#{helpers.heart} #{site_name} - Fotos de #{username}", href="#{site_domain}/feed/#{username}", type="application/rss+xml" )
 
 block content
 	!= partial('_breadcrumb')
