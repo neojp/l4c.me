@@ -154,7 +154,7 @@ app.get '/fotos/ultimas', (req, res) -> res.redirect '/fotos', 301
 app.get '/fotos/:sort?', (req, res, next) ->
 	sort = req.param 'sort', 'ultimas'
 	page = req.param 'page', 1
-	per_page = helpers.pagination
+	per_page = config.pagination
 	photos = null
 	query = {}
 
@@ -195,7 +195,7 @@ app.get '/fotos/galeria/pag/:page?', middleware.paged('/fotos/galeria')
 app.get '/fotos/galeria', (req, res, next) ->
 	sort = 'galeria'
 	page = req.param 'page', 1
-	per_page = helpers.pagination
+	per_page = config.pagination
 	photos = null
 	query = {}
 
@@ -553,7 +553,7 @@ app.get '/:user/:slug/sizes/:size', (req, res) ->
 app.get '/:user/pag/:page?', middleware.paged('/:user')
 app.get '/:user', (req, res, next) ->
 	username = req.param 'user'
-	per_page = helpers.pagination
+	per_page = config.pagination
 	page = req.param 'page', 1
 	user = null
 	photos = null
