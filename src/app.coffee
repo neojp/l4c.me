@@ -727,10 +727,10 @@ module.exports.listen = listen = () ->
 				process.setuid user.uid
 				console.log "process.setuid #{user.uid}"
 
-		if user.umask
+		if config.umask
 			try
-				process.setumask user.umask
-				console.log "process.setumask #{user.umask}"
+				process.setumask config.umask
+				console.log "process.setumask #{config.umask}"
 
 # Only listen on $ node app.js
 if (!module.parent)
