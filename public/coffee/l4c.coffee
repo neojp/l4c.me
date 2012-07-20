@@ -75,7 +75,7 @@
 				$aside.addClass('active')
 				active = true
 
-				$aside.find('#header-username').trigger('focus')
+				$aside.find('.username').trigger('focus')
 
 				if first
 					$aside.find('img[data-src]').lazyload( load: true )
@@ -115,7 +115,7 @@
 				$(this).parent().toggleClass 'hidden', checked
 				
 				if checked
-					$('#header-password').trigger 'focus'
+					$('.password').trigger 'focus'
 				else
 					$('.change-password-trigger').trigger 'focus'
 
