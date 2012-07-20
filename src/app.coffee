@@ -291,7 +291,7 @@ app.get '/feed/:user', (req, res) ->
 	# send xml
 	.end null, (data) ->
 		xml = feed.xml()
-		res.send xml, 'Content-Type': 'application/rss+xml'
+		res.send xml, 'Content-Type': 'application/xml'
 
 
 app.get '/login', (req, res, next) ->
