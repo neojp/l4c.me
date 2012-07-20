@@ -20,42 +20,4 @@ hr.hidden
 	aside#header-login
 		a#header-login-trigger.button( href="#header-login" ) Entra o Registrate
 		
-		form.login( method="post", action="/login" )
-			span.bg
-			span.topbar
-
-			fieldset.fields
-				legend desde L4C.me
-				
-				p
-					//- label( for="header-username" ) Nombre de usuario
-					input#header-username( type="text", name="username", placeholder="Nombre de usuario", required )
-
-				p
-					//- label( for="header-password" ) Contraseña
-					input#header-password( type="password", name="password", placeholder="Contraseña", required )
-				
-				p.buttons
-					a.forgot( href="/login/forgot" ) Lo olvid&eacute;
-					button( type="submit" ) Iniciar Sesión
-
-			fieldset.social
-				legend desde otros sitios
-
-				p
-					a.zocial.facebook( href="/login/facebook" ) Entra con Facebook
-					a.zocial.twitter( href="/login/twitter" ) Entra con Twitter
-					a.zocial.googleplus.disabled( href="#", tabindex="-1" ) Entra con Google+
-				
-				//- p
-				//- 	a.cristalab.disabled( title="No disponible" )
-				//- 		img( src= helpers.image.blank, data-src="/images/cristalab_32.png", alt="", width="32", height="32" )
-					
-				//- 	a.mdw.disabled( title="No disponible" )
-				//- 		img( src= helpers.image.blank, data-src="/images/mdw_32.png", alt="", width="32", height="32" )
-
-			hr.gray.nomargin
-			fieldset.register
-				p
-					a.button.blue( href="/register" ) Registrate en L4C.me
-					a.close( href="#" ) Cerrar
+		!= partial('_login')
