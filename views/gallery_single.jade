@@ -112,7 +112,7 @@ block content
 					ul.grid
 						- _.each(photos.from_all, function(photo){
 							li
-								a( href="/#{user.username}/#{photo.slug}" )
+								a( href="/#{photo._user.username}/#{photo.slug}" )
 									img( src= helpers.image.blank, data-src= "/uploads/#{photo._id}_t.#{photo.ext}", height= size.height, width= size.width )
 									span.icon-zoom
 						- });
