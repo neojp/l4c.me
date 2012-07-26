@@ -68,7 +68,7 @@ app.configure ->
 	app.use express.session
 			secret: helpers.heart
 			store: new mongo_session
-				url: config.mongodb.extras + '/sessions'
+				url: config.mongodb.system + '/sessions'
 				clear_interval: 3600
 
 	app.use passport.initialize()
