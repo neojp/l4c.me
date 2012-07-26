@@ -974,6 +974,9 @@ form.profile
 	background darken(#00B8F4, 25%)
 	padding 10px 25px
 
+	.wrap
+		@extends .clearfix
+
 	&
 	a
 	h1
@@ -999,13 +1002,9 @@ form.profile
 		vertical-align middle
 		width 20px
 
-	.col
-		display table-cell
-		padding-right 25px
-		width 100%
-
 	.photo-info
-		display table-cell
+		float right
+		margin-left 25px
 
 		p
 			background darken(#00B8F4, 15%)

@@ -7,14 +7,6 @@ block after-head-meta
 block before-wrap
 	#img-info
 		.wrap
-			.col
-				h1= photo.name
-				p.photo-author Por 
-					a.gravatar( href="/#{user.username}" )
-						img( src= helpers.image.blank, data-src= helpers.gravatar(user.email, 50) )
-					|  
-					a( href="/#{user.username}")= user.username
-
 			.photo-info
 				p
 					- comments_total = helpers.format_number(photo.comments.length || 0)
@@ -28,6 +20,14 @@ block before-wrap
 					span.info-date( title= photo.created_at )
 						span.hidden hace&nbsp;
 						= photo.pretty_date.replace(' ', '&nbsp;')
+			
+			.col
+				h1= photo.name
+				p.photo-author Por 
+					a.gravatar( href="/#{user.username}" )
+						img( src= helpers.image.blank, data-src= helpers.gravatar(user.email, 50) )
+					|  
+					a( href="/#{user.username}")= user.username
 
 	#img
 		.img
