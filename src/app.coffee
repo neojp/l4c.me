@@ -21,7 +21,7 @@ url_domain = null
 # Mongoose configuration
 mongo_session = require 'connect-mongo'
 mongoose = require 'mongoose'
-mongoose.connect config.mongodb
+mongoose.connect config.mongodb.app
 model = require './models'
 
 
@@ -65,7 +65,12 @@ app.configure ->
 	app.use express.bodyParser()
 	app.use express.methodOverride()
 	app.use express.cookieParser helpers.heart
-	app.use express.session( secret: helpers.heart, store: new mongo_session( url: config.mongodb + '/sessions' ))
+	app.use express.session
+			secret: helpers.heart
+			store: new mongo_session
+				url: config.mongodb.extras + '/sessions'
+				clear_interval: 3600
+
 	app.use passport.initialize()
 	app.use passport.session()
 	app.use app.router

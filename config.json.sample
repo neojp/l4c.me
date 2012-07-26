@@ -36,7 +36,10 @@
 		}
 	},
 
-	"mongodb": "mongodb://localhost/l4c",
+	"mongodb": {
+		"app": "mongodb://localhost/l4c",
+		"extras": "mongodb://localhost/l4c_extras"
+	},
 
 	"pagination": 50,
 
