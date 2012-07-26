@@ -53,11 +53,10 @@
 
 		# load images only when scrolled over
 		lazyload: () ->
-			$.getScript '/js/jquery.lazyload.min.js', () ->
-				$('img[data-src]').lazyload
-					data_attribute: 'src'
-					effect: 'fadeIn'
-					failure_limit: 10
+			$('img[data-src]').lazyload
+				data_attribute: 'src'
+				effect: 'fadeIn'
+				failure_limit: 10
 
 		# login button on header
 		login: () ->
@@ -76,7 +75,7 @@
 				$aside.addClass('active')
 				active = true
 
-				$aside.find('#header-username').trigger('focus')
+				$aside.find('.username').trigger('focus')
 
 				if first
 					$aside.find('img[data-src]').lazyload( load: true )
@@ -116,7 +115,7 @@
 				$(this).parent().toggleClass 'hidden', checked
 				
 				if checked
-					$('#header-password').trigger 'focus'
+					$('.password').trigger 'focus'
 				else
 					$('.change-password-trigger').trigger 'focus'
 
@@ -134,7 +133,7 @@
 				$('.change-password-trigger').trigger 'click'
 
 
-		#############################################################################
+		#########################################################################
 
 
 		# window.onload event
@@ -150,21 +149,13 @@
 			Site.disabled()
 
 
-		#############################################################################
-
-
-		# load 3rd party scripts
-		load_scripts: () ->
-			# hoverIntent
-			$.getScript '/js/jquery.hoverIntent.minified.js', -> Site.init()
-
-
 	#############################################################################
 
 
-	$(document).on 'ready', Site.load_scripts
+	# document.ready
+	Site.init()
 
-	log $('body').hasClass('js-ready')
+	# window.load
 	if $('body').hasClass('js-ready')
 		Site.load()
 	else

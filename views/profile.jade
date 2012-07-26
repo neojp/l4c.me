@@ -23,10 +23,10 @@ form.profile( method="post", action="/profile" )
 				| El nombre de usuario es usado en la URL de tu perfil y fotos
 				br
 				small
-					| http://l4c.me/
+					| #{site_domain}/
 					strong #{user.username}
 					br
-					| http://l4c.me/
+					| #{site_domain}/
 					strong #{user.username}
 					| /nombre-de-tu-foto
 
@@ -50,54 +50,19 @@ form.profile( method="post", action="/profile" )
 					label.cancel( for="change-password" )
 						a.gray( href="#change-password-trigger" ) Cancelar
 
-	hr
-
-	.social
-		p.facebook
-			- if (!user.facebook.id)
-				a.zocial.facebook( href="/login/facebook" ) Enlaza tu Facebook
-			- else
-				| Tu cuenta de Facebook 
-				strong= user.facebook.username
-				|  ha sido asociada con esta cuenta. 
-				a.gray.remove() Remover?
-
+	- if (user.twitter.id)
 		hr
 
-		.twitter
-			- if (!user.twitter.id)
-				p
-					a.zocial.twitter( href="/login/twitter" ) Enlaza tu Twitter
-			- else
-				//- | Tu cuenta de Twitter 
-				//- strong= user.twitter.username
-				//- |  ha sido asociada a esta cuenta.
-				//- a.gray.remove( href="//twitter.com/settings/applications" ) Remover?
-				//- br
-				//- br
-				
-				p
-					strong Tu cuenta de Twitter
-				p
-					label
-						- if (!user.twitter.share)
-							input.checkbox( type="checkbox", name="twitter_share" ) 
-						- else
-							input.checkbox( type="checkbox", name="twitter_share", checked ) 
-						| Compartir fotos en Twitter
+		.social
+			p
+				label
+					- if (!user.twitter.share)
+						input.checkbox( type="checkbox", name="twitter_share" ) 
+					- else
+						input.checkbox( type="checkbox", name="twitter_share", checked ) 
+					| Comparte tus fotos automaticamente en Twitter
 
-		hr
-
-		p.googleplus
-			- if (!user.google || !user.google.id)
-				a.zocial.googleplus.disabled( href="/login/google" ) Enlaza tu Google+
-			- else
-				| Tu cuenta de Google+ 
-				strong= user.google.username
-				|  ha sido asociada a esta cuenta.
-				a.gray.remove( href="//google.com/" ) Remover?
-
-	hr
+	//- hr
 
 	p.buttons
 		button( type="submit" ) Editar mi perfil
