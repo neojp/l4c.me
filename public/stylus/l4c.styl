@@ -983,6 +983,10 @@ form.profile
 	p
 		margin 0
 
+	h1
+		line-height 1
+		margin-bottom 0.25em
+
 	.photo-author
 		line-height 20px
 
@@ -995,27 +999,31 @@ form.profile
 		vertical-align middle
 		width 20px
 
+	.col
+		display table-cell
+		padding-right 25px
+		width 100%
+
 	.photo-info
-		background darken(#00B8F4, 15%)
-		border-radius()
-		bottom 0
-		padding 10px 10px 10px 15px
-		position absolute
-		right 0
+		display table-cell
 
-		> span
-		> a
-			border 0
-			display inline-block
-			margin-left 1em
+		p
+			background darken(#00B8F4, 15%)
+			border-radius()
+			padding 10px 10px 10px 15px
 
-			&:first-child
-				margin-left 0
+			> span
+			> a
+				border 0
+				margin-left 1em
 
-			&:before
-				font-size 1.2em
-				margin-right 0.5em
-				vertical-align middle
+				&:first-child
+					margin-left 0
+
+				&:before
+					font-size 1.2em
+					margin-right 0.5em
+					vertical-align middle
 
 	.info-comments
 		@extends .icon-comment-bubbles
