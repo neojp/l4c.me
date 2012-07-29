@@ -18,7 +18,7 @@ delay = 1 * 60 * 1000
 # Mongoose configuration
 mongo_session = require 'connect-mongo'
 mongoose = require 'mongoose'
-mongoose.connect config.mongodb
+mongoose.connect config.mongodb.app
 
 model = 
 	user: require "../build/models/user"
