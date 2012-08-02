@@ -41,6 +41,25 @@ methods =
 				
 				slug_lookup err, count
 
+	set_image_data: (next) ->
+		gm = require 'gm'
+		doc = this
+		file_path = nodejs_path.normalize "#{__dirname}/../../public/uploads/#{doc._id}_o.#{doc.image.ext}"
+		next = if _.isFunction next then next else () ->
+		
+		gm(file_path).identify (err, data) ->
+			return next err  if err
+			
+			doc.image.height = data.size.height
+			doc.image.width = data.size.width
+
+			is_panorama = data.size.width >= data.size.height * 2
+			doc.image.panorama = true  if is_panorama
+
+			doc.save (err) ->
+				return next err  if err
+				next null, doc
+
 	resize_photo: (size, src, next) ->
 		if _.isFunction src
 			next = src
@@ -54,8 +73,8 @@ methods =
 			return next new Error 'Image size required'
 
 		doc = this
-		dest = nodejs_path.normalize "#{__dirname}/../../public/uploads/#{doc._id}_#{size.size}.#{doc.ext}"
-		src = nodejs_path.normalize "#{__dirname}/../../public/uploads/#{doc._id}_o.#{doc.ext}"  if _.isNull src
+		dest = nodejs_path.normalize "#{__dirname}/../../public/uploads/#{doc._id}_#{size.size}.#{doc.image.ext}"
+		src = nodejs_path.normalize "#{__dirname}/../../public/uploads/#{doc._id}_o.#{doc.image.ext}"  if _.isNull src
 
 		callback = (err, stdout, stderr) ->
 			console.log "photo #{size.action} end #{size.size}", stdout, stderr
@@ -67,7 +86,7 @@ methods =
 			im[size.action]
 				dstPath: dest
 				filter: 'Cubic'  #  Lagrange is only available on v6.3.7-1
-				format: doc.ext
+				format: doc.image.ext
 				height: size.height
 				srcPath: src
 				width: size.width
@@ -108,9 +127,9 @@ methods =
 
 	upload_photo: (file_path, next) ->
 		doc = this
-		console.log 'photo upload', file_path, '->', "#{doc._id}_o.#{doc.ext}"
+		console.log 'photo upload', file_path, '->', "#{doc._id}_o.#{doc.image.ext}"
 
-		upload_path = nodejs_path.normalize "#{__dirname}/../../public/uploads/#{doc._id}_o.#{doc.ext}"
+		upload_path = nodejs_path.normalize "#{__dirname}/../../public/uploads/#{doc._id}_o.#{doc.image.ext}"
 
 		alternate_upload = (path1, path2) ->
 			origin = fs.createReadStream path1
@@ -173,9 +192,13 @@ photo = new Schema
 		required: true
 		type: Date
 	description: String
-	ext:
-		type: String
-		enum: ['gif', 'jpg', 'png']
+	image:
+		ext:
+			type: String
+			enum: ['gif', 'jpg', 'png']
+		height: Number
+		panorama: Boolean
+		width: Number
 	name:
 		required: true
 		type: String
@@ -184,16 +207,9 @@ photo = new Schema
 		index: true
 		set: (v) -> Math.random()
 		type: Number
-	# sizes:
-	# 	l: String
-	# 	m: String
-	# 	s: String
-	# 	t: String
-	# 	o: String
 	slug:
-		# required: true
+		index: true
 		type: String
-		# unique: true
 	views:
 		default: 0
 		type: Number
@@ -201,16 +217,8 @@ photo = new Schema
 # virtual: pretty_date
 photo.virtual('pretty_date').get methods.pretty_date
 
-
-# photo.pre 'save', middleware.pre_slug
-# photo.pre 'save', (next) ->
-# 	if _.isUndefined this.slug
-# 		this.slug = this._id
-	
-# 	next()
-
-
 photo.methods.set_slug = methods.set_slug
+photo.methods.set_image_data = methods.set_image_data
 photo.methods.resize_photo = methods.resize_photo
 photo.methods.resize_photos = methods.resize_photos
 photo.methods.upload_photo = methods.upload_photo

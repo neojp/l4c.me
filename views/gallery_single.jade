@@ -32,8 +32,11 @@ block before-wrap
 	#img
 		.img
 			a( href="/#{username}/#{slug}/sizes/o" )
-				//- img( src= helpers.image.blank, data-src= "/uploads/#{photo._id}_m.#{photo.ext}" )
-				img( src= "/uploads/#{photo._id}_m.#{photo.ext}" )
+				- if (photo.image.panorama)
+					img( src= "/uploads/#{photo._id}_o.#{photo.image.ext}" )
+				- else
+					img( src= "/uploads/#{photo._id}_m.#{photo.image.ext}" )
+
 			.icons
 				a.icon-zoom( href="/#{username}/#{slug}/sizes/g" )
 				- // a.icon-edit( href="/#{username}/#{slug}/editar" )
@@ -99,7 +102,7 @@ block content
 					- _.each(from_user, function(photo){
 						li
 							a( href="/#{username}/#{photo.slug}" )
-								img( src= helpers.image.blank, data-src= "/uploads/#{photo._id}_t.#{photo.ext}", height= size.height, width= size.width )
+								img( src= helpers.image.blank, data-src= "/uploads/#{photo._id}_t.#{photo.image.ext}", height= size.height, width= size.width )
 								span.icon-zoom
 					- });
 
@@ -114,7 +117,7 @@ block content
 						- _.each(photos.from_all, function(photo){
 							li
 								a( href="/#{photo._user.username}/#{photo.slug}" )
-									img( src= helpers.image.blank, data-src= "/uploads/#{photo._id}_t.#{photo.ext}", height= size.height, width= size.width )
+									img( src= helpers.image.blank, data-src= "/uploads/#{photo._id}_t.#{photo.image.ext}", height= size.height, width= size.width )
 									span.icon-zoom
 						- });
 					

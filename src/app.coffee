@@ -281,7 +281,7 @@ app.get '/feed/:user', (req, res) ->
 			
 			body = if _.isEmpty(photo.description) then '' else helpers.markdown(photo.description)
 			body += """
-				<p><a href="#{url}"><img src="#{url_domain}/uploads/#{photo._id}_m.#{photo.ext}"></p>
+				<p><a href="#{url}"><img src="#{url_domain}/uploads/#{photo._id}_m.#{photo.image.ext}"></p>
 			"""
 
 			feed.item
@@ -425,7 +425,7 @@ app.post '/fotos/publicar', middleware.auth, (req, res, next) ->
 	queue = invoke (data, callback) ->
 		photo.name = name
 		photo.description = description  if description && description != ''
-		photo.ext = file_ext
+		photo.image.ext = file_ext
 		photo._user = user._id
 		photo.save (err) ->
 			console.log "photo create - #{name}"
@@ -437,6 +437,9 @@ app.post '/fotos/publicar', middleware.auth, (req, res, next) ->
 		photo.upload_photo file.path, (err) ->
 			return callback err  if err
 			photo.resize_photos callback
+
+	.then (data, callback) ->
+		photo.set_image_data callback
 
 	# set photo slug
 	queue.and (data, callback) ->
@@ -573,9 +576,9 @@ app.get '/:user/:slug', (req, res, next) ->
 		photo.next = data[2][1]
 		
 		res.locals
-			body_class: 'user single'
+			body_class: 'user single' + if photo.image.panorama then ' panorama' else ''
 			document_descrition: photo.description || ''
-			document_image: "#{url_domain}/uploads/#{photo._id}_m.#{photo.ext}"
+			document_image: "#{url_domain}/uploads/#{photo._id}_m.#{photo.image.ext}"
 			document_title: photo.name
 			document_url: "#{url_domain}/#{username}/#{photo._id}"
 			photo: photo
@@ -596,7 +599,7 @@ app.get '/:user/:slug/sizes/:size', (req, res) ->
 	model.photo
 		.findOne( slug: slug )
 		.populate('_user')
-		.run (err, photo) ->
+		.exec (err, photo) ->
 			return next err  if err
 			return error_handler(404)(req, res)  if !photo
 
@@ -674,7 +677,7 @@ app.get '/:user/:slug/editar', middleware.auth, (req, res) ->
 		model.photo
 			.findOne( _user: user._id, slug: slug )
 			.populate('_user')
-			.run callback
+			.exec callback
 
 	.then (data, callback) ->
 		photo.resize_photos(404)(req, res)  if !data
