@@ -135,7 +135,9 @@ get_new_emails = function(server) {
         if (description && description !== '') {
           photo.description = description;
         }
-        photo.ext = file_ext;
+        photo.image = {
+          ext: file_ext
+        };
         photo.slug = 'from-mail-' + uid + '-' + nodejs_path.normalize(photo.name) + '-' + Math.random();
         photo._user = user._id;
         return photo.save(function(err) {
@@ -149,14 +151,19 @@ get_new_emails = function(server) {
             return callback(err);
           }
           return photo.resize_photos(function(err, dest) {
-            processed_emails++;
-            if (processed_emails === total_emails) {
-              console.log("Done fetching all messages! Will retry in " + delay + "ms");
-              setTimeout(function() {
-                return get_new_emails(server);
-              }, delay);
+            if (err) {
+              return callback(err);
             }
-            return callback(err, dest);
+            return photo.set_image_data(function(err) {
+              processed_emails++;
+              if (processed_emails === total_emails) {
+                console.log("Done fetching all messages! Will retry in " + delay + "ms");
+                setTimeout(function() {
+                  return get_new_emails(server);
+                }, delay);
+              }
+              return callback(err, dest);
+            });
           });
         });
       });

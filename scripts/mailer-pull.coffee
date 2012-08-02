@@ -125,7 +125,7 @@ get_new_emails = (server) ->
 
 				photo.name = name
 				photo.description = description  if description && description != ''
-				photo.ext = file_ext
+				photo.image = { ext: file_ext }
 				photo.slug = 'from-mail-' + uid + '-' + nodejs_path.normalize(photo.name) + '-' + Math.random()
 				photo._user = user._id
 				photo.save (err) ->
@@ -141,16 +141,19 @@ get_new_emails = (server) ->
 					return callback err  if err
 					
 					photo.resize_photos (err, dest) ->
-						processed_emails++
+						return callback err  if err
 
-						if processed_emails == total_emails
-							console.log "Done fetching all messages! Will retry in #{delay}ms"
-							
-							setTimeout ->
-								get_new_emails server
-							, delay
+						photo.set_image_data (err) ->
+							processed_emails++
 
-						callback err, dest
+							if processed_emails == total_emails
+								console.log "Done fetching all messages! Will retry in #{delay}ms"
+								
+								setTimeout ->
+									get_new_emails server
+								, delay
+
+							callback err, dest
 
 			# set photo slug
 			queue.and (data, callback) ->
