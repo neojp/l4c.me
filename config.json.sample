@@ -37,8 +37,22 @@
 	},
 
 	"mongodb": {
-		"app": "mongodb://localhost/l4c",
-		"system": "mongodb://localhost/l4c_system"
+		"app": {
+			"db": "l4c",
+			"host": "localhost",
+			"password": null,
+			"port": null,
+			"url": "mongodb://localhost/l4c",
+			"user": null
+		},
+		"system": {
+			"db": "l4c_system",
+			"host": "localhost",
+			"password": null,
+			"port": null,
+			"url": "mongodb://localhost/l4c_system",
+			"user": null
+		}
 	},
 
 	"pagination": 50,

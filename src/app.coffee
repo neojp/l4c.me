@@ -21,7 +21,7 @@ url_domain = null
 # Mongoose configuration
 mongo_session = require 'connect-mongo'
 mongoose = require 'mongoose'
-mongoose.connect config.mongodb.app
+mongoose.connect config.mongodb.app.url
 model = require './models'
 
 
@@ -68,7 +68,7 @@ app.configure ->
 	app.use express.session
 			secret: helpers.heart
 			store: new mongo_session
-				url: config.mongodb.system + '/sessions'
+				url: config.mongodb.system.url + '/sessions'
 				clear_interval: 3600
 
 	app.use passport.initialize()

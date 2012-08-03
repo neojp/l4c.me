@@ -20,7 +20,7 @@ helpers = require "../build/lib/helpers"
 # Mongoose configuration
 mongo_session = require 'connect-mongo'
 mongoose = require 'mongoose'
-mongoose.connect config.mongodb.app
+mongoose.connect config.mongodb.app.url
 
 model = 
 	user: require "../build/models/user"

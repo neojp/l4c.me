@@ -15,7 +15,7 @@ var mongo_session = require('connect-mongo'),
     Schema = mongoose.Schema,
     ObjectId = Schema.ObjectId;
 
-mongoose.connect(config.mongodb.app);
+mongoose.connect(config.mongodb.app.url);
 
 
 // L4C Models
@@ -67,8 +67,24 @@ function fix_photo_ext(next) {
 	};
 
 
+	// parse db info and create the parameters
+	var c = config.mongodb.app;
+	var args = [];
+	
+	if (c.user)
+		args.push('-u', c.user);
+	
+	if (c.password)
+		args.push('-p', c.password);
+
+	var host_db = c.host + (c.port ? ':' + c.port : '') + '/' + c.db;
+	args.push(host_db);
+
+	args.push('--eval');
+	args.push('f = ' + mongodb_shell_script.toString() + '; f();');
+
 	// run mongo script in a child process
-	var proc = spawn('mongo', [config.mongodb.app.replace('mongodb://', ''), '--eval', 'f = ' + mongodb_shell_script.toString() + '; f();']);
+	var proc = spawn('mongo', args);
 
 	proc.stdout.on('data', function(data){
 		console.log('stdout: ' + data);
