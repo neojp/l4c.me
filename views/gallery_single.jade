@@ -20,6 +20,8 @@ block before-wrap
 					span.info-date( title= photo.created_at )
 						span.hidden hace&nbsp;
 						= photo.pretty_date.replace(' ', '&nbsp;')
+
+				a.button.upload( href="/fotos/publicar" ) Sube una foto
 			
 			.col
 				h1= photo.name

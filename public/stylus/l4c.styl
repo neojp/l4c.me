@@ -94,23 +94,26 @@ a.button
 .wrap
 	margin 0 auto
 	position relative
-	max-width 1475px
+	// max-width 1475px
+	max-width 1000px
 
 #header
-	background #00b8f4
-	min-height 60px
+	// background #00b8f4
+	background darken(#00B8F4, 25%)
+	min-height 68px
 	position relative
 	z-index 3
 
 	.wrap
-		clearfix()
+		@extends .clearfix
+		padding 15px 10px 0
 
 	&, a
 		border 0
 		color #fff
 
 	#logo
-		left 15px
+		left 10px
 		margin 0
 		position absolute
 		top 3px
@@ -153,52 +156,58 @@ a.button
 			&.active > a
 				background #0a93ca
 			
+#header-login
+	float right
+	// margin-right 10px
+	// padding 18px 5px 0 0
+	// height 25px
+	// line-height 25px
+	// position relative
+
+	a
+		text-decoration none
 	
-	aside
-		float right
-		margin-right 10px
-		padding 18px 5px 0 0
+	a.username
+		border-bottom 2px solid #80dcfa
+		
+		&:hover
+			border-color #fff
+	
+	a.profile, a.logout
+		display inline-block
 		height 25px
-		line-height 25px
-		position relative
+		margin 0 3px
+		padding 0 10px
+		border-radius( 5px )
 
-		a
-			text-decoration none
-		
-		a.username
-			border-bottom 2px solid #80dcfa
-			
-			&:hover
-				border-color #fff
-		
-		a.profile, a.logout
-			display inline-block
-			height 25px
-			margin 0 3px
-			padding 0 10px
-			border-radius( 5px )
+		span
+			border-left 1px solid #37cdff
+			height 20px
+			margin-left 8px
+			padding 0 0 0 5px
 
-			span
-				border-left 1px solid #37cdff
-				height 20px
-				margin-left 8px
-				padding 0 0 0 5px
-
-		a.profile
-			background #c2ecfc
-			color #0a93ca
-		
-		a.logout
-			background #0a93ca
-			color #c2ecfc
+	a.profile
+		background #c2ecfc
+		color #0a93ca
+	
+	a.logout
+		background #0a93ca
+		color #c2ecfc
 
 #header-login-trigger
 	@extends .icon-login
+
+	font-size 1.35em
+	line-height 36px
+	margin-left 10px
+	padding 0 10px
 
 	&:before
 		margin-right 0.5em
 
 #header-login
+	position relative
+
 	&.active
 		#header-login-trigger
 			border-radius( 5px 5px 0 0 )
@@ -207,7 +216,7 @@ a.button
 			left auto
 			opacity 1
 			right 0
-			top 47px
+			top 29px
 
 	form.login
 		background #F7F7F7
@@ -542,7 +551,7 @@ form.profile
 
 #wrap
 	margin 0 auto
-	max-width 1475px
+	// max-width 1475px
 	padding 25px
 
 #message
@@ -802,7 +811,7 @@ form.profile
 	width auto
 
 #content-sidebar-wrap
-	max-width 1475px
+	// max-width 1475px
 	clearfix()
 
 	#content
@@ -970,10 +979,10 @@ form.profile
 #img-info
 	@extends .clearfix
 	background darken(#00B8F4, 25%)
-	padding 10px 25px
 
 	.wrap
 		@extends .clearfix
+		padding 10px
 
 	&
 	a
@@ -1278,9 +1287,10 @@ body.single
 	#wrap
 		padding-top 0
 
-	#img-info .wrap
-	#content-sidebar-wrap
-		max-width 1000px
+	// #header .wrap
+	// #img-info .wrap
+	// #content-sidebar-wrap
+	// 	max-width 1000px
 
 	#content-sidebar-wrap nav.pagination
 		float right
@@ -1442,3 +1452,56 @@ body.upload
 			@extends .icon-photo
 			&:before
 				margin-right 0.5em
+
+
+body.single.small-header
+	#header
+		height 0
+		min-height 0
+
+		#logo
+			background url("images/logo_simple.png") no-repeat right center
+			background-size 36.5px 36.5px
+			height 36.5px
+			top 15px
+			width 36.5px
+
+			img
+				display none
+
+	#header-login
+		margin 0
+		padding 0
+		position absolute
+		right 25px
+		top 60px
+		display none
+
+	#img-info
+		padding 10px 0
+
+		.col
+			padding-left 60px
+
+		h1
+			line-height 0.9
+
+		.photo-info
+			margin-top 5px
+
+			p
+				display inline-block
+				vertical-align bottom
+
+		a.upload
+			font-size 1.35em
+			line-height 36px
+			margin-left 10px
+			padding 0 10px
+
+			@extends .icon-photo
+			&:before
+				margin-right 0.5em
+
+			&:hover
+				background-color lighten( #ff9933, 10% )
