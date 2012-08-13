@@ -21,7 +21,6 @@ html( lang="es" )
 		block after-head-meta
 	
 	- body_class += logged_user ? ' logged-in' : '';
-	- body_class += ' small-header';
 	body( class= body_class )
 		script document.body.className += ' js-enable ';
 

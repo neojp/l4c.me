@@ -576,7 +576,7 @@ app.get '/:user/:slug', (req, res, next) ->
 		photo.next = data[2][1]
 		
 		res.locals
-			body_class: 'user single' + if photo.image.panorama then ' panorama' else ''
+			body_class: 'small-header user single' + if photo.image.panorama then ' panorama' else ''
 			document_descrition: photo.description || ''
 			document_image: "#{url_domain}/uploads/#{photo._id}_m.#{photo.image.ext}"
 			document_title: photo.name
@@ -607,7 +607,7 @@ app.get '/:user/:slug/sizes/:size', (req, res) ->
 			photo.save()
 
 			locals =
-				body_class: 'user sizes'
+				body_class: 'small-header  user sizes'
 				photo: photo
 				size: req.param 'size'
 				slug: slug

@@ -20,8 +20,6 @@ block before-wrap
 					span.info-date( title= photo.created_at )
 						span.hidden hace&nbsp;
 						= photo.pretty_date.replace(' ', '&nbsp;')
-
-				a.button.upload( href="/fotos/publicar" ) Sube una foto
 			
 			.col
 				h1= photo.name
@@ -93,9 +91,6 @@ block content
 					//- a.icon-cristalab( href="#cristalab" ): span.hidden Cristalab
 					
 					a.icon-rss( href="#{site_domain}/feed/#{username}" ): span.hidden RSS
-
-			#upload
-				a( href="/fotos/publicar" ) Sube una foto
 
 			- var size = helpers.image.sizes.t;
 			.widget

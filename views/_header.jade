@@ -1,23 +1,29 @@
 p#logo
-	a( href="/", title="L4C.me" )
+	a( href="/", title= site_name )
 		img( src="/images/logo.png", alt="", width="156", height="50" )
 
 hr.hidden
 
-- if (logged_user)
-	aside
-		p Hola 
-			a.username( href= "/" + logged_user.username )= logged_user.username
-			|, puedes 
-			a.profile( href="/profile" ) editar tu perfil
-				span.icon-profile
-			|  o 
-			a.logout( href="/logout" ) salir
-				span.icon-logout
+- if (original_url.indexOf('/login') !== 0 && original_url.indexOf('/registro') !== 0)
 
-- else if (original_url.indexOf('/login') !== 0 && original_url.indexOf('/registro') !== 0)
+	aside#header-upload
+		a.button.upload( href="/fotos/publicar" ) Sube una foto
 
-	aside#header-login
-		a#header-login-trigger.button( href="#header-login" ) Entra o Registrate
+
+//- - if (logged_user)
+//- 	aside
+//- 		p Hola 
+//- 			a.username( href= "/" + logged_user.username )= logged_user.username
+//- 			|, puedes 
+//- 			a.profile( href="/profile" ) editar tu perfil
+//- 				span.icon-profile
+//- 			|  o 
+//- 			a.logout( href="/logout" ) salir
+//- 				span.icon-logout
+
+//- - else if (original_url.indexOf('/login') !== 0 && original_url.indexOf('/registro') !== 0)
+
+//- 	aside#header-login
+//- 		a#header-login-trigger.button( href="#header-login" ) Entra o Registrate
 		
-		!= partial('_login')
+//- 		!= partial('_login')

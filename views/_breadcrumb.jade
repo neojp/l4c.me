@@ -21,9 +21,6 @@ nav#breadcrumb
 			li.active
 				a( href="/fotos/#{user.username}" )= user.username
 
-			li#upload
-				a( href="/fotos/publicar" ) Sube una foto
-
 	- else
 		ul
 			- var className = '';
@@ -39,6 +36,3 @@ nav#breadcrumb
 			- className = (sort == 'galeria') ? 'active' : '';
 			li( class= className )
 				a( href="/fotos/galeria" ) Galer&iacute;as de Usuarios
-			
-			li#upload
-				a( href="/fotos/publicar" ) Sube una foto

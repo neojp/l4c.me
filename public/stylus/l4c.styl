@@ -94,8 +94,8 @@ a.button
 .wrap
 	margin 0 auto
 	position relative
-	// max-width 1475px
-	max-width 1000px
+	max-width 1475px
+	// max-width 1000px
 
 #header
 	// background #00b8f4
@@ -110,24 +110,24 @@ a.button
 
 	&, a
 		border 0
-		color #fff
+	color #fff
 
-	#logo
-		left 10px
-		margin 0
-		position absolute
-		top 3px
+#logo
+	left 10px
+	margin 0
+	position absolute
+	top 3px
 
-		a
-			display block
-			height 100%
+	a
+		display block
+		height 100%
 
-	#nav-aside
-		float right
-		font-size 1.2em
-		width 720px
-		width 75%
-	
+#nav-aside
+	float right
+	font-size 1.2em
+	width 720px
+	width 75%
+
 	nav
 		float left
 		height 30px
@@ -155,7 +155,23 @@ a.button
 			> a:hover,
 			&.active > a
 				background #0a93ca
-			
+
+#header-upload
+	float right
+
+	a.upload
+		font-size 1.35em
+		line-height 36px
+		margin-left 10px
+		padding 0 10px
+
+		@extends .icon-photo
+		&:before
+			margin-right 0.5em
+
+		&:hover
+			background-color lighten( #ff9933, 10% )
+
 #header-login
 	float right
 	// margin-right 10px
@@ -587,9 +603,9 @@ form.profile
 		width 22px
 
 #breadcrumb
-	height 45px
+	@extends .clearfix
 	line-height 45px
-	margin 0 0 25px
+	margin 0 auto 25px
 	position relative
 	
 	h1
@@ -621,39 +637,6 @@ form.profile
 		li.active a
 			border-color #ffd6ae
 			color #ffae5e
-
-#upload
-	background none
-	height 45px
-	line-height 45px
-	margin 0
-	padding 0 !important
-	
-	a
-		background #ff9933
-		border 0 !important
-		color #fff !important
-		display inline-block
-		font-size 22px
-		font-weight bold
-		padding 0 24px
-		border-radius( 5px )
-		transition()
-
-		@extends .icon-photo
-		&:before
-			margin-right 0.5em
-
-		&:hover
-			background-color lighten( #ff9933, 10% )
-
-#breadcrumb #upload
-	float right !important
-
-#sidebar #upload
-	float none !important
-	margin 0 -10px 40px 0
-	text-align right
 
 .pagination
 	font-weight bold
@@ -1297,44 +1280,31 @@ body.single
 		margin 0
 		padding 0
 
-	#sidebar #upload
-		text-align center
-		width 100%
-
-		a
-			display block
-
 body.sizes
 	#breadcrumb
-		line-height 1
+		line-height 45px
 		margin-bottom 0
 
 		.col
 			float left
-
-			h1
-				margin-top 0.25em
+			padding-left 10px
 
 		ul.col
 			float right
-			line-height 45px
-
-		a
-			color #fff
 
 		ul
 			float right
 			font-size 1.2em
 
-		li
-			background-image url("../images/sep_white.png")
+		// li
+		// 	background-image url("../images/sep_white.png")
 			
-			&:first-child
-				background none
+		// 	&:first-child
+		// 		background none
 
-		li.active a
-			border-color #fff
-			color #fff
+		// li.active a
+		// 	border-color #fff
+		// 	color #fff
 	
 	#content
 		text-align center
@@ -1454,20 +1424,21 @@ body.upload
 				margin-right 0.5em
 
 
-body.single.small-header
+body.small-header
 	#header
+	#header > .wrap
 		height 0
 		min-height 0
 
-		#logo
-			background url("images/logo_simple.png") no-repeat right center
-			background-size 36.5px 36.5px
-			height 36.5px
-			top 15px
-			width 36.5px
+	#logo
+		background url("images/logo_simple.png") no-repeat right center
+		background-size 36.5px 36.5px
+		height 36.5px
+		top 15px
+		width 36.5px
 
-			img
-				display none
+		img
+			display none
 
 	#header-login
 		margin 0
@@ -1481,7 +1452,7 @@ body.single.small-header
 		padding 10px 0
 
 		.col
-			padding-left 60px
+			padding-left 50px
 
 		h1
 			line-height 0.9
@@ -1493,15 +1464,5 @@ body.single.small-header
 				display inline-block
 				vertical-align bottom
 
-		a.upload
-			font-size 1.35em
-			line-height 36px
-			margin-left 10px
-			padding 0 10px
-
-			@extends .icon-photo
-			&:before
-				margin-right 0.5em
-
-			&:hover
-				background-color lighten( #ff9933, 10% )
+	#header-upload
+		padding-top 10px
