@@ -101,49 +101,6 @@
 			$body.on 'keyup', (e) -> close 'click.login' if active && e.which == 27
 			$container.on 'click.header', (e) -> e.stopPropagation()
 
-
-		# login button on header
-		# login: () ->
-		# 	first = true
-		# 	active = false
-
-		# 	$aside = $('#header aside')
-		# 	$trigger = $('#header-login-trigger')
-		# 	$close = $('#header a.close')
-
-		# 	open = (e) ->
-		# 		e.stopPropagation()
-		# 		e.preventDefault()
-		# 		return if active
-
-		# 		$aside.addClass('active')
-		# 		active = true
-
-		# 		$aside.find('.username').trigger('focus')
-
-		# 		if first
-		# 			$aside.find('img[data-src]').lazyload( load: true )
-		# 			first = false
-
-		# 	close = (e) ->
-		# 		if !active
-		# 			return
-				
-		# 		$aside.removeClass('active')
-		# 		$trigger.trigger('focus')
-		# 		active = false
-
-		# 	$trigger
-		# 		.on('click.login', open)
-		# 		.hoverIntent
-		# 			over: open
-		# 			out: $.noop
-
-		# 	$close.on 'click.login', close
-		# 	$body.on 'click.login', -> $close.trigger 'click.login' if active
-			
-		# 	$body.on 'click.login', 'aside', (e) -> e.stopPropagation()
-
 		# check if current browser is safari mobile
 		mobile: () ->
 			navigator.appVersion.toLowerCase().indexOf("mobile") > -1
