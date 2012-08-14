@@ -43,7 +43,7 @@
 			$('a.disabled').on 'click', (e) ->
 				e.preventDefault()
 				e.stopPropagation()
-		
+
 		# add ie fallback elements
 		ie_fallback: () ->
 			log 'Y U NO STOP USING IE!! ლ(ಠ益ಠლ)'
@@ -58,47 +58,91 @@
 				effect: 'fadeIn'
 				failure_limit: 10
 
-		# login button on header
-		login: () ->
-			first = true
+		# logged in dropdown on header
+		logged_header: () ->
 			active = false
 
-			$aside = $('#header aside')
-			$trigger = $('#header-login-trigger')
-			$close = $('#header a.close')
+			$container = $('#header-profile')
+			$trigger = $('#header-gravatar')
 
 			open = (e) ->
 				e.stopPropagation()
 				e.preventDefault()
 				return if active
 
-				$aside.addClass('active')
 				active = true
-
-				$aside.find('.username').trigger('focus')
-
-				if first
-					$aside.find('img[data-src]').lazyload( load: true )
-					first = false
+				$container.addClass('active')
+				
+				$links = $container.find('ul a').removeAttr('tabindex')
+				$links.eq(0).trigger('focus')
 
 			close = (e) ->
 				if !active
 					return
-				
-				$aside.removeClass('active')
+
+				$container.removeClass('active')
+				$container.find('ul a').attr('tabindex', '-1')
 				$trigger.trigger('focus')
 				active = false
 
-			$trigger
-				.on('click.login', open)
-				.hoverIntent
-					over: open
-					out: $.noop
+			$trigger.on 'click.header', (e) ->
+				e.preventDefault()
 
-			$close.on 'click.login', close
-			$body.on 'click.login', -> $close.trigger 'click.login' if active
+				if !active
+					open e
+				else
+					close e
+
+			$trigger.hoverIntent
+				over: open
+				out: $.noop
+
+			$body.on 'click.header', -> close 'click.login' if active
+			$body.on 'keyup', (e) -> close 'click.login' if active && e.which == 27
+			$container.on 'click.header', (e) -> e.stopPropagation()
+
+
+		# login button on header
+		# login: () ->
+		# 	first = true
+		# 	active = false
+
+		# 	$aside = $('#header aside')
+		# 	$trigger = $('#header-login-trigger')
+		# 	$close = $('#header a.close')
+
+		# 	open = (e) ->
+		# 		e.stopPropagation()
+		# 		e.preventDefault()
+		# 		return if active
+
+		# 		$aside.addClass('active')
+		# 		active = true
+
+		# 		$aside.find('.username').trigger('focus')
+
+		# 		if first
+		# 			$aside.find('img[data-src]').lazyload( load: true )
+		# 			first = false
+
+		# 	close = (e) ->
+		# 		if !active
+		# 			return
+				
+		# 		$aside.removeClass('active')
+		# 		$trigger.trigger('focus')
+		# 		active = false
+
+		# 	$trigger
+		# 		.on('click.login', open)
+		# 		.hoverIntent
+		# 			over: open
+		# 			out: $.noop
+
+		# 	$close.on 'click.login', close
+		# 	$body.on 'click.login', -> $close.trigger 'click.login' if active
 			
-			$body.on 'click.login', 'aside', (e) -> e.stopPropagation()
+		# 	$body.on 'click.login', 'aside', (e) -> e.stopPropagation()
 
 		# check if current browser is safari mobile
 		mobile: () ->
@@ -144,7 +188,7 @@
 		# document.ready event
 		init: () ->
 			log 'DOM Ready'
-			Site.login()
+			Site.logged_header()
 			Site.profile()
 			Site.disabled()
 
