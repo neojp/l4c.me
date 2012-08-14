@@ -30,17 +30,10 @@ form.login( method="post", action="/login" )
 		legend desde otros sitios
 
 		p
-			a.zocial.facebook( href="/login/facebook" ) Logueate con Facebook
 			a.zocial.twitter( href="/login/twitter" ) Logueate con Twitter
-			a.zocial.googleplus( href="#" ) Logueate con Google+
+			a.zocial.facebook.disabled( title="No disponible" ) Logueate con Facebook
+			a.zocial.googleplus.disabled( title="No disponible" ) Logueate con Google+
 		
-		p
-			a.cristalab.disabled( title="No disponible" )
-				img( src= helpers.image.blank, data-src="/images/cristalab_32.png", alt="", width="32", height="32" )
-			
-			a.mdw.disabled( title="No disponible" )
-				img( src= helpers.image.blank, data-src="/images/mdw_32.png", alt="", width="32", height="32" )
-
 	hr.gray.nomargin
 	fieldset.register
 		p
