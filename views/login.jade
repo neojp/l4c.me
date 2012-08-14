@@ -12,7 +12,7 @@ hr
 
 form.login( method="post", action="/login" )
 	fieldset.fields
-		legend desde L4C.me
+		legend desde #{site_name}
 		
 		p
 			//- label( for="header-username" ) Nombre de usuario
@@ -24,7 +24,7 @@ form.login( method="post", action="/login" )
 		
 		p.buttons
 			a.forgot( href="/login/forgot" ) Recuperar Contraseña
-			button( type="submit" ) Iniciar Sesión
+			button( type="submit" ) Entrar
 
 	fieldset.social
 		legend desde otros sitios
