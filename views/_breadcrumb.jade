@@ -1,25 +1,11 @@
 nav#breadcrumb
 	h1 Galeria
 
-	- if (original_url.indexOf('/tags/') == 0)
-		ul
-			li
-				a( href="/tags" ) Categorias
-
-			li.active
-				a( href="/tags/#{tag.slug}" )= tag.name
-
-			li#upload
-				a( href="/fotos/publicar" ) Sube una foto
-
-	- var users_gallery = original_url.indexOf('/fotos/') == 0 && !_.chain(['/fotos/ultimas', '/fotos/galeria', '/fotos/top', '/fotos/publicar']).map(function(value){ return original_url.indexOf(value) == 0; }).any().value();
+	- var users_gallery = original_url.indexOf('/fotos') == -1
 	- if (users_gallery)
 		ul
-			li
-				a( href="/fotos/galeria" ) Galer&iacute;as de Usuarios
-
-			li.active
-				a( href="/fotos/#{user.username}" )= user.username
+			li Galeria de fotos de 
+				strong= user.username
 
 	- else
 		ul
@@ -32,7 +18,3 @@ nav#breadcrumb
 			- className = (sort == 'top') ? 'active' : '';
 			li( class= className )
 				a( href="/fotos/top" ) Mas vistas
-			
-			- className = (sort == 'galeria') ? 'active' : '';
-			li( class= className )
-				a( href="/fotos/galeria" ) Galer&iacute;as de Usuarios

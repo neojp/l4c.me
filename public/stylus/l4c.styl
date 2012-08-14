@@ -121,6 +121,10 @@ a.button
 	a
 		display block
 		height 100%
+		transition()
+
+		&:focus
+			transform( scale(1.025) )
 
 #nav-aside
 	float right
@@ -172,128 +176,89 @@ a.button
 		&:hover
 			background-color lighten( #ff9933, 10% )
 
-#header-login
-	float right
-	// margin-right 10px
-	// padding 18px 5px 0 0
-	// height 25px
-	// line-height 25px
-	// position relative
 
-	a
-		text-decoration none
-	
-	a.username
-		border-bottom 2px solid #80dcfa
-		
-		&:hover
-			border-color #fff
-	
-	a.profile, a.logout
+#header-gravatar
+	background #01688a
+	border-radius 5px
+	line-height 32px
+	overflow hidden
+	padding 3px 6px 3px 3px
+
+	&
+	img
 		display inline-block
-		height 25px
-		margin 0 3px
-		padding 0 10px
-		border-radius( 5px )
-
-		span
-			border-left 1px solid #37cdff
-			height 20px
-			margin-left 8px
-			padding 0 0 0 5px
-
-	a.profile
-		background #c2ecfc
-		color #0a93ca
+		vertical-align bottom
 	
-	a.logout
-		background #0a93ca
-		color #c2ecfc
+	img
+		border 0
+		border-radius 3px
+		height 32px
+		margin-right 3px
+		width 32px
 
-#header-login-trigger
-	@extends .icon-login
+	span
+		display inline-block
+		font-size 0.7em
+		transform( rotate(90deg) )
+		transition()
+		vertical-align middle
 
-	font-size 1.35em
-	line-height 36px
+#header-profile
+	display inline-block
 	margin-left 10px
-	padding 0 10px
-
-	&:before
-		margin-right 0.5em
-
-#header-login
 	position relative
+	vertical-align bottom
 
+	&:hover
 	&.active
-		#header-login-trigger
+		#header-gravatar
+			box-shadow( 0 5px 5px rgba(#000, 0.25) )
 			border-radius( 5px 5px 0 0 )
 
-		form.login
-			left auto
+			span
+				transform( rotate(90*3deg) )
+
+		ul
 			opacity 1
+			left auto
 			right 0
-			top 29px
+			top 35px
 
-	form.login
-		background #F7F7F7
-		border-radius( 0 0 5px 5px )
-		box-shadow( 0 0 5px rgba(#000, 0.5) )
-		box-sizing border-box
-		left -9999px
+	ul
+		background #01688a
+		border-radius( 5px 0 5px 5px )
+		box-shadow( 0 5px 5px rgba(#000, 0.25) )
+		list-style none
+		margin 0
 		opacity 0
-		padding 15px
-		position absolute
-		top -9999px
-		width (180px + 15) + (180px + 16) + 30
-		transition( opacity .150s linear )
-
-	input
-		font-size 1em
-		padding 5px
-		width 165px
-
-	legend
-		font-size 1em
-		font-weight bold
-		line-height 1
-		margin 0 0 10px
-
-
-	span.bg
-	span.topbar
-		background #00B8F4
-		height 5px
-		left 0
-		position absolute
-		right 0
-		top -5px
-
-	span.topbar
-		background #FF9933
-		left 0
-		right 0
-
-	.fields button
-		font-size 1em
-
-	.social
-		padding 0 0 0 15px
-		width 180px
-
-		p
-			margin 0
-	
-	.zocial
-		font-size 1em
-		margin 5px 0
-		width 160px
-
-		&:before
-			width 15px
-
-	.register
-		margin 15px 0 0
 		padding 0
+		position absolute
+		left -9999px
+		top -9999px
+		transition( opacity 0.150s linear )
+		width 165px
+		
+		a
+			color #d6e6ce
+			display block
+			padding 5px 10px
+			transition()
+
+			&:hover
+				background rgba(#005874, 0.35)
+
+	li
+		border-top 1px solid rgba(#005874, 0.85)
+		margin 0
+
+		&:first-child
+			border-top 0
+
+			a
+				border-radius 5px 0 0 0
+
+		&:last-child a
+			border-radius 0 0 5px 5px
 
 fieldset
 	border 0
@@ -915,7 +880,8 @@ form.profile
 					margin-left 0
 			
 			a
-				background #000
+				background #333
+				box-shadow inside 0 0 5px #000
 				border 0
 
 				&:hover img

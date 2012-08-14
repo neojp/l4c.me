@@ -9,21 +9,14 @@ hr.hidden
 	aside#header-upload
 		a.button.upload( href="/fotos/publicar" ) Sube una foto
 
+		- if (logged_user)
+			- src = (logged_user.email) ? helpers.gravatar(logged_user.email, 125) : helpers.image.blank
+			#header-profile
+				a#header-gravatar( href= "/" + logged_user.username )
+					img( data-src=src, src= helpers.image.blank )
+					span: b.icon-next
 
-//- - if (logged_user)
-//- 	aside
-//- 		p Hola 
-//- 			a.username( href= "/" + logged_user.username )= logged_user.username
-//- 			|, puedes 
-//- 			a.profile( href="/profile" ) editar tu perfil
-//- 				span.icon-profile
-//- 			|  o 
-//- 			a.logout( href="/logout" ) salir
-//- 				span.icon-logout
-
-//- - else if (original_url.indexOf('/login') !== 0 && original_url.indexOf('/registro') !== 0)
-
-//- 	aside#header-login
-//- 		a#header-login-trigger.button( href="#header-login" ) Entra o Registrate
-		
-//- 		!= partial('_login')
+				ul
+					li: a( href= "/" + logged_user.username ) Ver mi perfil
+					li: a( href= "/profile" ) Editar mi perfil
+					li: a( href= "/logout" ) Salir de sesión
