@@ -1,7 +1,7 @@
 nav#breadcrumb
 	h1 Galeria
 
-	- var users_gallery = original_url.indexOf('/fotos') == -1
+	- var users_gallery = original_url !== '/' && original_url.indexOf('/fotos') == -1
 	- if (users_gallery)
 		ul
 			li Galeria de fotos de 
