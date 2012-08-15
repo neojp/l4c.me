@@ -1,0 +1,20 @@
+.author-info
+	p.photo-author
+		img.gravatar( src= helpers.image.blank, data-src= helpers.gravatar(user.email, 90) )
+		
+		span.author-name
+			- if (typeof author_prefix !== 'undefined')
+				!= author_prefix + ' '
+			
+			strong= user.username
+
+		span.icons
+			- if (user.facebook && user.facebook.username)
+				a.icon-facebook( href="http://facebook.com/#{user.facebook.username}" ): span.hidden Facebook
+			
+			- if (user.twitter && user.twitter.username)
+				a.icon-twitter( href="http://twitter.com/#{user.twitter.username}" ): span.hidden Twitter
+			
+			//- a.icon-cristalab( href="#cristalab" ): span.hidden Cristalab
+			
+			a.icon-rss( href="#{site_domain}/feed/#{username}" ): span.hidden RSS

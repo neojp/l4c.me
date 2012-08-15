@@ -4,8 +4,9 @@ nav#breadcrumb
 	- var users_gallery = original_url !== '/' && original_url.indexOf('/fotos') == -1
 	- if (users_gallery)
 		ul
-			li Galeria de fotos de 
-				strong= user.username
+			li
+				- var author_prefix = 'Galeria de fotos de'
+				include _author_info
 
 	- else
 		ul

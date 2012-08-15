@@ -75,22 +75,7 @@ block content
 
 		
 		#sidebar
-			p.photo-author
-				a.gravatar( href="/#{user.username}" )
-					img( src= helpers.image.blank, data-src= helpers.gravatar(user.email, 50) )
-				|  
-				strong
-					a( href="/#{user.username}")= user.username
-				span.icons
-					- if (user.facebook && user.facebook.username)
-						a.icon-facebook( href="http://facebook.com/#{user.facebook.username}" ): span.hidden Facebook
-					
-					- if (user.twitter && user.twitter.username)
-						a.icon-twitter( href="http://twitter.com/#{user.twitter.username}" ): span.hidden Twitter
-					
-					//- a.icon-cristalab( href="#cristalab" ): span.hidden Cristalab
-					
-					a.icon-rss( href="#{site_domain}/feed/#{username}" ): span.hidden RSS
+			include _author_info
 
 			- var size = helpers.image.sizes.t;
 			.widget

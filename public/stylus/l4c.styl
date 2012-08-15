@@ -97,6 +97,78 @@ a.button
 	max-width 1475px
 	// max-width 1000px
 
+
+.author-info
+	.photo-author
+		@extends .clearfix
+		padding 0 0 0 65px
+
+		a
+			border 0
+			color inherit
+
+	.gravatar
+		border 0 !important
+		float left
+		margin 0 0 0 -65px
+
+		&
+		img
+			background #ddd
+			border-radius 5px
+			height 50px
+			vertical-align bottom
+			width 50px
+
+	.author-name
+		display block
+		font-size 1.3em
+		font-weight normal
+		line-height 1.35
+		margin-bottom 0.35em
+
+	.icons
+		display block
+		// font-size 0.9em
+
+		a
+			border 1px solid rgba(#000, 0.15) !important
+			border-radius 3px
+			color #fff !important
+			display inline-block
+			height 16px
+			line-height 16px
+			margin-left 5px
+			overflow hidden
+			text-align center
+			vertical-align middle
+			// text-shadow 0 1px 0 rgba(#000, 0.5)
+			width 16px
+
+			&:first-child
+				margin-left 0
+		
+		.icon-facebook
+			background #fff
+			color #4863AE !important
+			font-size 1.3em
+
+		.icon-twitter
+			background #46C0FB
+
+		.icon-cristalab
+			background #ccc
+		
+		.icon-cristalab:before
+			background url("../images/sprite.png") no-repeat 0 0
+			content " "
+			height 16px
+			display inline-block
+			width 16px
+
+		.icon-rss
+			background #fe9832
+
 #header
 	// background #00b8f4
 	background darken(#00B8F4, 25%)
@@ -551,23 +623,39 @@ form.profile
 		margin 0
 		padding 0
 		clearfix()
-		
-		li
-			background url(images/sep_blue.png) no-repeat left center
-			float left
-			padding 0 10px 0 17px
-
-			&:first-child
-				background none
-				padding-left 10px
-		
+			
 		a
 			border-bottom 2px solid #84c9e4
 			color #0a93ca
+	
+	li
+		background url(images/sep_blue.png) no-repeat left center
+		float left
+		padding 0 10px 0 17px
 
-		li.active a
+		&:first-child
+			background none
+			padding-left 10px
+
+		&.active a
 			border-color #ffd6ae
 			color #ffae5e
+
+	.author-info
+		line-height 1
+
+	.photo-author
+		margin 0
+	
+	.gravatar
+	.gravatar img
+		height 45px
+		width 45px
+
+	.author-name
+		font-size 1em
+		display block
+		padding-top 5px
 
 .pagination
 	font-weight bold
@@ -759,75 +847,10 @@ form.profile
 		float right
 		padding-right 14px
 		width 336px
-
-		.photo-author
-			@extends .clearfix
-			padding 0 0 0 65px
-
-			a
-				border 0
-				color inherit
-
-		.gravatar
-			border 0
-			float left
-			margin 0 0 0 -65px
-
-			&
-			img
-				background #ddd
-				border-radius 5px
-				height 50px
-				vertical-align bottom
-				width 50px
-
-		strong
-			display block
-			font-size 1.3em
+	
+		.author-name strong
 			font-weight normal
-			line-height 1.35
-			margin-bottom 0.35em
 
-		.icons
-			display block
-			// font-size 0.9em
-
-			a
-				border 1px solid rgba(#000, 0.15)
-				border-radius 3px
-				color #fff
-				display inline-block
-				height 16px
-				line-height 16px
-				margin-left 5px
-				overflow hidden
-				text-align center
-				vertical-align middle
-				// text-shadow 0 1px 0 rgba(#000, 0.5)
-				width 16px
-			
-			.icon-facebook
-				background #fff
-				color #4863AE
-				font-size 1.3em
-				margin-left 0
-
-			.icon-twitter
-				background #46C0FB
-
-			.icon-cristalab
-				background #ccc
-			
-			.icon-cristalab:before
-				background url("../images/sprite.png") no-repeat 0 0
-				content " "
-				height 16px
-				display inline-block
-				width 16px
-
-			.icon-rss
-				background #fe9832
-		
 		.grid
 			list-style none
 			margin 0
