@@ -66,19 +66,23 @@
 			$trigger = $('#header-gravatar')
 
 			open = (e) ->
-				e.stopPropagation()
-				e.preventDefault()
 				return if active
-
-				active = true
-				$container.addClass('active')
 				
+				if e
+					e.stopPropagation()
+					e.preventDefault()
+
+				$container.addClass('active')
 				$links = $container.find('ul a').removeAttr('tabindex')
-				$links.eq(0).trigger('focus')
+				$trigger.trigger('focus')
+				active = true
 
 			close = (e) ->
-				if !active
-					return
+				return if !active
+				
+				if e
+					e.stopPropagation()
+					e.preventDefault()
 
 				$container.removeClass('active')
 				$container.find('ul a').attr('tabindex', '-1')
