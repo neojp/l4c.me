@@ -300,44 +300,42 @@ app.get '/feed/:user', (req, res) ->
 
 
 app.get '/login', (req, res, next) ->
+	qs = res.local('query_vars')
+	req.flash 'auth_redirect', qs.r  if not _.isUndefined(qs.r)
+
 	if (req.isAuthenticated())
-		return res.redirect '/'
+		return res.redirect if qs.r then qs.r else '/' + req.user.username
 	
 	res.local 'failed', not _.isUndefined(res.local('query_vars').failed)
 	res.render 'login'
 
+set_auth_redirect = (req, res, next) ->
+	qs = res.local('query_vars')
+	req.flash 'auth_redirect', qs.r  if not _.isUndefined(qs.r)
 
-app.post '/login', passport.authenticate('local', failureRedirect: '/login?failed'), (req, res, next) ->
+auth_redirect = (req, res, next) ->
 	flash = req.flash 'auth_redirect'
-	url = if _.size flash then _.first flash else '/profile'
+	url = if _.size flash then _.first flash else '/' + req.user.username
 	res.redirect url
 
+app.post '/login', passport.authenticate('local', failureRedirect: '/login?failed'), auth_redirect
 
-app.get '/login/facebook', passport.authenticate('facebook', { scope: config.facebook.permissions })
+app.get '/login/facebook', set_auth_redirect, passport.authenticate('facebook', { scope: config.facebook.permissions })
 app.get '/login/facebook/callback', passport.authenticate('facebook', failureRedirect: '/login'), (req, res, next) ->
 	flash = req.flash 'auth_redirect'
-	url = if _.size flash then _.first flash else '/profile'
+	url = if _.size flash then _.first flash else '/' + req.user.username
 	res.redirect url
 
 app.get '/login/facebook/remove', middleware.auth, (req, res, next) ->
 	model.user.update({ _id: req.user._id }, { $unset: { facebook: 1} }, false, -> res.redirect('/profile'))
 
 
-app.get '/login/twitter', passport.authenticate('twitter')
-app.get '/login/twitter/callback', passport.authenticate('twitter', failureRedirect: '/login'), (req, res, next) ->
-	flash = req.flash 'auth_redirect'
-	url = if _.size flash then _.first flash else '/profile'
-	res.redirect url
-	# res.redirect '/userinfo'
+app.get '/login/twitter', set_auth_redirect, passport.authenticate('twitter')
+app.get '/login/twitter/callback', passport.authenticate('twitter', failureRedirect: '/login'), auth_redirect
 
 app.get '/login/twitter/remove', middleware.auth, (req, res, next) ->
 	model.user.update({ _id: req.user._id }, { $unset: { twitter: 1} }, false, -> res.redirect('/profile'))
 
-	# model.user
-	# 	.findOne( _id: req.user._id )
-	# 	.exec (err, user) ->
-	# 		user.twitter = null
-	# 		user.save -> res.redirect('/userinfo')
 
 app.get '/userinfo', (req, res, next) ->
 	res.json req.user
@@ -345,7 +343,9 @@ app.get '/userinfo', (req, res, next) ->
 
 app.get '/logout', (req, res, next) ->
 	req.logout()
-	res.redirect '/'
+	
+	qs = res.local 'query_vars'
+	return res.redirect if qs.r then qs.r else '/'
 
 
 app.get '/registro', (req, res, next) -> res.redirect '/register'

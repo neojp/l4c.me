@@ -35,6 +35,7 @@ header.clearfix
 a#dejar-comentario
 #comments-form.comments
 	h2.hidden Deja un Comentario
+	- var redirect = '?r=' + original_url
 
 	form.clearfix( method="post", action="/comment" )
 		input( type="hidden", name="photo", value=photo.slug )
@@ -45,7 +46,7 @@ a#dejar-comentario
 				//- a( href="/#{logged_user.username}" )= logged_user.username
 				strong= logged_user.username
 				|  &nbsp; &mdash; &nbsp; 
-				a.logout( href="/logout" ) Salir?
+				a.logout( href="/logout" + redirect ) Salir?
 				| 
 				span.icon-logout
 
@@ -57,16 +58,16 @@ a#dejar-comentario
 
 			fieldset.social
 				legend
-					a.gray( href="/login" ) Entra
+					a.gray( href="/login" + redirect ) Entra
 					|  o 
-					a.gray( href="/register" ) registrate
+					a.gray( href="/register" + redirect ) registrate
 					|  a tu cuenta y deja un comentario
 				
 				p
 					- var title_attr = "Aun no esta disponible :(";
-					a.zocial.twitter( href="/login/twitter" ) Entra con Twitter
-					a.zocial.facebook.disabled( href="#", tabindex="-1", title= title_attr ) Entra con Facebook
-					a.zocial.googleplus.disabled( href="#", tabindex="-1", title= title_attr ) Entra con Google+
+					a.zocial.twitter( href="/login/twitter" + redirect ) Entra con Twitter
+					a.zocial.facebook.disabled( tabindex="-1", title= title_attr ) Entra con Facebook
+					a.zocial.googleplus.disabled( tabindex="-1", title= title_attr ) Entra con Google+
 
 				hr
 

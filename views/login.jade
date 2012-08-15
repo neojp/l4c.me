@@ -30,9 +30,10 @@ form.login( method="post", action="/login" )
 		legend desde otros sitios
 
 		p
+			- var title_attr = "Aun no esta disponible :(";
 			a.zocial.twitter( href="/login/twitter" ) Logueate con Twitter
-			a.zocial.facebook.disabled( title="No disponible" ) Logueate con Facebook
-			a.zocial.googleplus.disabled( title="No disponible" ) Logueate con Google+
+			a.zocial.facebook.disabled( tabindex="-1", title= title_attr ) Logueate con Facebook
+			a.zocial.googleplus.disabled( tabindex="-1", title= title_attr ) Logueate con Google+
 		
 	hr.gray.nomargin
 	fieldset.register

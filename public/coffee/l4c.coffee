@@ -101,8 +101,8 @@
 				over: open
 				out: $.noop
 
-			$body.on 'click.header', -> close 'click.login' if active
-			$body.on 'keyup', (e) -> close 'click.login' if active && e.which == 27
+			$body.on 'click.header', (e) -> close e if active
+			$body.on 'keyup', (e) -> close e if active && e.which == 27
 			$container.on 'click.header', (e) -> e.stopPropagation()
 
 		# check if current browser is safari mobile
