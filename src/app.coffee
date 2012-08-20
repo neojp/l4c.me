@@ -312,6 +312,7 @@ app.get '/login', (req, res, next) ->
 set_auth_redirect = (req, res, next) ->
 	qs = res.local('query_vars')
 	req.flash 'auth_redirect', qs.r  if not _.isUndefined(qs.r)
+	next()
 
 auth_redirect = (req, res, next) ->
 	flash = req.flash 'auth_redirect'
