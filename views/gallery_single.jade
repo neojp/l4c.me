@@ -46,7 +46,7 @@ block before-wrap
 
 					- if (photo.prev)
 						a.prev( href="/#{username}/#{photo.prev.slug}" )
-							span &#x3c; 
+							span.icon-prev
 							span.hidden &nbsp; Anterior
 
 					- if (photo.prev && photo.next)
@@ -56,7 +56,7 @@ block before-wrap
 					- if (photo.next)
 						a.next( href="/#{username}/#{photo.next.slug}" )
 							span.hidden Siguiente &nbsp;
-							span &#x3e;
+							span.icon-next
 
 block content
 	#content-sidebar-wrap.wrap
@@ -84,7 +84,7 @@ block content
 					- _.each(from_user, function(photo){
 						li
 							a( href="/#{username}/#{photo.slug}" )
-								img( src= helpers.image.blank, data-src= "/uploads/#{photo._id}_t.#{photo.image.ext}", height= size.height, width= size.width )
+								img( src= helpers.image.blank, data-src= "/uploads/#{photo._id}_t.#{photo.image.ext}" )
 								span.icon-zoom
 					- });
 
@@ -99,7 +99,7 @@ block content
 						- _.each(photos.from_all, function(photo){
 							li
 								a( href="/#{photo._user.username}/#{photo.slug}" )
-									img( src= helpers.image.blank, data-src= "/uploads/#{photo._id}_t.#{photo.image.ext}", height= size.height, width= size.width )
+									img( src= helpers.image.blank, data-src= "/uploads/#{photo._id}_t.#{photo.image.ext}" )
 									span.icon-zoom
 						- });
 					

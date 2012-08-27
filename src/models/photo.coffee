@@ -95,13 +95,25 @@ methods =
 		# graphicsmagick module
 		graphicsmagick = (src, dest) ->
 			gm = require 'gm'
-			if size.action == 'resize'
+			invoke (data, cb) ->
+				gm(src).size cb
+			
+			.end null, (current_size) ->
+				console.log current_size
+
+				if (current_size.width < size.width && current_size.height < size.height)
+					console.log "photo resize not needed #{size.size} - #{src} -> #{dest}"
+					gm(src).autoOrient().write(dest, callback)
+
+				else if size.action == 'resize'
 				console.log "photo resize start #{size.size} - #{src} -> #{dest}"
 				gm(src).autoOrient().resize(size.width, size.height).write(dest, callback)
+				
 			else if size.action == 'crop'
 				console.log "photo crop start #{size.size} - #{src} -> #{dest}"
 				gm(src).autoOrient().thumb size.width, size.height, dest, 80 , ->
 					gm(dest).crop(size.width, size.height).write(dest, callback)
+				
 			else
 				next new Error "No hay accion disponible: #{size.action}"
 
