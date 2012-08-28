@@ -35,7 +35,7 @@
     "marked": ">= 0.2.1",
     "mime": "*",
     "moment": ">= 1.4.0",
-    "mongoose": ">= 2.5.9",
+    "mongoose": "= 3.x",
     "mongoose-types": ">= 1.0.3",
     "nib": "*",
     "rss": "*",

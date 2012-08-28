@@ -175,8 +175,8 @@ app.get '/fotos/:sort?', (req, res, next) ->
 			.skip(per_page * (page - 1))
 			.populate('_user')
 		
-		photos.sort('created_at', -1)  if sort == 'ultimas'
-		photos.sort('views', -1, 'created_at', -1)  if sort == 'top'
+		photos.sort({ created_at: -1 })  if sort == 'ultimas'
+		photos.sort({ views: -1, created_at: -1 })  if sort == 'top'
 		photos.exec callback
 
 	.rescue (err) ->
@@ -212,7 +212,7 @@ app.get '/fotos/galeria', (req, res, next) ->
 	.and (data, callback) ->
 		model.photo
 			.find(query)
-			.sort('created_at', -1)
+			.sort({ created_at: -1 })
 			.limit(per_page)
 			.skip(per_page * (page - 1))
 			.populate('_user')
@@ -255,7 +255,7 @@ app.get '/feed/:user', (req, res) ->
 	.then (data, callback) ->
 		model.photo
 			.find(_user: user._id)
-			.sort('created_at', -1)
+			.sort({ created_at: -1 })
 			.limit(config.rss.limit)
 			.exec callback
 
@@ -550,7 +550,7 @@ app.get '/:user/:slug', (req, res, next) ->
 		model.photo
 			.find( _user: user._id )
 			.ne('_id', photo._id)
-			.sort('created_at', -1)
+			.sort({ created_at: -1 })
 			.limit(6)
 			.exec callback
 
@@ -639,7 +639,7 @@ app.get '/:user', (req, res, next) ->
 			.find( _user: user._id )
 			.limit(per_page)
 			.skip(per_page * (page - 1))
-			.sort('created_at', -1)
+			.sort({ created_at: -1 })
 			.populate('_user')
 			.exec callback
 

@@ -106,16 +106,16 @@ methods =
 					gm(src).autoOrient().write(dest, callback)
 
 				else if size.action == 'resize'
-				console.log "photo resize start #{size.size} - #{src} -> #{dest}"
-				gm(src).autoOrient().resize(size.width, size.height).write(dest, callback)
+					console.log "photo resize start #{size.size} - #{src} -> #{dest}"
+					gm(src).autoOrient().resize(size.width, size.height).write(dest, callback)
 				
-			else if size.action == 'crop'
-				console.log "photo crop start #{size.size} - #{src} -> #{dest}"
-				gm(src).autoOrient().thumb size.width, size.height, dest, 80 , ->
-					gm(dest).crop(size.width, size.height).write(dest, callback)
-				
-			else
-				next new Error "No hay accion disponible: #{size.action}"
+				else if size.action == 'crop'
+					console.log "photo crop start #{size.size} - #{src} -> #{dest}"
+					gm(src).autoOrient().thumb size.width, size.height, dest, 80 , ->
+						gm(dest).crop(size.width, size.height).write(dest, callback)
+					
+				else
+					next new Error "No hay accion disponible: #{size.action}"
 
 		# resize or crop images
 		graphicsmagick(src, dest)
@@ -162,12 +162,12 @@ methods =
 
 		invoke (data, callback) ->
 			model.findOne({ _user: photo._user, created_at: { $lt: created_at } }, { slug: 1 })
-				.sort('created_at', -1)
+				.sort({ created_at: -1 })
 				.exec callback
 
 		.and (data, callback) ->
 			model.findOne({ _user: photo._user, created_at: { $gt: created_at } }, { slug: 1 })
-				.sort('created_at', 1)
+				.sort({ created_at: 1 })
 				.exec callback
 
 		.end null, (data) ->
