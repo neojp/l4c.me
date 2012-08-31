@@ -80,7 +80,9 @@ module.exports =
 		return "#{status}  #{date}   #{method}  #{url}  #{time}          #{ip_address}"
 
 	markdown: (str) ->
-		marked(str) if _.isString(str)
+		if _.isString(str)
+			html = marked(str)
+			return html = html.replace /<a /g, '<a rel="nofollow" target="_blank" '
 
 	pretty_date: (date) ->
 		moment(date).fromNow(true)
