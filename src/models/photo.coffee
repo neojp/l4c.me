@@ -143,6 +143,7 @@ methods =
 		queue.rescue next
 		queue.end null, (data) -> next(null, data)
 
+
 	upload_photo: (file_path, next) ->
 		doc = this
 		console.log 'photo upload', file_path, '->', "#{doc._id}_o.#{doc.image.ext}"
@@ -158,6 +159,12 @@ methods =
 		fs.rename file_path, upload_path, (err) ->
 			return alternate_upload file_path, upload_path if err
 			next err
+
+	# remove_photo: (file_path, next) ->
+	# 	doc = this
+	# 	console.log 'photo remove', file_path
+
+	# 	path = nodejs_path.normalize "#{__dirname}/../../public/uploads/#{doc._id}_o.#{doc.image.ext}"
 
 	pretty_date: () ->
 		helpers.pretty_date this.created_at

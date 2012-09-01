@@ -746,10 +746,71 @@ app.put '/:user/:slug', middleware.auth, (req, res) ->
 
 
 app.delete '/:user/:slug', middleware.auth, (req, res) ->
-	user = req.param 'user'
-	slug = req.param 'slug'
-	res.send "DELETE /#{user}/#{slug}", 'Content-Type': 'text/plain'
+	# user = req.param 'user'
+	# slug = req.param 'slug'
+	# res.send "DELETE /#{user}/#{slug}", 'Content-Type': 'text/plain'
 
+	slug = req.param 'slug'
+	username = req.param 'user'
+	
+	user = null
+	photo = null
+
+	invoke (data, callback) ->
+		model.photo
+			.findOne( slug: slug )
+			.populate('_user')
+			.exec (err, data) ->
+				return callback err  if err
+				return error_handler(404)(req, res)  if data == null || data._user.username != username
+				return error_handler(403)(req, res)  if req.user.username != username
+
+				user = data._user
+				photo = data
+				callback()
+	
+	.then (data, callback) ->
+		photo.remove callback
+
+	.and (data, callback) ->
+		queue = invoke()
+		index = 0
+		nodejs_path = require 'path'
+		
+		_.each helpers.image.sizes, (size, key) ->
+			path = nodejs_path.normalize "#{__dirname}/../public/uploads/#{photo._id}_#{size.size}.#{photo.image.ext}"
+			
+			if !index
+				queue = invoke (data, cb) ->
+					console.log 'photo delete start', path
+					fs.unlink path, (err) ->
+						if err
+							console.log 'photo delete error', path
+							return cb err
+
+						console.log 'photo delete end', path
+						cb()
+			else
+				queue.and (data, cb) ->
+					console.log 'photo delete start', path
+					fs.unlink path, (err) ->
+						if err
+							console.log 'photo delete error', path
+							return cb err
+
+						console.log 'photo delete end', path
+						cb()
+			
+			index++
+
+		queue.rescue callback
+		queue.end null, (data) -> callback(null, data)
+
+	.rescue (err) ->
+		next err
+
+	.end null, (data) ->
+		res.redirect "/#{user.username}", 301
 
 
 module.exports.listen = listen = () ->

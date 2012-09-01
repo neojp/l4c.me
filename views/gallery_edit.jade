@@ -61,4 +61,9 @@ block content
 				hr.hidden
 
 				p.buttons
-					button( type="submit" ) Subir
+					button( type="submit" ) Editar
+
+			form( method="post", action="/#{username}/#{slug}", enctype="multipart/form-data" )
+				input( type="hidden", name="_method", value="delete" )
+				p.buttons
+					button( type="submit" ) Borrar
