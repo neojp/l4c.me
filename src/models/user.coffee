@@ -1,20 +1,28 @@
 mongoose = require 'mongoose'
-mongooseTypes = require 'mongoose-types'
-mongooseTypes.loadTypes mongoose
 invoke = require 'invoke'
-
 helpers = require '../lib/helpers'
 
 Schema = mongoose.Schema
 ObjectId = Schema.ObjectId
-Email = mongoose.SchemaTypes.Email
-# Url = mongoose.SchemaTypes.Url
 
 encrypt_password = (password) ->
 	require('crypto').createHash('sha1').update(password + helpers.heart).digest('hex')
 
 validate_url = (v) ->
 	/^(https?|ftp):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(\#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i.test(v)
+
+validate_email = (v) ->
+	/^[\+a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(v)
+
+Email =
+	get: (v) -> v || ''
+	lowercase: true
+	type: String,
+	validate: [validate_email, 'Please enter a valid Email']
+
+Url =
+	type: String
+	validate: [validate_url, 'Please enter a valid URL']
 
 user = new Schema
 	_photos: [
@@ -25,12 +33,7 @@ user = new Schema
 	created_at:
 		default: Date.now
 		type: Date
-	email:
-		lowercase: true
-		# required: true
-		type: Email,
-		# unique: true
-		get: (v) -> v || ''
+	email: Email
 	facebook:
 		id: String
 		email: Email
@@ -50,9 +53,7 @@ user = new Schema
 		token_secret: String
 		username: String
 		share: Boolean
-	url:
-		type: String
-		# validate: [validate_url, 'Please enter a valid URL']
+	url: Url
 	username:
 		lowercase: true
 		# required: true

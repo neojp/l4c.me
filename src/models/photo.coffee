@@ -1,6 +1,4 @@
 mongoose = require 'mongoose'
-mongooseTypes = require 'mongoose-types'
-mongooseTypes.loadTypes mongoose
 
 helpers = require '../lib/helpers'
 _ = underscore = require 'underscore'
@@ -11,7 +9,15 @@ nodejs_path = require 'path'
 
 Schema = mongoose.Schema
 ObjectId = Schema.ObjectId
-Email = mongoose.SchemaTypes.Email
+
+validate_email = (v) ->
+	/^[\+a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(v)
+
+Email =
+	get: (v) -> v || ''
+	lowercase: true
+	type: String,
+	validate: [validate_email, 'Please enter a valid Email']
 
 methods =
 	set_slug: (next) ->
