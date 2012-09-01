@@ -71,7 +71,12 @@ module.exports.tweet_photo = tweet_photo = (photo_id, callback) ->
 		hashtag = if config.twitter.hashtag then ' ' + config.twitter.hashtag else ''
 		
 		# tweet format
-		tweet_format = "#{helpers.heart} %s [pic] %s%s"
+		box = "▣"
+		box_with_circle = "◘"
+		box_with_circle2 = "◙"
+		calendar = "⌨"
+		equis = "⌧"
+		tweet_format = "%s [pic] #{calendar} %s%s"
 		
 		# substract whatever whatever amount of characters we introduced with the heart, hashtag, [pic] and url
 		# tweets can't be over 120
@@ -80,7 +85,7 @@ module.exports.tweet_photo = tweet_photo = (photo_id, callback) ->
 		length = 120 - (_.str.sprintf(tweet_format, '', '', hashtag).length + url_length)
 
 		# photo names will be truncated with 3 character ellipses
-		photo_name = _.str.truncate photo.name, length
+		photo_name = _.str.prune photo.name, length
 
 		# create tweet status
 		tweet = _.str.sprintf tweet_format, photo_name, photo_url, hashtag
