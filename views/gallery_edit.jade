@@ -63,7 +63,7 @@ block content
 				p.buttons
 					button( type="submit" ) Editar
 
-			form( method="post", action="/#{username}/#{slug}", enctype="multipart/form-data" )
+			form.delete( method="post", action="/#{username}/#{slug}", enctype="multipart/form-data" )
 				input( type="hidden", name="_method", value="delete" )
 				p.buttons
-					button( type="submit" ) Borrar
+					button.gray( type="submit" ) Borrar

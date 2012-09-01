@@ -1310,7 +1310,8 @@ body.single-edit
 
 	#content-sidebar-wrap #content
 		float none
-		margin 40px auto
+		margin 40px auto 20px
+		position relative
 		width 520px
 
 		form p
@@ -1406,16 +1407,35 @@ body.single-edit
 		background url(images/bg_shadow.png) no-repeat center top
 		margin 25px 0 0
 		padding 40px 0 0
-		text-align center
+		padding-left 50%
+		text-align left
 
 		button
 			height 45px
 			font-size 24px
+			margin-left 10px
 			padding 0 25px 0 15px
 
 			@extends .icon-photo
 			&:before
 				margin-right 0.5em
+
+	form.delete
+		bottom 0
+		position absolute
+		right 50%
+
+		p.buttons
+			background none
+			margin 0
+			padding 0 10px 0 0
+
+			button
+				@extends .icon-remove
+				font-size 14px
+				height auto
+				margin 0
+				padding 5px 15px 5px 10px
 
 
 body.small-header
