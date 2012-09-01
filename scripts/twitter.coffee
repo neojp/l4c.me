@@ -76,7 +76,7 @@ module.exports.tweet_photo = tweet_photo = (photo_id, callback) ->
 		box_with_circle2 = "◙"
 		calendar = "⌨"
 		equis = "⌧"
-		tweet_format = "%s [pic] #{calendar} %s%s"
+		tweet_format = "#{box} %s %s%s"
 		
 		# substract whatever whatever amount of characters we introduced with the heart, hashtag, [pic] and url
 		# tweets can't be over 120

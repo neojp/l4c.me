@@ -72,7 +72,7 @@ module.exports.tweet_photo = tweet_photo = function(photo_id, callback) {
     box_with_circle2 = "◙";
     calendar = "⌨";
     equis = "⌧";
-    tweet_format = "%s [pic] " + calendar + " %s%s";
+    tweet_format = "" + box + " %s %s%s";
     url_length = 20;
     length = 120 - (_.str.sprintf(tweet_format, '', '', hashtag).length + url_length);
     photo_name = _.str.prune(photo.name, length);
