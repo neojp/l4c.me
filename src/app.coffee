@@ -1,6 +1,8 @@
 # Module dependencies
 _ = underscore = require 'underscore'
 _.str = underscore.str = require 'underscore.string'
+_.mixin _.str.exports()
+
 invoke = require 'invoke'
 express = require 'express'
 nodejs_url  = require 'url'
@@ -126,7 +128,7 @@ app.all '*', middleware.redirect_subdomain, middleware.remove_trailing_slash, (r
 	res.locals
 		_: underscore
 		body_class: ''
-		document_description: config.info.description
+		document_description: ''
 		document_image: url_domain + '/images/logo.png'
 		document_title: config.info.name
 		document_url: url_domain
@@ -193,6 +195,8 @@ app.get '/fotos/:sort?', (req, res, next) ->
 			photos: photos
 			sort: sort
 			total: count
+			document_description: if req.originalUrl == '/' then config.info.description else res.local 'document_description'
+			document_title: if req.originalUrl == '/' then config.info.title else res.local 'document_title'
 
 		res.render 'gallery', { layout: false }
 
@@ -573,12 +577,18 @@ app.get '/:user/:slug', (req, res, next) ->
 		next err
 
 	.end null, (data) ->
-		photo.prev = data[2][0]
-		photo.next = data[2][1]
+		photo.prev  = data[2][0]
+		photo.next  = data[2][1]
+		description = _(photo.description)
+						.chain()
+						.clean()       # remove whitespace and break lines
+						.escapeHTML()  # escape all HTML tags
+						.prune(150)    # fancier version of truncate, doesn't return cut-off words
+						.value()
 		
 		res.locals
 			body_class: 'small-header user single' + if photo.image.panorama then ' panorama' else ''
-			document_descrition: photo.description || ''
+			document_description: description || ''
 			document_image: "#{url_domain}/uploads/#{photo._id}_m.#{photo.image.ext}"
 			document_title: photo.name
 			document_url: "#{url_domain}/#{username}/#{photo._id}"

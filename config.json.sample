@@ -16,6 +16,7 @@
 
 	"info": {
 		"name": "L4C.me",
+		"title": "The document title on the homepage",
 		"description": "A photo sharing service made with love ♥"
 	},
 
