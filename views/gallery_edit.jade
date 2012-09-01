@@ -1,0 +1,64 @@
+extends layout
+
+block before-wrap
+	#img-info
+		.wrap
+			.photo-info
+				p
+					- comments_total = helpers.format_number(photo.comments.length || 0)
+					- views_total = helpers.format_number(photo.views || 0)
+					a.info-comments( href="#comentarios", title="#{comments_total} comentarios" )= comments_total
+						span.hidden &nbsp;comentarios
+					| &nbsp;
+					span.info-views( title="#{views_total} visitas" )= views_total
+						span.hidden &nbsp;visitas 
+					| &nbsp;
+					span.info-date( title= photo.created_at )
+						span.hidden hace&nbsp;
+						= photo.pretty_date.replace(' ', '&nbsp;')
+			
+			.col
+				h1= photo.name
+				p.photo-author Por 
+					a.gravatar( href="/#{user.username}" )
+						img( src= helpers.image.blank, data-src= helpers.gravatar(user.email, 50) )
+					|  
+					a( href="/#{user.username}")= user.username
+
+block content
+	#content-sidebar-wrap.wrap
+		nav#breadcrumb
+			h1 Editar una foto
+
+		hr
+		
+		#content
+			form( method="post", action="/#{username}/#{slug}", enctype="multipart/form-data" )
+				input( type="hidden", name="_method", value="put" )
+				
+				p.img
+					label( for="upload-file" ) Fotografia
+						em No puede ser cambiada
+					span.icons
+						a.icon-zoom( href="/#{username}/#{slug}/sizes/g" )
+					
+					a( href="/#{username}/#{slug}/sizes/g", target="_blank" )
+						img( src= "/uploads/#{photo._id}_s.#{photo.image.ext}" )
+
+				p.title
+					label( for="upload-title" ) Titulo 
+					
+					input#upload-title( type="text", name="name", value= photo.name, required )
+				
+				p.description
+					label( for="upload-description" )
+						span Descripci&oacute;n 
+						em Es opcional, 
+							a( href="http://en.wikipedia.org/wiki/Markdown", target="_blank", tabindex="-1" ) Markdown
+							|  está disponible
+					textarea#upload-description( name="description" )= photo.description
+
+				hr.hidden
+
+				p.buttons
+					button( type="submit" ) Subir

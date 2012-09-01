@@ -666,43 +666,83 @@ app.get '/:user', (req, res, next) ->
 app.get '/:user/:slug/editar', middleware.auth, (req, res) ->
 	slug = req.param 'slug'
 	username = req.param 'user'
+	
 	user = null
 	photo = null
 
 	invoke (data, callback) ->
-		model.user.findOne username: username, (err, user) -> callback err, user
-
-	.then (data, callback) ->
-		return error_handler(404)(req, res)  if (!data)
-		user = data
 		model.photo
-			.findOne( _user: user._id, slug: slug )
+			.findOne( slug: slug )
 			.populate('_user')
-			.exec callback
+			.exec (err, data) ->
+				return callback err  if err
+				return error_handler(404)(req, res)  if data == null || data._user.username != username
+				return error_handler(403)(req, res)  if req.user.username != username
 
-	.then (data, callback) ->
-		photo.resize_photos(404)(req, res)  if !data
-		return error_handler(403)(req, res)  if !_.isEqual user._id, req.user._id
-		photo = data
+				user = data._user
+				photo = data
+				callback()
 
 	.rescue (err) ->
-		next err  if err
-	
-	.end user, (data) ->
+		next err
+
+	.end null, (data) ->
 		res.locals
-			body_class: 'single edit'
-			path: "/#{user.username}/#{photo.slug}/editar"
+			body_class: 'small-header user single-edit' + if photo.image.panorama then ' panorama' else ''
+			document_descrition: photo.description || ''
+			document_image: "#{url_domain}/uploads/#{photo._id}_m.#{photo.image.ext}"
+			document_title: photo.name
+			document_url: "#{url_domain}/#{username}/#{photo._id}/editar"
 			photo: photo
 			slug: slug
-			user: username
-
-		res.render 'gallery_single'
+			user: user
+			username: user.username
+		
+		res.render 'gallery_edit', { layout: false }
 
 
 app.put '/:user/:slug', middleware.auth, (req, res) ->
-	user = req.param 'user'
 	slug = req.param 'slug'
-	res.send "PUT /#{user}/#{slug}", 'Content-Type': 'text/plain'
+	username = req.param 'user'
+	
+	user = null
+	photo = null
+
+	has_update = false
+	updated = {}
+
+	invoke (data, callback) ->
+		model.photo
+			.findOne( slug: slug )
+			.populate('_user')
+			.exec (err, data) ->
+				return callback err  if err
+				return error_handler(404)(req, res)  if data == null || data._user.username != username
+				return error_handler(403)(req, res)  if req.user.username != username
+
+				user = data._user
+				photo = data
+				callback()
+
+	.then (data, callback) ->
+		# name & description
+		photo.name = req.body.name  if photo.name != req.body.name && has_update = true
+		photo.description = req.body.description  if photo.description != req.body.description && has_update = true
+		callback()
+
+	.rescue (err) ->
+		res.json [user, slug, req.body]
+		# url = "/#{username}/#{slug}/editar"
+		# res.redirect(url)
+
+	.end null, (data) ->
+		url = "/#{username}/#{slug}"
+
+		# update
+		if has_update
+			photo.save -> res.redirect url
+		else
+			res.redirect url
 
 
 app.delete '/:user/:slug', middleware.auth, (req, res) ->

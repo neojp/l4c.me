@@ -38,8 +38,8 @@ block before-wrap
 					img( src= "/uploads/#{photo._id}_m.#{photo.image.ext}" )
 
 			.icons
+				a.icon-edit( href="/#{username}/#{slug}/editar" )
 				a.icon-zoom( href="/#{username}/#{slug}/sizes/g" )
-				- // a.icon-edit( href="/#{username}/#{slug}/editar" )
 
 			- if (photo.prev || photo.next)
 				nav.pagination

@@ -1013,25 +1013,24 @@ form.profile
 
 		a
 			background rgba(#FF9933, 0.8) none no-repeat center center
+			color #fff
 			display inline-block
 			height 25px
+			line-height 25px
 			margin-left 5px
 			vertical-align bottom
 			width 30px
 		
 		.icon-zoom
 			@extends .icon-zoom-in
-			color #fff
 			font-size 24px
-			line-height 25px
 
 			&:before
 				line-height 33px
 				margin 0
 		
-		// .icon-edit
-		// 	@extends .icon-edit
-		// 	background-image url(images/icon_edit.png)
+		.icon-edit
+			font-size 19px
 
 	.pagination
 		height 0
@@ -1239,6 +1238,7 @@ body.single
 			padding 0
 
 body.sizes
+body.single-edit
 	#breadcrumb
 		line-height 45px
 		margin-bottom 0
@@ -1264,16 +1264,50 @@ body.sizes
 		// 	border-color #fff
 		// 	color #fff
 	
+body.sizes
 	#content
 		text-align center
 
 	// .img-info
 	// 	padding 10px 15px
 
+body.single-edit
+	.img
+		a
+			border 0
+		img
+			vertical-align bottom
+
+	.title label
+		line-height 29px
+
+	.description
+		label
+			display block
+			float none
+			margin-bottom 0.5em
+			margin-right 0
+			text-align left
+			width auto
+
+		span
+			display inline-block
+			margin-right 20px
+			text-align right
+			width 95px
+
+		em
+			display inline
+
+		textarea
+			height 165px
+			width 506px
+
 body.upload
+body.single-edit
 	#inner
 		background #fff url(images/bg_upload.png) no-repeat center bottom
-	
+
 	#content-sidebar-wrap #content
 		float none
 		margin 40px auto
@@ -1295,18 +1329,20 @@ body.upload
 			display block
 			font-size 0.8em
 			font-weight normal
+			margin-top 0.25em
 	
-	input, textarea
+	input
+	textarea
 		float left
 	
 	input
-		width 235px
+		width 335px
 	
 	textarea
 		height 135px
 		width 380px
 
-	#upload-placeholder-container,
+	#upload-placeholder-container
 	#upload-file-container
 		color #0A92CA
 		margin-bottom 1em
