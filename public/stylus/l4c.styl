@@ -1271,38 +1271,6 @@ body.sizes
 	// .img-info
 	// 	padding 10px 15px
 
-body.single-edit
-	.img
-		a
-			border 0
-		img
-			vertical-align bottom
-
-	.title label
-		line-height 29px
-
-	.description
-		label
-			display block
-			float none
-			margin-bottom 0.5em
-			margin-right 0
-			text-align left
-			width auto
-
-		span
-			display inline-block
-			margin-right 20px
-			text-align right
-			width 95px
-
-		em
-			display inline
-
-		textarea
-			height 165px
-			width 506px
-
 body.upload
 body.single-edit
 	#inner
@@ -1407,8 +1375,7 @@ body.single-edit
 		background url(images/bg_shadow.png) no-repeat center top
 		margin 25px 0 0
 		padding 40px 0 0
-		padding-left 50%
-		text-align left
+		text-align center
 
 		button
 			height 45px
@@ -1419,6 +1386,42 @@ body.single-edit
 			@extends .icon-photo
 			&:before
 				margin-right 0.5em
+
+body.single-edit
+	.img
+		a
+			border 0
+		img
+			vertical-align bottom
+
+	.title label
+		line-height 29px
+
+	.description
+		label
+			display block
+			float none
+			margin-bottom 0.5em
+			margin-right 0
+			text-align left
+			width auto
+
+		span
+			display inline-block
+			margin-right 20px
+			text-align right
+			width 95px
+
+		em
+			display inline
+
+		textarea
+			height 165px
+			width 506px
+
+	p.buttons
+		padding-left 50%
+		text-align left
 
 	form.delete
 		bottom 0
@@ -1436,7 +1439,6 @@ body.single-edit
 				height auto
 				margin 0
 				padding 5px 15px 5px 10px
-
 
 body.small-header
 	#header
