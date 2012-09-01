@@ -38,7 +38,7 @@ block before-wrap
 					img( src= "/uploads/#{photo._id}_m.#{photo.image.ext}" )
 
 			.icons
-				- if (username == logged_user.username)
+				- if (logged_user && logged_user.username == username)
 					a.icon-edit( href="/#{username}/#{slug}/editar" )
 				a.icon-zoom( href="/#{username}/#{slug}/sizes/g" )
 
