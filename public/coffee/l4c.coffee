@@ -61,33 +61,48 @@
 		# logged in dropdown on header
 		logged_header: () ->
 			active = false
+			animated = false
 
 			$container = $('#header-profile')
 			$trigger = $('#header-gravatar')
+			$dropdown = $container.find('ul')
+			transition_end = 'transitionend oTransitionEnd webkitTransitionEnd'
 
 			open = (e) ->
-				return if active
+				return if animated || active
 				
 				if e
 					e.stopPropagation()
 					e.preventDefault()
+
+				animated = true
+				active = true
 
 				$container.addClass('active')
 				$links = $container.find('ul a').removeAttr('tabindex')
 				$trigger.trigger('focus')
-				active = true
+
+				$dropdown.on transition_end, (e) ->
+					$dropdown.off()
+					animated = false
 
 			close = (e) ->
-				return if !active
-				
+				return if animated || !active
+
 				if e
 					e.stopPropagation()
 					e.preventDefault()
 
+				animated = true
+				active = false
+
 				$container.removeClass('active')
 				$container.find('ul a').attr('tabindex', '-1')
 				$trigger.trigger('focus')
-				active = false
+
+				$dropdown.on transition_end, (e) ->
+					$dropdown.off()
+					animated = false
 
 			$trigger.on 'click.header', (e) ->
 				e.preventDefault()
