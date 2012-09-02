@@ -2,7 +2,7 @@
 
 	nav.pagination
 		- var className = "";
-		span
+		span.prev
 			- if (page > 2)
 				a.prev( href= "#{path}/pag/#{page-1}" ) Anterior
 			- if (page == 2)
@@ -20,7 +20,7 @@
 			span
 				a( href="#{path}", class="active" ) 1
 		
-		span
+		span.next
 			- if (page < pages)
 				a.next( href= "#{path}/pag/#{page+1}" ) Siguiente
 			- else
