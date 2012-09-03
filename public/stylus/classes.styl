@@ -2,128 +2,154 @@
 /*  CSS3 ✰ Classes  */
 }
 
-border-radius( value = 5px )
-	border-radius value
-	-o-border-radius value
-	-ms-border-radius value
-	-moz-border-radius value
-	-webkit-border-radius value
+vendor-prefixes = o ms moz webkit official
+url ?= ''
+
+@import "nib/vendor.styl"
+@import "nib/gradients.styl"
+
+border-radius( arg = '' )
+	if arg == ''
+		vendor('border-radius', 5px)
+	else
+		pos = ()
+		augmented = false
+		for args in arguments
+			for arg in args
+				if arg is a 'ident'
+					append(pos, arg)
+					augmented = true
+				else
+					append(pos, arg)
+					if augmented
+						-apply-border-radius(pos)
+						pos = ()
+		vendor('border-radius', pos) unless augmented
+
+box-shadow( arg = '' )
+	value = arg == '' ? 0 0 5px rgba(#000, 0.10) : arguments
+	vendor('box-shadow', value)
 	-webkit-background-clip padding-box
 
-box-shadow( value = 0 0 5px rgba(#000, 0.10) )
-	box-shadow value
-	-o-box-shadow value
-	-ms-box-shadow value
-	-moz-box-shadow value
-	-webkit-box-shadow value
-	-webkit-background-clip padding-box
+// box-orient( arg = '' )
+// 	vendor('box-orient', arguments)
 
-gradient( top_color, bottom_color = false, inverse = false )
-	
-	if !bottom_color
-		original_color = top_color
-		top_color = lighten(original_color, 15%)
-		bottom_color = darken(original_color, 15%)
-	
-	if inverse
-		temp_color = top_color
-		top_color = bottom_color
-		bottom_color = temp_color
+// flex-direction( arg = '' )
+// 	vendor('flex-direction', arguments)
 
-	background-color top_color
-	background-image -moz-linear-gradient(top, top_color, bottom_color)
-	background-image -webkit-gradient(linear, left top, left bottom, color-stop(0, top_color), color-stop(1, bottom_color))
-	background-image linear-gradient(top, top_color, bottom_color)
-	filter unquote("progid:DXImageTransform.Microsoft.gradient(startColorStr='" + rgb(bottom_color) + "', EndColorStr='" + rgb(top_color) + "')")
+// box-sizing( arg = '' )
+// 	value = arg == '' ? border-box : arguments
+// 	vendor('box-sizing', value)
+// 	if arg == 'border-box'
+// 		*behavior: url(url + 'stylus/boxsizing.htc')
 
-text-shadow( value = 1px 1px 1px rgba(#000, 0.25) ) 
+display( arg = '' )
+	if arg == 'inline-block'
+		display arg
+		zoom 1
+		*display inline
+	else if arg == 'box'
+		display -moz-box
+		display -webkit-box
+		display box
+	else
+		display arg
+
+overflow( arg = '' )
+	if arg == 'auto'
+		overflow auto
+		-webkit-overflow-scrolling touch
+	else
+		overflow arg
+
+text-shadow( arg = '')
+	value = arg == '' ? 1px 1px 1px rgba(#000, 0.25) : arguments
 	text-shadow value
-	-o-text-shadow value
-	-ms-text-shadow value
-	-moz-text-shadow value
-	-webkit-text-shadow value
 
-transform( value = rotate(180deg) ) 
-	transform value
-	-o-transform value
-	-ms-transform value
-	-moz-transform value
-	-webkit-transform value
+transition( arg = '' )
+	value = arg == '' ? all 0.150s linear : arguments
+	vendor('transition', value)
 
-transition( value = all 0.150s linear )
-	transition value
-	-o-transition value
-	-ms-transition value
-	-moz-transition value
-	-webkit-transition value
+transition-property( arg = '' )
+	value = arg == '' ? all : arguments
+	vendor('transition-property', value)
 
-transition-property( value = all )
-	transition-property arguments
-	-o-transition-property arguments
-	-ms-transition-property arguments
-	-moz-transition-property arguments
-	-webkit-transition-property arguments
+transform( arg = '' )
+	value = arg == '' ? translate3d(0,0,0) : arguments
+	vendor('transform', value)
+	
+	// -webkit-backface-visibility hidden
+	// -webkit-perspective 1000
+
+white-space( arg = 'pre-wrap' )
+	if arg == 'pre-wrap'
+		white-space pre-wrap
+		white-space -moz-pre-wrap
+		white-space -pre-wrap
+		white-space -o-pre-wrap
+		word-wrap break-word
+	
+	else
+		white-space arguments
 
 // Image replacement
 ir()
-	background-repeat no-repeat
-	height 100%
-	direction ltr 
+	width = arguments ? arguments[0] : 100%
+	height = arguments && arguments[1] ? arguments[1] : false
+	height = height ? height : width
+
+	direction ltr
 	display block
+	height height
 	overflow hidden
+	position relative
 	text-align left
-	text-indent -999em
-	width 100%
+	text-indent 100%
+	white-space nowrap
+	width width
 
 .ir
 	ir()
 
 // Accesible & Design hidden classes
-.hidden  
-	display none !important
-	visibility hidden !important
+hidden()
+	display none
+
+.hidden
+	hidden()
 
 visuallyhidden()
 	left -9999px
 	position absolute !important
 	top -9999px
-	//clip rect(1px 1px 1px 1px)
-	//clip rect(1px, 1px, 1px, 1px) 
 
 .visuallyhidden
 	visuallyhidden()
 
+invisible()
+	visibility hidden
+	
 .invisible  
-	visibility  hidden 
+	invisible()
 
-user-select( value )
-	-webkit-user-select value
-	-khtml-user-select value
-	-moz-user-select value
-	-ms-user-select value
-	-o-user-select value
-	user-select value
-
+// Disable text selection
 noselect()
-	user-select( none )
+	vendor('user-select', none)
+	-khtml-user-select: none;
 
 .noselect
 	noselect()
-	-moz-user-select: -moz-none;
 
 // Clearing
 clearfix()
 	zoom 1
 
-	&:before,
 	&:after  
+		clear both
 		content "\0020"
 		display block
 		height 0
-		visibility hidden  
-
-	&:after  
-		clear both
+		visibility hidden
 
 .clearfix
 	clearfix()
@@ -131,34 +157,11 @@ clearfix()
 .clear
 	display block
 	clear both
-	height 0
-	overflow hidden
-	visibility hidden
+	zoom 1
 
-// Aligning for WordPress
-align(value)
-	text-align value
-
-.aligncenter
-	align(center)
-
-.alignleft 
-	align(left)
-
-.alignright 
-	align(right)
-
-.alignjustify 
-	align(justify)
-
-// wrappers
-wrapper()
-	margin 0 auto
-	position relative
-	width 960px
-
+// nomargin
 nomargin()
-	margin 0
+	margin 0 !important
 
 .nomargin
 	nomargin()

@@ -4,7 +4,8 @@
 }
 
 @import "classes"
-@import "reset"
+@import "normalize"
+@import "wordpress"
 @import "icons"
 
 font_icomoon = 'IcoMoon'
@@ -12,6 +13,7 @@ font_icomoon = 'IcoMoon'
 body
 	background #242c33
 	color #333
+	font 12px/1.25 Helvetica, Arial, sans-serif
 
 hr
 	background url(images/bg_hr.png) repeat-x left bottom
@@ -27,10 +29,18 @@ hr
 
 h1, h2, h3, h4, h5, h6
 	color #0a92ca
+	margin 0 0 10px
+
+h1
+	font-size 2em
+
+p
+	margin 0 0 1em
 
 a
 	border-bottom 2px solid #80c4e0
 	color #0a92ca
+	text-decoration none
 
 	&.gray
 		border-color #ccc
@@ -90,6 +100,25 @@ a.button
 	font-style normal
 	margin-right 0.5em
 	speak none
+
+label
+	cursor pointer
+	// font-weight bold
+
+input, textarea
+	border 2px solid #ccc
+	font 12px/1 Helvetica, Arial, sans-serif;
+	margin 0 0 15px
+	padding 5px
+	width 160px
+	border-radius()
+	box-shadow( inset 1px 1px 5px rgba(#ccc, 0.2) )
+	transition()
+
+textarea
+	height 115px
+	resize none
+	width 260px
 
 .wrap
 	margin 0 auto
@@ -571,7 +600,7 @@ form.profile
 #wrap
 	margin 0 auto
 	// max-width 1475px
-	padding 25px
+	padding 25px 0
 
 #message
 	background #ffc68c
@@ -663,12 +692,15 @@ form.profile
 	line-height 30px
 	text-align center
 
-	li, span, a
+	li
+	span
+	a
 		display inline-block
 		height 30px
-		vertical-align middle
+		vertical-align bottom
 	
-	li, span
+	li
+	span
 		padding-left 1px
 	
 		&:first-child
@@ -678,6 +710,15 @@ form.profile
 			color #999
 			letter-spacing 1px
 			width 22px
+
+	span.list
+		display inline-block
+	
+	span.of
+		display none
+
+	span.hidden
+		display none
 	
 	a
 		background #999
@@ -729,12 +770,14 @@ form.profile
 
 	li
 		display inline-block
-		min-height 188px
 		margin 15px
 		text-align center
 		vertical-align top
 		width 178px
 	
+		body.gallery &
+			min-height 188px
+
 	a
 		color inherit
 		border 0
@@ -754,7 +797,7 @@ form.profile
 		img
 			border 4px solid #fff
 			display inline-block
-			transition()
+			transition border .150s linear
 
 	span.icon-zoom
 		@extends .icon-zoom-in

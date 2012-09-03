@@ -1,7 +1,34 @@
+#debug
+	padding 2px 5px
+	text-align center
+	background #ccc
+
 hidden()
 	display none !important
 
+@media only screen and (max-width: 320px)
+	body.logged-in #header-upload a.upload
+		&:before
+			margin 0
+		
+		span
+			hidden()
+
 @media only screen and (max-width: 640px)
+	#comments-form
+		.col
+			float none
+			width auto
+		.col-2
+			padding 0
+
+		.buttons
+			text-align center
+			
+			button
+				float none
+
+@media only screen and (max-width: 960px)
 	html
 		-webkit-text-size-adjust none
 
@@ -15,9 +42,6 @@ hidden()
 
 	#container
 		padding-bottom 25px
-
-	#debug
-		display none
 
 	#breadcrumb
 		line-height 1
@@ -33,17 +57,25 @@ hidden()
 	nav.pagination
 		font-size 1em
 
-		span
+		span.list
 			display none
+		
+		span.of
+			display inline-block
+			font-weight normal
+			color #999
+			padding 0 10px
 
 		span.prev
 		span.next
 			display inline-block
 
+	body.gallery .grid li
+		min-height 0
+
 	.grid
 		li
 			margin 0.5%
-			min-height 0
 			width 150px
 
 		div.img
@@ -60,6 +92,65 @@ hidden()
 		.comments
 			hidden()
 
+	a.zocial.disabled
+		display none
+
+	#comments
+		padding 15px
+
+		hr
+			display none
+
+	.img-info p
+		font-size 1em
+
+	.img-description
+		background url(images/bg_hr.png) repeat-x left bottom
+		padding 15px 15px 11px
+
+	legend
+		font-size 1em
+		padding 0
+
+	fieldset
+		margin 0
+
+	fieldset.social
+		legend
+			padding 0 0 1em
+
+	#comments-form
+		// margin 0 auto
+		// max-width 560px
+
+		fieldset
+			margin 0 auto
+			max-width 516px
+
+		hr
+			display block
+			margin 15px 0
+
+		p
+			margin 0 0 0.25em
+
+		.buttons
+			padding .35em .625em .75em
+
+	#content-sidebar-wrap
+		#content h1
+		#sidebar
+			hidden()
+
+		#content
+		#sidebar
+		#comments
+			float none
+			width auto
+
+		#content
+			padding 0
+	
 	#footer
 		ul
 			height auto
@@ -76,3 +167,69 @@ hidden()
 		#claborg
 			margin 0 auto 15px
 
+	body.small-header #header, body.small-header #header > .wrap
+	body.small-header
+		#header
+		#header > .wrap
+			height auto
+
+		#header
+			min-height 68px
+
+		#logo
+			background none
+			height auto
+			top 3px
+			width auto
+			
+			img
+				display block
+
+		#header-upload
+			padding-top 0
+
+		#inner
+			display box
+			box-orient vertical
+
+		#img-info
+			background darken(#00B8F4, 40%)
+			box-ordinal-group 2
+			padding 0
+			
+			.wrap
+				box-direction reverse
+				box-orient vertical
+				display box
+				margin 0
+				padding 0
+
+			.col
+				padding 15px
+
+			.photo-info
+				margin 0
+				float none
+
+				p
+					display block
+					border-radius 0
+
+					> span
+						display block
+						margin 0
+
+				span.hidden
+					display inline
+				span.nbsp
+					hidden()
+
+		#img
+			box-ordinal-group 1
+			margin 0
+
+			.pagination
+				hidden()
+
+		#wrap
+			box-ordinal-group 3

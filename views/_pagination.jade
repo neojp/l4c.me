@@ -10,16 +10,19 @@
 			- if (page == 1)
 				a.prev.disabled Anterior
 		
-		- if (pages > 1)
-			- _.each( _.range(1, pages + 1), function(i){
+		span.list
+			- if (pages > 1)
+				- _.each( _.range(1, pages + 1), function(i){
+					span
+						- className = (i == page) ? "active" : "";
+						a( href= "#{path}/pag/#{i}", class= className )= i
+				- });
+			- else
 				span
-					- className = (i == page) ? "active" : "";
-					a( href= "#{path}/pag/#{i}", class= className )= i
-			- });
-		- else
-			span
-				a( href="#{path}", class="active" ) 1
-		
+					a( href="#{path}", class="active" ) 1
+
+		span.of #{page} / #{pages}
+
 		span.next
 			- if (page < pages)
 				a.next( href= "#{path}/pag/#{page+1}" ) Siguiente
