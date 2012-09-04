@@ -46,8 +46,10 @@ a
 		border-color #ccc
 		color #999
 
-input, textarea
-	&:focus, &:active
+input
+textarea
+	&:focus
+	&:active
 		border-color #FF9933
 		outline 0
 
@@ -105,15 +107,16 @@ label
 	cursor pointer
 	// font-weight bold
 
-input, textarea
+input
+textarea
 	border 2px solid #ccc
 	font 12px/1 Helvetica, Arial, sans-serif;
 	margin 0 0 15px
 	padding 5px
+	transition border .150s linear
 	width 160px
 	border-radius()
 	box-shadow( inset 1px 1px 5px rgba(#ccc, 0.2) )
-	transition()
 
 textarea
 	height 115px
@@ -407,9 +410,6 @@ form.login
 			display inline-block
 			margin 5px
 
-			&.disabled
-				margin 0 10px
-
 		img
 			vertical-align bottom
 
@@ -600,7 +600,10 @@ form.profile
 #wrap
 	margin 0 auto
 	// max-width 1475px
-	padding 25px 0
+	padding 25px
+
+	body.single &
+		padding 25px 0
 
 #message
 	background #ffc68c
@@ -1308,11 +1311,11 @@ body.single-edit
 		// 	color #fff
 	
 body.sizes
-	#content
-		text-align center
-
-	// .img-info
-	// 	padding 10px 15px
+	#img
+		margin 0
+	
+	#wrap
+		display none
 
 body.upload
 body.single-edit

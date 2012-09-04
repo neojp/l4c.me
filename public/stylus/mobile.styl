@@ -28,6 +28,36 @@ hidden()
 			button
 				float none
 
+	body.upload
+	body.single-edit
+		#content-sidebar-wrap #content
+			margin 0
+			width auto
+
+		label
+		#upload-placeholder-container label
+		#upload-file-container label
+			float none
+			display block
+			margin 0
+			text-align left
+			width auto
+
+		#upload-file-container
+			padding 0
+			margin 0
+
+		label br + br
+			display none
+
+		input
+		textarea
+			margin 0
+
+		.name em
+			display inline
+
+
 @media only screen and (max-width: 960px)
 	html
 		-webkit-text-size-adjust none
@@ -38,10 +68,7 @@ hidden()
 		margin-top 5px
 
 	#wrap
-		padding 0
-
-	#container
-		padding-bottom 25px
+		padding 0 !important
 
 	#breadcrumb
 		line-height 1
@@ -69,9 +96,6 @@ hidden()
 		span.prev
 		span.next
 			display inline-block
-
-	body.gallery .grid li
-		min-height 0
 
 	.grid
 		li
@@ -108,24 +132,24 @@ hidden()
 		background url(images/bg_hr.png) repeat-x left bottom
 		padding 15px 15px 11px
 
-	legend
-		font-size 1em
-		padding 0
 
 	fieldset
 		margin 0
 
-	fieldset.social
-		legend
-			padding 0 0 1em
-
 	#comments-form
 		// margin 0 auto
 		// max-width 560px
+		
+		legend
+			font-size 1em
+			padding 0
 
 		fieldset
 			margin 0 auto
 			max-width 516px
+
+		fieldset.social legend
+			padding 0 0 1em
 
 		hr
 			display block
@@ -137,10 +161,11 @@ hidden()
 		.buttons
 			padding .35em .625em .75em
 
+	#content h1
+	#sidebar
+		hidden()
+
 	#content-sidebar-wrap
-		#content h1
-		#sidebar
-			hidden()
 
 		#content
 		#sidebar
@@ -166,6 +191,14 @@ hidden()
 
 		#claborg
 			margin 0 auto 15px
+
+
+	body.gallery
+		#container
+			padding-bottom 25px
+		
+		.grid li
+			min-height 0
 
 	body.small-header #header, body.small-header #header > .wrap
 	body.small-header
@@ -233,3 +266,57 @@ hidden()
 
 		#wrap
 			box-ordinal-group 3
+
+	body.sizes
+	body.single-edit
+		#breadcrumb
+			padding 0
+
+		#container
+			padding-bottom 0
+
+		.info
+			padding 15px
+			text-align center
+			margin 0
+	
+	form.login
+		width auto
+
+		&
+		.fields p.buttons
+			text-align center
+
+		.fields
+		.social
+			background none
+			float none
+			margin 15px auto 0
+
+		.fields
+			background url("images/bg_hr_gray.png") left bottom repeat-x
+			padding-bottom 16px
+			padding 0 15px 15px
+
+			input
+				box-sizing border-box
+				margin 0 auto
+				max-width 400px
+				width 100%
+
+		.social
+			max-width 500px
+			padding 15px
+			width auto
+
+			legend
+				padding 0
+
+			p
+				margin 0
+
+		.register
+			padding 15px 0
+
+			a.button
+				margin 0
