@@ -15,7 +15,7 @@ form.profile( method="post", action="/profile" )
 			a.gray( href="//gravatar.com/gravatars/new", target="_blank" ) Cambia tu avatar
 
 	ul.fields
-		li
+		li.username
 			label( for="header-username" ) Nombre de usuario
 			br
 			input#header-username( type="text", name="username", placeholder="Nombre de usuario", value=user.username )
@@ -30,14 +30,14 @@ form.profile( method="post", action="/profile" )
 					strong #{user.username}
 					| /nombre-de-tu-foto
 
-		li
+		li.email
 			label( for="header-email" ) Correo Electr&oacute;nico
 			br
 			input#header-email( type="email", name="email", placeholder="Correo Electr&oacute;nico", value=user.email )
 			.info
 				| Solo usamos tu correo para recuperar tu contraseña o enviar notificaciones sobre tu cuenta
 
-		li
+		li.password
 			label
 				input#change-password( type="checkbox", name="change-password", value="yes" ).hidden
 				button.gray.change-password-trigger( type="button" ) Cambia tu contraseña
@@ -51,7 +51,7 @@ form.profile( method="post", action="/profile" )
 						a.gray( href="#change-password-trigger" ) Cancelar
 
 	- if (user.twitter.id)
-		hr
+		hr.gray
 
 		.social
 			p

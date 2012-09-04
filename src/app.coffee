@@ -355,6 +355,9 @@ app.get '/logout', (req, res, next) ->
 
 app.get '/registro', (req, res, next) -> res.redirect '/register'
 app.get '/register', (req, res, next) ->
+	res.locals
+		body_class: 'register'
+
 	res.render 'register'
 
 

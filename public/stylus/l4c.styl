@@ -425,8 +425,25 @@ form.login
 			margin-right 25px
 			padding 0.5em 1em
 
-form.register hr
-	margin 25px 0
+form.register
+	text-align center
+
+	hr
+		margin 25px 0
+	
+	.fields
+		// display inline-block
+		float none
+
+		p.buttons
+			text-align inherit
+
+	input
+		max-width 400px
+		margin-left auto
+		margin-right auto
+		width 100%
+
 
 form.profile
 	margin 0 auto
@@ -440,7 +457,8 @@ form.profile
 
 		p.img
 			background #ddd
-			margin 0 0 5px
+			margin 0 auto 5px
+			width 125px
 
 			a
 				border 0

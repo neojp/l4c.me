@@ -3,10 +3,9 @@ nav#breadcrumb
 
 hr
 
-
 form.login.register( method="post", action="/register" )
 	fieldset.fields
-		legend en L4C.me
+		legend Registrate en #{site_name}
 		
 		p
 			//- label( for="header-username" ) Nombre de usuario
@@ -23,61 +22,12 @@ form.login.register( method="post", action="/register" )
 		p.buttons
 			button( type="submit" ) Registrate
 
-		hr.gray.nomargin
+		hr.gray
 		
 		p
 			| Ya tienes una cuenta? Puedes 
-			a.login( href="/registro" ) iniciar sesi&oacute;n
+			a.login( href="/login" ) iniciar sesi&oacute;n
 
-		p
-			| Si la olvidaste, 
-			a.forgot( href="/login/forgot" ) recupera tu cuenta o contraseña
-	
-	fieldset.social
-		p Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus quis lectus metus, at posuere neque. Sed pharetra nibh eget orci convallis at posuere leo convallis. Sed blandit augue vitae augue scelerisque bibendum. Vivamus sit amet libero turpis, non venenatis urna. In blandit, odio convallis suscipit venenatis, ante ipsum cursus augue.
-		p Et mollis nunc diam eget sapien. Nulla facilisi. Etiam feugiat imperdiet rhoncus. Sed suscipit bibendum enim, sed volutpat tortor malesuada non. Morbi fringilla dui non purus porttitor mattis. Suspendisse quis vulputate risus. Phasellus erat velit, sagittis sed varius volutpat, placerat nec urna. Nam eu metus vitae dolor fringilla feugiat. Nulla.
-		p Facilisi. Etiam enim metus, luctus in adipiscing at, consectetur quis sapien. Duis imperdiet egestas ligula, quis hendrerit ipsum ullamcorper et. Phasellus id tristique orci. Proin consequat mi at felis scelerisque ullamcorper. Etiam tempus, felis vel eleifend porta, velit nunc mattis urna, at ullamcorper erat diam dignissim ante. Pellentesque justo risus.
-		p Rutrum ac semper a, faucibus nec lorem. Nullam eget quam tellus, eget sagittis justo.Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Proin ante enim, tincidunt ut interdum in, adipiscing quis tortor. Nulla turpis lacus, rutrum in adipiscing ut, porttitor ac ante. Sed euismod, mauris a.
-
-
-
-
-- /*
-
-form( method="post", action="/registro" )
-	p
-		label Username
-			| 
-			input( type="text", name="username" )
-	
-	p
-		label E-mail
-			| 
-			input( type="email", name="email" )
-	
-	p
-		label Password
-			| 
-			input( type="password", name="password" )
-	
-	p
-		label Repeat Password
-			| 
-			input( type="password", name="password_repeat" )
-	
-	p
-		label Are you a Cristalab member? 
-			input( type="radio", name="clab_boolean", value="yes" )
-			| Yes
-		| 
-		label
-			input( type="radio", name="clab_boolean", value="no", checked )
-			| No
-	
-	p
-		label Cristalab username 
-			input( type="text", name="clab" )
-	
-	p
-		button( type="submit" ) Submit
-- */
+		//- p
+		//- 	| Si la olvidaste, 
+		//- 	a.forgot( href="/login/forgot" ) recupera tu cuenta o contraseña
