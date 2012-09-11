@@ -44,6 +44,28 @@
 				e.preventDefault()
 				e.stopPropagation()
 
+		footer: () ->
+			html = """
+				<div id="footer">
+					<ul>
+						<li id="claborg">
+							<a href="http://www.cristalab.org/" target="_blank" rel="nofollow">Cristalab.org</a>
+						</li>
+						<li id="cristalab">
+							<a href="http://cristalab.com/" target="_blank" rel="nofollow">Cristalab</a>
+						</li>
+						<li id="tiaxime">
+							<a href="http://tiaxime.com/" target="_blank" rel="nofollow">Consejos de amor</a>
+						</li>
+						<li id="github">
+							<a href="https://github.com/neojp/l4c.me/" target="_blank" rel="nofollow">Contribuye a Clabie.com en GitHub.com</a>
+						</li>
+					</ul>
+				</div>
+			"""
+			console.log html
+			$('#js').before html
+
 		# add ie fallback elements
 		ie_fallback: () ->
 			log 'Y U NO STOP USING IE!! ლ(ಠ益ಠლ)'
@@ -160,6 +182,7 @@
 		load: () ->
 			log 'Window on Load'
 			Site.lazyload()
+			Site.footer()
 
 		# document.ready event
 		init: () ->

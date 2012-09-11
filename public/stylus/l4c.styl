@@ -596,19 +596,23 @@ form.profile
 	#p3 a:before
 		background-position -16px*4 0
 
-#github
-	@extends .icon-github
-	text-align center
-	
-	&:before
-		font-size 1.2em
-		margin-right 0.5em
-		vertical-align middle
+	#github
+		@extends .icon-github
+		text-align center
+		
+		&:before
+			font-size 1.2em
+			margin-right 0.5em
+			vertical-align middle
 
-	a
-		color #ccc
-		border-color #666
-		padding 0
+		a
+			background none
+			border-color #666
+			color #ccc
+			margin-left 0.25em
+
+			&:before
+				display none
 
 #inner
 	background #fff
