@@ -582,16 +582,16 @@ app.get '/:user/:slug', (req, res, next) ->
 	.end null, (data) ->
 		photo.prev  = data[2][0]
 		photo.next  = data[2][1]
-		description = _(photo.description)
+		description = if photo.description? then _(photo.description)
 						.chain()
 						.clean()       # remove whitespace and break lines
 						.escapeHTML()  # escape all HTML tags
 						.prune(150)    # fancier version of truncate, doesn't return cut-off words
 						.value()
-		
+
 		res.locals
 			body_class: 'small-header user single' + if photo.image.panorama then ' panorama' else ''
-			document_description: description || ''
+			document_description: if !_.isUndefined(description) then description else ''
 			document_image: "#{url_domain}/uploads/#{photo._id}_m.#{photo.image.ext}"
 			document_title: photo.name
 			document_url: "#{url_domain}/#{username}/#{photo._id}"
