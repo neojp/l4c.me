@@ -1,5 +1,5 @@
 !!! 5
-html( lang="es" )
+html( lang="es", prefix="og: http://ogp.me/ns#" )
 	head
 		- document_title = helpers.heart + ' ' + document_title + ' &nbsp; ' + twitter_config.hashtag
 		meta( charset="utf-8" )
@@ -17,6 +17,7 @@ html( lang="es" )
 		meta( property="og:title", content= document_title )
 		meta( property="og:description", content= document_description )
 		meta( property="og:image", content= document_image )
+		meta( property="og:url", content= document_url )
 
 		block after-head-meta
 	

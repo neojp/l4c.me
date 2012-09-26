@@ -125,6 +125,7 @@ app.param 'user', (req, res, next, id) ->
 
 # Routes
 app.all '*', middleware.redirect_subdomain, middleware.remove_trailing_slash, (req, res, next) ->
+	url_domain = "http://#{req.headers.host}"
 	res.locals
 		_: underscore
 		body_class: ''
@@ -594,7 +595,7 @@ app.get '/:user/:slug', (req, res, next) ->
 			document_description: if !_.isUndefined(description) then description else ''
 			document_image: "#{url_domain}/uploads/#{photo._id}_m.#{photo.image.ext}"
 			document_title: photo.name
-			document_url: "#{url_domain}/#{username}/#{photo._id}"
+			document_url: "#{url_domain}/#{username}/#{photo.slug}"
 			photo: photo
 			photos:
 				from_user: data[0]
@@ -834,7 +835,7 @@ module.exports.listen = listen = () ->
 	_.each config.domains, (value, key, list) ->
 		if available_apps[value]
 			server.use express.vhost key, available_apps[value]
-			url_domain = 'http://' + key  if _.isNull url_domain
+			# url_domain = 'http://' + key  if _.isNull url_domain
 	
 	server.listen config.port || 3000, ->
 		console.log "Listening on port %d \n\n", server.address().port
