@@ -627,6 +627,7 @@ app.get '/:user/:slug/sizes/:size', (req, res) ->
 				size: req.param 'size'
 				slug: slug
 				user: user
+				username: user.username
 
 			res.render 'gallery_sizes', { layout: false, locals: locals }
 
