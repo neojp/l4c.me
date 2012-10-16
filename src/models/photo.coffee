@@ -169,17 +169,30 @@ methods =
 	pretty_date: () ->
 		helpers.pretty_date this.created_at
 
-	prev_next: (next) ->
+	prev_next: (logged_username, next) ->
 		photo = this
 		created_at = photo.created_at
+		next = if _.isFunction logged_username then logged_username else next
+		is_mine = photo._user.username == logged_username
+		console.log is_mine
 
 		invoke (data, callback) ->
-			model.findOne({ _user: photo._user, created_at: { $lt: created_at } }, { slug: 1 })
+			query = model.findOne({ _user: photo._user, created_at: { $lt: created_at } }, { slug: 1 })
+
+			if !is_mine
+				query.nor([{ privacy: 'private' }])
+
+			query
 				.sort({ created_at: -1 })
 				.exec callback
 
 		.and (data, callback) ->
-			model.findOne({ _user: photo._user, created_at: { $gt: created_at } }, { slug: 1 })
+			query = model.findOne({ _user: photo._user, created_at: { $gt: created_at } }, { slug: 1 })
+
+			if !is_mine
+				query.nor([{ privacy: 'private' }])
+
+			query
 				.sort({ created_at: 1 })
 				.exec callback
 

@@ -76,7 +76,7 @@ block content
 				- else
 					div.img-description.no-description
 
-				- if (logged_user.username == username && photo.privacy)
+				- if (logged_user && logged_user.username == username && photo.privacy)
 					p.privacy
 						strong Estado: 
 						- if (photo.privacy == 'public')

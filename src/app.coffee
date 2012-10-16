@@ -539,7 +539,7 @@ app.get '/:user/:slug', (req, res, next) ->
 	slug = req.param 'slug'
 	username = req.param 'user'
 	logged_user = res.local 'logged_user'
-	is_mine = logged_user.username == username
+	is_mine = logged_user && logged_user.username == username
 
 	user = null
 	photo = null
@@ -588,7 +588,8 @@ app.get '/:user/:slug', (req, res, next) ->
 	# prev / next photos from user
 	.and (data, callback) ->
 		# console.log 'photo', photo
-		photo.prev_next(callback)
+		logged_username = if logged_user && logged_user.username then logged_user.username else null
+		photo.prev_next(logged_username, callback)
 
 	.rescue (err) ->
 		next err
@@ -625,7 +626,7 @@ app.get '/:user/:slug/sizes/:size', (req, res) ->
 	username = req.param 'user'
 
 	logged_user = res.local 'logged_user'
-	is_mine = logged_user.username == username
+	is_mine = logged_user && logged_user.username == username
 
 	model.photo
 		.findOne( slug: slug )
@@ -653,7 +654,7 @@ app.get '/:user/pag/:page?', middleware.paged('/:user')
 app.get '/:user', (req, res, next) ->
 	logged_user = res.local 'logged_user'
 	username = req.param 'user'
-	is_profile = logged_user.username == username
+	is_profile = logged_user && logged_user.username == username
 	per_page = config.pagination
 	page = req.param 'page', 1
 	user = null
