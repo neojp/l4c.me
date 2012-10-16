@@ -227,6 +227,10 @@ photo = new Schema
 	name:
 		required: true
 		type: String
+	privacy:
+		default: 'public'
+		enum: ['public', 'private']
+		type: String
 	random:
 		default: Math.random
 		index: true
@@ -242,11 +246,11 @@ photo = new Schema
 # virtual: pretty_date
 photo.virtual('pretty_date').get methods.pretty_date
 
-photo.methods.set_slug = methods.set_slug
+photo.methods.set_slug       = methods.set_slug
 photo.methods.set_image_data = methods.set_image_data
-photo.methods.resize_photo = methods.resize_photo
-photo.methods.resize_photos = methods.resize_photos
-photo.methods.upload_photo = methods.upload_photo
-photo.methods.prev_next = methods.prev_next
+photo.methods.resize_photo   = methods.resize_photo
+photo.methods.resize_photos  = methods.resize_photos
+photo.methods.upload_photo   = methods.upload_photo
+photo.methods.prev_next      = methods.prev_next
 
 module.exports = model = mongoose.model 'photo', photo

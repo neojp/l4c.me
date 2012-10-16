@@ -29,6 +29,17 @@
 						|  está disponible
 				textarea#upload-description( name="description" )
 
+			p.privacy
+				label( for="upload-privacy" ) Privacidad
+
+				label.inline
+					input#upload-privacy.radio( type="radio", name="privacy", value="public", checked ) 
+					| Público
+
+				label.inline
+					input.radio( type="radio", name="privacy", value="private" ) 
+					| Privado
+
 			hr.hidden
 
 			p.buttons

@@ -37,59 +37,63 @@ a#dejar-comentario
 	h2.hidden Deja un Comentario
 	- var redirect = '?r=' + original_url
 
-	form.clearfix( method="post", action="/comment" )
-		input( type="hidden", name="photo", value=photo.slug )
-		
-		- if (logged_user)
-			//- p= logged_user
-			p Estas logueado como 
-				//- a( href="/#{logged_user.username}" )= logged_user.username
-				strong= logged_user.username
-				|  &nbsp; &mdash; &nbsp; 
-				a.logout( href="/logout" + redirect ) Salir?
-				| 
-				span.icon-logout
+	- if (photo.privacy == 'private')
+		form.aligncenter
+			p Los comentarios están cerrados, cambia la privacidad de esta foto si quieres recibir comentarios.
+	- else
+		form.clearfix( method="post", action="/comment" )
+			input( type="hidden", name="photo", value=photo.slug )
+			
+			- if (logged_user)
+				//- p= logged_user
+				p Estas logueado como 
+					//- a( href="/#{logged_user.username}" )= logged_user.username
+					strong= logged_user.username
+					|  &nbsp; &mdash; &nbsp; 
+					a.logout( href="/logout" + redirect ) Salir?
+					| 
+					span.icon-logout
 
-			p
-				label
-					textarea( name="comment" )
-
-		- else
-
-			fieldset.social
-				legend
-					a.gray( href="/login" + redirect ) Entra
-					|  o 
-					a.gray( href="/register" + redirect ) registrate
-					|  a tu cuenta y deja un comentario
-				
 				p
-					- var title_attr = "Aun no esta disponible :(";
-					a.zocial.twitter( href="/login/twitter" + redirect ) Entra con Twitter
-					a.zocial.facebook.disabled( tabindex="-1", title= title_attr ) Entra con Facebook
-					a.zocial.googleplus.disabled( tabindex="-1", title= title_attr ) Entra con Google+
+					label
+						textarea( name="comment" )
 
-				hr
+			- else
 
-			fieldset
-				legend O deja un comentario como invitado
-
-				.col.col-1
-					p
-						label Nombre
-							br
-							input( type="text", name="name" )
+				fieldset.social
+					legend
+						a.gray( href="/login" + redirect ) Entra
+						|  o 
+						a.gray( href="/register" + redirect ) registrate
+						|  a tu cuenta y deja un comentario
 					
 					p
-						label Email
-							br
-							input( type="email", name="email" )
+						- var title_attr = "Aun no esta disponible :(";
+						a.zocial.twitter( href="/login/twitter" + redirect ) Entra con Twitter
+						a.zocial.facebook.disabled( tabindex="-1", title= title_attr ) Entra con Facebook
+						a.zocial.googleplus.disabled( tabindex="-1", title= title_attr ) Entra con Google+
 
-				.col.col-2
-					p
-						label Comentario
-							br
-							textarea( name="comment" )
-		
-		p.buttons
-			button( type="submit" ) Enviar Comentario
+					hr
+
+				fieldset
+					legend O deja un comentario como invitado
+
+					.col.col-1
+						p
+							label Nombre
+								br
+								input( type="text", name="name" )
+						
+						p
+							label Email
+								br
+								input( type="email", name="email" )
+
+					.col.col-2
+						p
+							label Comentario
+								br
+								textarea( name="comment" )
+			
+			p.buttons
+				button( type="submit" ) Enviar Comentario

@@ -20,7 +20,7 @@ block content
 					- url = '/' + user.username + '/' + photo.slug;
 
 					li
-						div.img
+						div( class="img " + photo.privacy )
 							a( href= url )
 								img( src= helpers.image.blank, data-src= "/uploads/#{photo._id}_#{size.size}.#{photo.image.ext}" )
 								span.icon-zoom

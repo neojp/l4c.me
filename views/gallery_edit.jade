@@ -58,6 +58,23 @@ block content
 							|  está disponible
 					textarea#upload-description( name="description" )= photo.description
 
+				p.privacy
+					label( for="upload-privacy" ) Privacidad
+
+					label.inline
+						- if (!photo.privacy || photo.privacy == 'public')
+							input#upload-privacy.radio( type="radio", name="privacy", value="public", checked ) 
+						- else
+							input#upload-privacy.radio( type="radio", name="privacy", value="public" ) 
+						| Público
+
+					label.inline
+						- if (photo.privacy == 'private')
+							input.radio( type="radio", name="privacy", value="private", checked ) 
+						- else
+							input.radio( type="radio", name="privacy", value="private" ) 
+						| Privado
+
 				hr.hidden
 
 				p.buttons

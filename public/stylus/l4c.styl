@@ -1360,7 +1360,11 @@ body.single-edit
 		margin-right 20px
 		text-align right
 		width 95px
-		
+
+		&.inline
+			float none
+			width auto
+
 		em
 			color #999
 			display block
@@ -1374,6 +1378,12 @@ body.single-edit
 	
 	input
 		width 335px
+
+		&.radio
+			display inline
+			float none
+			margin 0 0.5em
+			width auto
 	
 	textarea
 		height 135px
@@ -1550,5 +1560,11 @@ body.small-header
 
 	#header-upload
 		padding-top 10px
+
+	.privacy
+		color #666
+		font-size 1em
+		font-style italic
+		margin 2em 0 0
 
 @import "mobile"

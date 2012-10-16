@@ -75,6 +75,14 @@ block content
 						!= helpers.markdown(photo.description)
 				- else
 					div.img-description.no-description
+
+				- if (logged_user.username == username && photo.privacy)
+					p.privacy
+						strong Estado: 
+						- if (photo.privacy == 'public')
+							| Ésta foto es pública.
+						- if (photo.privacy == 'private')
+							| Ésta foto es privada.
 			
 			//- #social-bar
 

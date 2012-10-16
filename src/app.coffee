@@ -174,6 +174,7 @@ app.get '/fotos/:sort?', (req, res, next) ->
 	.and (data, callback) ->
 		photos = model.photo
 			.find(query)
+			.nor([{ privacy: 'private'}])
 			.limit(per_page)
 			.skip(per_page * (page - 1))
 			.populate('_user')
@@ -260,6 +261,7 @@ app.get '/feed/:user', (req, res) ->
 	.then (data, callback) ->
 		model.photo
 			.find(_user: user._id)
+			.nor([{ privacy: 'private'}])
 			.sort({ created_at: -1 })
 			.limit(config.rss.limit)
 			.exec callback
@@ -397,11 +399,12 @@ app.post '/comment', (req, res, next) ->
 	console.log comment
 
 	invoke (data, callback) ->
-		# model.photo.update({ slug: req.body.photo }, { $push: { comments: comment } }, false, callback)
-		# model.photo.update({ slug: req.body.photo }, { $push: { comments: comment } }, false, callback)
 		model.photo.findOne({ slug: req.body.photo }, callback).populate('_user')
 
 	.then (data, callback) ->
+		if data.privacy == 'private'
+			return callback new Error('You can\'t send comments to private photos')
+
 		data.comments.push comment
 		data.save callback
 
@@ -424,6 +427,7 @@ app.post '/fotos/publicar', middleware.auth, (req, res, next) ->
 	user = req.user
 	name = req.body.name
 	description = req.body.description
+	privacy = req.body.privacy
 
 	file = req.files.file
 	file_ext = helpers.image.extensions[file.type]
@@ -434,6 +438,7 @@ app.post '/fotos/publicar', middleware.auth, (req, res, next) ->
 	queue = invoke (data, callback) ->
 		photo.name = name
 		photo.description = description  if description && description != ''
+		photo.privacy = if privacy && privacy in ['public', 'private'] then privacy else 'public'
 		photo.image.ext = file_ext
 		photo._user = user._id
 		photo.save (err) ->
@@ -533,7 +538,9 @@ app.get '/tweets', middleware.auth, (req, res) ->
 app.get '/:user/:slug', (req, res, next) ->
 	slug = req.param 'slug'
 	username = req.param 'user'
-	
+	logged_user = res.local 'logged_user'
+	is_mine = logged_user.username == username
+
 	user = null
 	photo = null
 	myphotos = []
@@ -547,6 +554,7 @@ app.get '/:user/:slug', (req, res, next) ->
 			.exec (err, data) ->
 				return callback err  if err
 				return error_handler(404)(req, res)  if data == null || data._user.username != username
+				return error_handler(403)(req, res)  if data.privacy == 'private' && !is_mine  # private photos can only be viewed by owners
 
 				user = data._user
 				photo = data
@@ -555,9 +563,13 @@ app.get '/:user/:slug', (req, res, next) ->
 
 	# more user photos
 	.then (data, callback) ->
-		model.photo
+		photos = model.photo
 			.find( _user: user._id )
-			.ne('_id', photo._id)
+
+		if !is_mine
+			photos.nor([{ _id: photo._id }, {privacy: 'private'}])
+		
+		photos
 			.sort({ created_at: -1 })
 			.limit(6)
 			.exec callback
@@ -568,6 +580,7 @@ app.get '/:user/:slug', (req, res, next) ->
 			.find()
 			.ne('_user', photo._user._id)
 			.or( helpers.random_query() )
+			.nor([{ privacy: 'private' }])
 			.limit(6)
 			.populate('_user')
 			.exec callback
@@ -609,14 +622,18 @@ app.get '/:user/:slug', (req, res, next) ->
 
 app.get '/:user/:slug/sizes/:size', (req, res) ->
 	slug = req.param 'slug'
-	user = req.param 'user'
+	username = req.param 'user'
+
+	logged_user = res.local 'logged_user'
+	is_mine = logged_user.username == username
 
 	model.photo
 		.findOne( slug: slug )
 		.populate('_user')
 		.exec (err, photo) ->
 			return next err  if err
-			return error_handler(404)(req, res)  if !photo
+			return error_handler(404)(req, res)  if photo == null || photo._user.username != username
+			return error_handler(403)(req, res)  if photo.privacy == 'private' && !is_mine  # private photos can only be viewed by owners
 
 			photo.views += 1
 			photo.save()
@@ -626,15 +643,17 @@ app.get '/:user/:slug/sizes/:size', (req, res) ->
 				photo: photo
 				size: req.param 'size'
 				slug: slug
-				user: user
-				username: user.username
+				user: photo._user
+				username: username
 
 			res.render 'gallery_sizes', { layout: false, locals: locals }
 
 
 app.get '/:user/pag/:page?', middleware.paged('/:user')
 app.get '/:user', (req, res, next) ->
+	logged_user = res.local 'logged_user'
 	username = req.param 'user'
+	is_profile = logged_user.username == username
 	per_page = config.pagination
 	page = req.param 'page', 1
 	user = null
@@ -652,6 +671,11 @@ app.get '/:user', (req, res, next) ->
 	.and (data, callback) ->
 		photos = model.photo
 			.find( _user: user._id )
+
+		if !is_profile
+			photos.nor([{ privacy: 'private'}])
+		
+		photos
 			.limit(per_page)
 			.skip(per_page * (page - 1))
 			.sort({ created_at: -1 })
@@ -743,6 +767,7 @@ app.put '/:user/:slug', middleware.auth, (req, res) ->
 		# name & description
 		photo.name = req.body.name  if photo.name != req.body.name && has_update = true
 		photo.description = req.body.description  if photo.description != req.body.description && has_update = true
+		photo.privacy = req.body.privacy  if photo.privacy != req.body.privacy && has_update = true
 		callback()
 
 	.rescue (err) ->
@@ -829,15 +854,19 @@ app.delete '/:user/:slug', middleware.auth, (req, res) ->
 
 
 module.exports.listen = listen = () ->
-	server = express.createServer()
-	available_apps =
-		app: app
+	if (_.isEmpty config.domains)
+		server = app
 
-	_.each config.domains, (value, key, list) ->
-		if available_apps[value]
-			server.use express.vhost key, available_apps[value]
-			# url_domain = 'http://' + key  if _.isNull url_domain
-	
+	else
+		server = express.createServer()
+		available_apps =
+			app: app
+
+		_.each config.domains, (value, key, list) ->
+			if available_apps[value]
+				server.use express.vhost key, available_apps[value]
+				# url_domain = 'http://' + key  if _.isNull url_domain
+
 	server.listen config.port || 3000, ->
 		console.log "Listening on port %d \n\n", server.address().port
 		user = config.users.default
