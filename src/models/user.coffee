@@ -25,12 +25,14 @@ Email =
 
 Url =
 	type: String
-	validate: [validate_url, 'Please enter a valid URL']
+	validate: [validate_url, 'Please enter a valid URL'],
+	unique: true
 
 Nick =
 	type: String,
 	lowercase: true,
-	validate: [validate_nick, 'Please enter a valid Nickname']
+	validate: [validate_nick, 'Please enter a valid Nickname'],
+	unique: true
 
 user = new Schema
 	_photos: [
