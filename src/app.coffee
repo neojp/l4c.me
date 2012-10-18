@@ -463,7 +463,7 @@ app.post '/fotos/publicar', middleware.auth, (req, res, next) ->
 
 	# tweet photo
 	queue.then (data, callback) ->
-		if req.user.twitter and req.user.twitter.share
+		if photo.privacy != 'private' && req.user.twitter and req.user.twitter.share
 			script = fs.realpathSync __dirname + '/../scripts/twitter.js'
 			proc = spawn 'node', [script, photo._id]
 			
