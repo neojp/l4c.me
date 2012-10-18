@@ -14,6 +14,9 @@ validate_url = (v) ->
 validate_email = (v) ->
 	/^[\+a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(v)
 
+validate_nick = (v) ->
+	!/([^\w-.])/.test(v)
+
 Email =
 	get: (v) -> v || ''
 	lowercase: true
@@ -22,7 +25,14 @@ Email =
 
 Url =
 	type: String
-	validate: [validate_url, 'Please enter a valid URL']
+	validate: [validate_url, 'Please enter a valid URL'],
+	unique: true
+
+Nick =
+	type: String,
+	lowercase: true,
+	validate: [validate_nick, 'Please enter a valid Nickname'],
+	unique: true
 
 user = new Schema
 	_photos: [
@@ -37,7 +47,7 @@ user = new Schema
 	facebook:
 		id: String
 		email: Email
-		username: String
+		username: Nick
 	password:
 		# required: true
 		set: encrypt_password
@@ -51,14 +61,10 @@ user = new Schema
 		id: String
 		token: String
 		token_secret: String
-		username: String
+		username: Nick
 		share: Boolean
 	url: Url
-	username:
-		lowercase: true
-		# required: true
-		type: String
-		# unique: true
+	username: Nick
 
 user.statics.encrypt_password = encrypt_password
 
