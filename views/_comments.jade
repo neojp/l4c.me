@@ -70,11 +70,15 @@ a#dejar-comentario
 					p
 						- var title_attr = "Aun no esta disponible :(";
 						a.zocial.twitter( href="/login/twitter" + redirect ) Entra con Twitter
+
+						- /*
 						a.zocial.facebook.disabled( tabindex="-1", title= title_attr ) Entra con Facebook
 						a.zocial.googleplus.disabled( tabindex="-1", title= title_attr ) Entra con Google+
+						- */
 
-					hr
+					//- hr
 
+				- /*
 				fieldset
 					legend O deja un comentario como invitado
 
@@ -94,6 +98,9 @@ a#dejar-comentario
 							label Comentario
 								br
 								textarea( name="comment" )
+				- */
 			
+			- /*
 			p.buttons
 				button( type="submit" ) Enviar Comentario
+			- */
