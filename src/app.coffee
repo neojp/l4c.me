@@ -384,6 +384,11 @@ app.post '/register', (req, res, next) ->
 
 # Logged in user routes
 app.post '/comment', (req, res, next) ->
+	if !req.user
+		ip_address = req.headers['x-forwarded-for'] ? req.connection.remoteAddress
+		console.log "denied guest comment on photo.slug - #{ip_address} - #{req.body.photo}"
+		return error_handler(403)(req, res)
+
 	comment =
 		body: req.body.comment
 		guest: true
@@ -396,7 +401,7 @@ app.post '/comment', (req, res, next) ->
 		comment._user = req.user._id
 		comment.guest = false
 
-	console.log comment
+	console.log "comment photo.slug: #{req.body.photo}"
 
 	invoke (data, callback) ->
 		model.photo.findOne({ slug: req.body.photo }, callback).populate('_user')

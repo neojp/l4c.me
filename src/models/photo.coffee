@@ -105,7 +105,7 @@ methods =
 				gm(src).size cb
 			
 			.end null, (current_size) ->
-				console.log current_size
+				console.log "grpahicsmagick current_size - #{current_size}"
 
 				if (current_size.width < size.width && current_size.height < size.height)
 					console.log "photo resize not needed #{size.size} - #{src} -> #{dest}"
@@ -174,7 +174,8 @@ methods =
 		created_at = photo.created_at
 		next = if _.isFunction logged_username then logged_username else next
 		is_mine = photo._user.username == logged_username
-		console.log is_mine
+		
+		console.log "prev_next is_mine?  #{is_mine}"
 
 		invoke (data, callback) ->
 			query = model.findOne({ _user: photo._user, created_at: { $lt: created_at } }, { slug: 1 })
