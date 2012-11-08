@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 var http = require('http'),
     execFile = require('child_process').execFile;
     i = 0,
