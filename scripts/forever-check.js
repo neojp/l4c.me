@@ -5,7 +5,7 @@ var http = require('http'),
     i = 0,
     restarted = 0,
     timer = null,
-    delay = 60 * 1000;
+    delay = 5 * 1000;
 
 function output(error, stdout, stderr){
     var s = [];
@@ -23,8 +23,8 @@ function output(error, stdout, stderr){
 
 // request options
 var options = {
-    host: '127.0.0.1',
-    port: 3000,
+    host: 'clabie.com',
+    port: 80,
     path: '/',
     method: 'HEAD'
 };
@@ -43,6 +43,7 @@ function clabie_restart(){
 }
 
 function clabie_check(){
+    console.log('');
     console.log('clabie_check - ', i,  ':', restarted, ' - ', new Date());
     i++;
 
@@ -50,15 +51,15 @@ function clabie_check(){
     var req = http.request(options, function(res){
         clearTimeout(timer);
 
-        // console.log('STATUS:' + res.statusCode);
-        // console.log('HEADERS:' + JSON.stringify(res.headers));
-
         console.log(res.statusCode);
         
         if (res.statusCode >= 500) {
             console.log('');
             clabie_restart();
+            return;
         }
+
+        setTimeout(clabie_check, delay);
     });
 
     req.on('error', function(e){
