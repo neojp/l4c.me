@@ -57,12 +57,8 @@ function clabie_check(){
         
         if (res.statusCode >= 500) {
             console.log('');
-            setTimeout(clabie_check, delay);
-            return;
+            clabie_restart();
         }
-
-        // restart clabie
-        clabie_restart();
     });
 
     req.on('error', function(e){
