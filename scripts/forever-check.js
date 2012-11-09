@@ -5,7 +5,7 @@ var http = require('http'),
     i = 0,
     restarted = 0,
     timer = null,
-    delay = 5 * 1000;
+    delay = 60 * 1000;
 
 function output(error, stdout, stderr){
     var s = [];
