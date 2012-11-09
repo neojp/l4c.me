@@ -3,6 +3,7 @@
 var http = require('http'),
     execFile = require('child_process').execFile;
     i = 0,
+    restarted = 0,
     timer = null,
     delay = 60 * 1000;
 
@@ -22,15 +23,27 @@ function output(error, stdout, stderr){
 
 // request options
 var options = {
-    host: 'clabie.com',
-    port: 80,
+    host: '127.0.0.1',
+    port: 3000,
     path: '/',
     method: 'HEAD'
 };
 
 
+function clabie_restart(){
+    execFile(__dirname + '/forever-restart.js', null, null, function(error, stdout, stderr){
+        var s = output.apply(this, arguments);
+        var r = s.join("\n");
+        console.log('');
+        console.log(r);
+
+        restarted++;
+        setTimeout(clabie_check, delay);
+    });
+}
+
 function clabie_check(){
-    console.log('clabie_check', i, ' - ', new Date());
+    console.log('clabie_check - ', i,  ':', restarted, ' - ', new Date());
     i++;
 
     // start request
@@ -42,28 +55,27 @@ function clabie_check(){
 
         console.log(res.statusCode);
         
-        if (res.statusCode == 200) {
+        if (res.statusCode >= 500) {
             console.log('');
             setTimeout(clabie_check, delay);
             return;
         }
 
         // restart clabie
-        execFile(__dirname + '/forever-restart.js', null, null, function(error, stdout, stderr){
-            var s = output.apply(this, arguments);
-            var r = s.join("\n");
-            console.log('');
-            console.log(r);
-
-            setTimeout(clabie_check, delay);
-        });
+        clabie_restart();
     });
 
     req.on('error', function(e){
-        if (e.code === 'ECONNRESET')
+        console.log('ERROR - problem with request: ' + e.message);
+
+        if (e.code === 'ECONNRESET') {
             console.log('Timeout ERROR');
 
-        console.log('problem with request: ' + e.message);
+            // restart clabie
+            clabie_restart();
+            return;
+        }
+
         setTimeout(clabie_check, delay);
     });
 
