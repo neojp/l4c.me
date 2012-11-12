@@ -9,7 +9,7 @@ form.login.register( method="post", action="/register" )
 		
 		p
 			//- label( for="header-username" ) Nombre de usuario
-			input#header-username( type="text", name="username", placeholder="Nombre de usuario", required, autofocus )
+			input#header-username( type="text", name="username", placeholder="Nombre de usuario", required, autofocus, pattern="[a-zA-z0-9-_.]*" )
 
 		p
 			//- label( for="header-password" ) Contraseña
