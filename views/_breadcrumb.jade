@@ -1,11 +1,11 @@
 nav#breadcrumb
-	h1 Galeria
+	h1 Galer&iacute;a
 
 	- var users_gallery = original_url !== '/' && original_url.indexOf('/fotos') == -1
 	- if (users_gallery)
 		ul
 			li
-				- var author_prefix = 'Galeria de fotos de'
+				- var author_prefix = 'Galer&iacute;a de fotos de'
 				include _author_info
 
 	- else
@@ -18,4 +18,4 @@ nav#breadcrumb
 			
 			- className = (sort == 'top') ? 'active' : '';
 			li( class= className )
-				a( href="/fotos/top" ) Mas vistas
+				a( href="/fotos/top" ) M&aacute;s vistas
