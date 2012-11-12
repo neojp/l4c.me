@@ -1,9 +1,9 @@
 !!! 5
 html( lang="es", prefix="og: http://ogp.me/ns#" )
 	head
-		- document_title = helpers.heart + ' ' + document_title + ' &nbsp; ' + twitter_config.hashtag
+		- document_title_tag = helpers.heart + ' ' + document_title + (twitter_config.hashtag ? ' &nbsp; ' + twitter_config.hashtag : '')
 		meta( charset="utf-8" )
-		title= document_title
+		title= document_title_tag
 		meta( name="description", value= document_description )
 		meta( name="viewport", content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1" )
 

@@ -1,7 +1,7 @@
 extends layout
 
 block before-head-meta
-	- if (path !== '/fotos/ultimas' && path !== '/:user')
+	- if (path == '/fotos/top' || page > 1)
 		meta( name="robots", content="noindex,follow" )
 
 block after-head-meta

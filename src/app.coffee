@@ -89,7 +89,7 @@ app.configure 'production', ->
 # Route Params
 app.param 'page', (req, res, next, id) ->
 	if id.match /[0-9]+/
-		req.param.page = parseInt req.param.page
+		req.param.page = parseInt req.param.page, 10
 		next()
 	else
 		return error_handler(404)(req, res)
@@ -163,7 +163,7 @@ app.get '/fotos/:sort/pag/:page?', middleware.paged('/fotos/:sort?')
 app.get '/fotos/ultimas', (req, res) -> res.redirect '/fotos', 301
 app.get '/fotos/:sort?', (req, res, next) ->
 	sort = req.param 'sort', 'ultimas'
-	page = req.param 'page', 1
+	page = parseInt req.param('page', 1), 10
 	per_page = config.pagination
 	photos = null
 	query = {}
@@ -197,6 +197,7 @@ app.get '/fotos/:sort?', (req, res, next) ->
 			body_class: "gallery #{sort}"
 			pages: Math.ceil count / per_page
 			path: "/fotos/#{sort}"
+			page: page
 			photos: photos
 			sort: sort
 			total: count
@@ -210,7 +211,7 @@ app.get '/fotos/:sort?', (req, res, next) ->
 app.get '/fotos/galeria/pag/:page?', middleware.paged('/fotos/galeria')
 app.get '/fotos/galeria', (req, res, next) ->
 	sort = 'galeria'
-	page = req.param 'page', 1
+	page = parseInt req.param('page', 1), 10
 	per_page = config.pagination
 	photos = null
 	query = {}
@@ -237,6 +238,7 @@ app.get '/fotos/galeria', (req, res, next) ->
 		res.locals
 			body_class: "gallery #{sort}"
 			pages: Math.ceil count / per_page
+			page: page
 			path: "/fotos/#{sort}"
 			photos: photos
 			sort: sort
@@ -675,7 +677,7 @@ app.get '/:user', (req, res, next) ->
 	username = req.param 'user'
 	is_profile = logged_user && logged_user.username == username
 	per_page = config.pagination
-	page = req.param 'page', 1
+	page = parseInt req.param('page', 1), 10
 	user = null
 	photos = null
 
@@ -712,6 +714,7 @@ app.get '/:user', (req, res, next) ->
 		res.locals
 			body_class: 'gallery user'
 			pages: Math.ceil count / per_page
+			page: page
 			path: "/#{user.username}"
 			photos: photos
 			sort: null
