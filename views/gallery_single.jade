@@ -2,13 +2,15 @@ extends layout
 
 block after-head-meta
 	meta( name="twitter:card", content="photo" )
-	meta( name="twitter:title", content="" )
+	meta( name="twitter:title", content= document_title )
 	meta( name="twitter:description", content= document_description )
-	meta( name="twitter:creator", content="@#{user.twitter.username}" )
+	- if (user.twitter && user.twitter.username)
+		meta( name="twitter:creator", content="@#{user.twitter.username}" )
 	meta( name="twitter:url", content= document_url )
 
 	meta( name="twitter:image", content= document_image )
 	link( rel="alternate", title="#{helpers.heart} #{site_name} - Fotos de #{username}", href="#{site_domain}/feed/#{username}", type="application/rss+xml" )
+	link( rel="canonical", href= document_url )
 
 block before-wrap
 	#img-info
