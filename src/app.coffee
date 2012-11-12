@@ -168,6 +168,9 @@ app.get '/fotos/:sort?', (req, res, next) ->
 	photos = null
 	query = {}
 
+	if req.originalUrl == '/fotos'
+		return res.redirect '/'
+
 	invoke (data, callback) ->
 		model.photo.count query, callback
 

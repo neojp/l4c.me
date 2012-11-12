@@ -1,5 +1,9 @@
 extends layout
 
+block before-head-meta
+	- if (path !== '/fotos/ultimas' && path !== '/:user')
+		meta( name="robots", content="noindex,follow" )
+
 block after-head-meta
 	- if (typeof username !== 'undefined')
 		link( rel="alternate", title="#{helpers.heart} #{site_name} - Fotos de #{username}", href="#{site_domain}/feed/#{username}", type="application/rss+xml" )

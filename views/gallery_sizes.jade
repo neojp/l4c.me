@@ -1,5 +1,10 @@
 extends layout
 
+block before-head-meta
+	meta( name="robots", content="noindex,follow" )
+	link( rel="canonical", href= document_url )
+
+
 block after-head-meta
 	meta( name="twitter:card", content="photo" )
 	meta( name="twitter:title", content= document_title )
@@ -10,7 +15,7 @@ block after-head-meta
 
 	meta( name="twitter:image", content= document_image )
 	link( rel="alternate", title="#{helpers.heart} #{site_name} - Fotos de #{username}", href="#{site_domain}/feed/#{username}", type="application/rss+xml" )
-	link( rel="canonical", href= document_url )
+
 
 block before-wrap
 	- user = photo._user
