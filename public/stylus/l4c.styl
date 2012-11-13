@@ -1234,10 +1234,25 @@ div.comments
 		font-size 0.8em
 		margin-left 2px
 
+	.comment-head
+		@extends .clearfix
+
+		p
+			float left
+
 	.comment-date
 		color #666
 		font-size 0.9em
 
+	.delete
+		float right
+
+		button
+			background none
+			color #888
+			padding 0
+
+#comments-form
 	form
 		background #F7F7F7
 		border 2px solid #FBE3CC

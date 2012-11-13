@@ -426,6 +426,35 @@ app.post '/comment', (req, res, next) ->
 		res.redirect "/#{photo._user.username}/#{photo.slug}#c#{_.last(photo.comments)._id}"
 
 
+app.delete '/comment', (req, res, next) ->
+	if !req.user
+		ip_address = req.headers['x-forwarded-for'] ? req.connection.remoteAddress
+		console.log "denied guest comment on photo.slug - #{ip_address} - #{req.body.photo}"
+		return error_handler(403)(req, res)
+
+	comment_id = req.body.comment
+
+	model.photo
+		.findOne( 'comments._id': comment_id )
+		.populate('_user')
+		.exec (err, photo) ->
+			return next err  if err
+			return error_handler(404)(req, res)  if photo == null
+			return error_handler(403)(req, res)  if req.user._id.toString() != photo._user._id.toString()  # comments can only be deleted by photo owners
+
+			comment = _.find photo.comments, (p) -> p._id.toString() == comment_id
+			photo.update
+					$pull:
+						comments:
+							_id: comment._id
+				,
+					safe: true
+				,
+					(err, done) ->
+						return next err  if err
+						res.redirect "/#{photo._user.username}/#{photo.slug}#comments"
+
+
 app.get '/fotos/publicar', middleware.auth, (req, res) ->
 	res.locals
 		body_class: 'upload'

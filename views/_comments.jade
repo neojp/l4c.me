@@ -10,14 +10,21 @@ header.clearfix
 	.comments
 		- _.each(photo.comments, function(comment, index, comments){
 			article.comment( id= "c#{comment._id}" )
-				p.comment-head
-					strong.comment-author
-						- if (!comment.guest)
-							a( href="/#{comment._user.username}" )= comment._user.username
-						- else
-							span= comment.user.name
-					|  
-					small.comment-date &middot; hace #{comment.pretty_date}
+				.comment-head
+					p
+						strong.comment-author
+							- if (!comment.guest)
+								a( href="/#{comment._user.username}" )= comment._user.username
+							- else
+								span= comment.user.name
+						|  
+						small.comment-date &middot; hace #{comment.pretty_date}
+
+					- if (logged_user && logged_user.username == username)
+						form.delete( method="post", action="/comment", enctype="multipart/form-data" )
+							input( type="hidden", name="_method", value="delete" )
+							button.icon-trash( type="submit", name="comment", value= comment._id )
+								span.hidden Borrar
 
 				p.gravatar
 					- if (!comment.guest)
@@ -58,6 +65,9 @@ a#dejar-comentario
 					label
 						textarea( name="comment" )
 
+				p.buttons
+					button( type="submit" ) Enviar Comentario
+
 			- else
 
 				fieldset.social
@@ -70,11 +80,6 @@ a#dejar-comentario
 					p
 						- var title_attr = "Aun no esta disponible :(";
 						a.zocial.twitter( href="/login/twitter" + redirect ) Entra con Twitter
-
-						- /*
-						a.zocial.facebook.disabled( tabindex="-1", title= title_attr ) Entra con Facebook
-						a.zocial.googleplus.disabled( tabindex="-1", title= title_attr ) Entra con Google+
-						- */
 
 					//- hr
 
@@ -100,7 +105,4 @@ a#dejar-comentario
 								textarea( name="comment" )
 				- */
 			
-			- /*
-			p.buttons
-				button( type="submit" ) Enviar Comentario
-			- */
+			
