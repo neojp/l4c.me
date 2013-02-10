@@ -18,7 +18,7 @@ lib = require './lib'
 helpers = lib.helpers
 error_handler = lib.error_handler
 middleware = lib.middleware(app)
-url_domain = null
+url_domain = 'http://' + config.domain
 
 
 # Mongoose configuration
@@ -88,7 +88,7 @@ app.configure ->
 			document_image: url_domain + '/images/logo.png'
 			document_title: config.info.name
 			document_url: url_domain
-			site_domain: config.domain
+			site_domain: 'http://' + config.domain
 			site_name: config.info.name
 			helpers: helpers
 			logged_user: if req.isAuthenticated() then req.user else null
