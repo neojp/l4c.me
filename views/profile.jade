@@ -1,68 +1,71 @@
-nav#breadcrumb
-	h1 Editar mi perfil
+extends layout
 
-hr
+block content
+	nav#breadcrumb
+		h1 Editar mi perfil
 
-form.profile( method="post", action="/profile" )
-	input( type="hidden", name="_method", value="put" )
+	hr
 
-	.gravatar
-		p.img
-			a( href="//gravatar.com/gravatars/new", target="_blank" )
-				- src = (user.email) ? helpers.gravatar(user.email, 125) : helpers.image.blank
-				img( data-src=src, src= helpers.image.blank )
-		p
-			a.gray( href="//gravatar.com/gravatars/new", target="_blank" ) Cambia tu avatar
+	form.profile( method="post", action="/profile" )
+		input( type="hidden", name="_method", value="put" )
 
-	ul.fields
-		li.username
-			label( for="header-username" ) Nombre de usuario
-			br
-			input#header-username( type="text", name="username", placeholder="Nombre de usuario", value=user.username )
-			.info
-				| El nombre de usuario es usado en la URL de tu perfil y fotos
-				br
-				small
-					| #{site_domain}/
-					strong #{user.username}
-					br
-					| #{site_domain}/
-					strong #{user.username}
-					| /nombre-de-tu-foto
-
-		li.email
-			label( for="header-email" ) Correo Electr&oacute;nico
-			br
-			input#header-email( type="email", name="email", placeholder="Correo Electr&oacute;nico", value=user.email )
-			.info
-				| Solo usamos tu correo para recuperar tu contraseña o enviar notificaciones sobre tu cuenta
-
-		li.password
-			label
-				input#change-password( type="checkbox", name="change-password", value="yes" ).hidden
-				button.gray.change-password-trigger( type="button" ) Cambia tu contraseña
-
-			#password-container.hidden
-				label( for="header-password" ) Contraseña
-				.col
-					input#header-password( type="password", name="password", placeholder="Contraseña" )
-					br
-					label.cancel( for="change-password" )
-						a.gray( href="#change-password-trigger" ) Cancelar
-
-	- if (user.twitter.id)
-		hr.gray
-
-		.social
+		.gravatar
+			p.img
+				a( href="//gravatar.com/gravatars/new", target="_blank" )
+					- src = (user.email) ? helpers.gravatar(user.email, 125) : helpers.image.blank
+					img( data-src=src, src= helpers.image.blank )
 			p
+				a.gray( href="//gravatar.com/gravatars/new", target="_blank" ) Cambia tu avatar
+
+		ul.fields
+			li.username
+				label( for="header-username" ) Nombre de usuario
+				br
+				input#header-username( type="text", name="username", placeholder="Nombre de usuario", value=user.username )
+				.info
+					| El nombre de usuario es usado en la URL de tu perfil y fotos
+					br
+					small
+						| #{site_domain}/
+						strong #{user.username}
+						br
+						| #{site_domain}/
+						strong #{user.username}
+						| /nombre-de-tu-foto
+
+			li.email
+				label( for="header-email" ) Correo Electr&oacute;nico
+				br
+				input#header-email( type="email", name="email", placeholder="Correo Electr&oacute;nico", value=user.email )
+				.info
+					| Solo usamos tu correo para recuperar tu contraseña o enviar notificaciones sobre tu cuenta
+
+			li.password
 				label
-					- if (!user.twitter.share)
-						input.checkbox( type="checkbox", name="twitter_share" ) 
-					- else
-						input.checkbox( type="checkbox", name="twitter_share", checked ) 
-					| Comparte tus fotos automaticamente en Twitter
+					input#change-password( type="checkbox", name="change-password", value="yes" ).hidden
+					button.gray.change-password-trigger( type="button" ) Cambia tu contraseña
 
-	//- hr
+				#password-container.hidden
+					label( for="header-password" ) Contraseña
+					.col
+						input#header-password( type="password", name="password", placeholder="Contraseña" )
+						br
+						label.cancel( for="change-password" )
+							a.gray( href="#change-password-trigger" ) Cancelar
 
-	p.buttons
-		button( type="submit" ) Guardar cambios
+		- if (user.twitter.id)
+			hr.gray
+
+			.social
+				p
+					label
+						- if (!user.twitter.share)
+							input.checkbox( type="checkbox", name="twitter_share" ) 
+						- else
+							input.checkbox( type="checkbox", name="twitter_share", checked ) 
+						| Comparte tus fotos automaticamente en Twitter
+
+		//- hr
+
+		p.buttons
+			button( type="submit" ) Guardar cambios

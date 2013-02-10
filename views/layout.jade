@@ -1,9 +1,8 @@
 !!! 5
 html( lang="es", prefix="og: http://ogp.me/ns#" )
 	head
-		- document_title_tag = helpers.heart + ' ' + document_title + (twitter_config.hashtag ? ' &nbsp; ' + twitter_config.hashtag : '')
 		meta( charset="utf-8" )
-		title= document_title_tag
+		title #{helpers.heart} #{document_title}
 		meta( name="description", value= document_description )
 		meta( name="viewport", content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1" )
 
@@ -20,36 +19,31 @@ html( lang="es", prefix="og: http://ogp.me/ns#" )
 		meta( property="og:url", content= document_url )
 
 		block after-head-meta
-	
+
 	- body_class += logged_user ? ' logged-in' : '';
 	body( class= body_class )
 		script document.body.className += ' js-enable ';
 
 		div#overflow
-		
+
 			header#header
 				.wrap
-					!= partial('_header')
-			
+					include _header
+
 			hr.hidden
 
 			section#inner
 				block before-wrap
 
 				#wrap
-					
-					//- p#message No te pierdas lo nuevo de L4C, un concurso nuevo cada mes. 
-					//- 	a.more( href="/concursos/" ) Leer m&aacute;s
-					//- 	a.close Cerrar [x]
-
 					#container.clearfix
 						- if (typeof body !== 'undefined')
 							!= body
-						
+
 						block content
-			
+
 			hr.hidden
-			
+
 			section#js
 				script window.onload = function(){ document.body.className += ' js-ready '; }; var Site = {};
 				script( src="//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js" )

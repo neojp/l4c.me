@@ -1,33 +1,36 @@
-nav#breadcrumb
-	h1 Registrate
+extends layout
 
-hr
+block content
+	nav#breadcrumb
+		h1 Registrate
 
-form.login.register( method="post", action="/register" )
-	fieldset.fields
-		legend Registrate en #{site_name}
-		
-		p
-			//- label( for="header-username" ) Nombre de usuario
-			input#header-username( type="text", name="username", placeholder="Nombre de usuario", required, autofocus )
+	hr
 
-		p
-			//- label( for="header-password" ) Contraseña
-			input#header-password( type="password", name="password", placeholder="Contraseña", required )
+	form.login.register( method="post", action="/register" )
+		fieldset.fields
+			legend Registrate en #{site_name}
 
-		p
-			//- label( for="header-email" ) Correo Electr&oacute;nico
-			input#header-email( type="email", name="email", placeholder="Correo Electr&oacute;nico", required )
-		
-		p.buttons
-			button( type="submit" ) Registrate
+			p
+				//- label( for="header-username" ) Nombre de usuario
+				input#header-username( type="text", name="username", placeholder="Nombre de usuario", required, autofocus )
 
-		hr.gray
-		
-		p
-			| Ya tienes una cuenta? Puedes 
-			a.login( href="/login" ) iniciar sesi&oacute;n
+			p
+				//- label( for="header-password" ) Contraseña
+				input#header-password( type="password", name="password", placeholder="Contraseña", required )
 
-		//- p
-		//- 	| Si la olvidaste, 
-		//- 	a.forgot( href="/login/forgot" ) recupera tu cuenta o contraseña
+			p
+				//- label( for="header-email" ) Correo Electr&oacute;nico
+				input#header-email( type="email", name="email", placeholder="Correo Electr&oacute;nico", required )
+
+			p.buttons
+				button( type="submit" ) Registrate
+
+			hr.gray
+
+			p
+				| Ya tienes una cuenta? Puedes 
+				a.login( href="/login" ) iniciar sesi&oacute;n
+
+			//- p
+			//- 	| Si la olvidaste,
+			//- 	a.forgot( href="/login/forgot" ) recupera tu cuenta o contraseña

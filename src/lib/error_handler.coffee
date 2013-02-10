@@ -22,7 +22,9 @@ error500 = (err, req, res) ->
 		return res.json error: err
 
 	headers = 'Content-Type': 'text/plain'
-	return res.send "#{helper.heart} Error 500: Cannot #{req.method} #{req.originalUrl}\n\n#{server_error}\n#{message}#{err.stack}", headers
+	res.status 500
+	res.set 'Content-Type', 'text/plain'
+	return res.send "#{helper.heart} Error 500: Cannot #{req.method} #{req.originalUrl}\n\n#{server_error}\n#{message}#{err.stack}"
 
 
 module.exports = (err, req, res, next) ->
@@ -30,11 +32,13 @@ module.exports = (err, req, res, next) ->
 	default_error = (req, res) ->
 		method = req.method
 		status = err.status ? err
-		res.statusCode = status
+		res.status status
 
 		return res.end()  if 'HEAD' == method
 		return res.json { error:{ status: status } }  if !req.accepts 'html' && req.accepts 'json'
-		return res.send "#{helper.heart} Error #{status}: Cannot #{method} #{req.originalUrl}", 'Content-Type': 'text/plain'
+
+		res.set 'Content-Type', 'text/plain'
+		return res.send "#{helper.heart} Error #{status}: Cannot #{method} #{req.originalUrl}"
 
 	# if err is a number and not 500
 	return default_error if typeof err == 'number' && err != 500

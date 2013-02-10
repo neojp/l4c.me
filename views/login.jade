@@ -1,41 +1,42 @@
-nav#breadcrumb
-	h1 Iniciar Sesión
+extends layout
 
-hr
+block content
+	nav#breadcrumb
+		h1 Iniciar Sesión
 
-- if (failed)
-	div.message.error
-		p
-			strong Please re-enter your password
-		p The password you entered is incorrect. Please try again (make sure your caps lock is off).
+	hr
+
+	- if (failed)
+		div.message.error
+			p
+				strong Please re-enter your password
+			p The password you entered is incorrect. Please try again (make sure your caps lock is off).
 
 
-form.login( method="post", action="/login" )
-	fieldset.fields
-		legend desde #{site_name}
-		
-		p
-			//- label( for="header-username" ) Nombre de usuario
-			input#header-username( type="text", name="username", placeholder="Nombre de usuario", required, autofocus )
+	form.login( method="post", action="/login" )
+		fieldset.fields
+			legend desde #{site_name}
 
-		p
-			//- label( for="header-password" ) Contraseña
-			input#header-password( type="password", name="password", placeholder="Contraseña", required )
-		
-		p.buttons
-			//- a.forgot( href="/login/forgot" ) Recuperar Contraseña
-			button( type="submit" ) Entrar
+			p
+				//- label( for="header-username" ) Nombre de usuario
+				input#header-username( type="text", name="username", placeholder="Nombre de usuario", required, autofocus )
 
-	fieldset.social
-		legend desde otros sitios
+			p
+				//- label( for="header-password" ) Contraseña
+				input#header-password( type="password", name="password", placeholder="Contraseña", required )
 
-		p
-			- var title_attr = "Aun no esta disponible :(";
-			a.zocial.twitter( href="/login/twitter" ) Logueate con Twitter
-			a.zocial.facebook.disabled( tabindex="-1", title= title_attr ) Logueate con Facebook
-			a.zocial.googleplus.disabled( tabindex="-1", title= title_attr ) Logueate con Google+
-		
-	hr.gray.nomargin
-	fieldset.register
-		p
-			a.button.blue( href="/register" ) Registrate en #{site_name}
+			p.buttons
+				//- a.forgot( href="/login/forgot" ) Recuperar Contraseña
+				button( type="submit" ) Entrar
+
+		fieldset.social
+			legend desde otros sitios
+
+			p
+				- var title_attr = "Aun no esta disponible :(";
+				a.zocial.twitter( href="/login/twitter" ) Logueate con Twitter
+
+		hr.gray.nomargin
+		fieldset.register
+			p
+				a.button.blue( href="/register" ) Registrate en #{site_name}

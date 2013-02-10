@@ -9,11 +9,11 @@ block after-head-meta
 		link( rel="alternate", title="#{helpers.heart} #{site_name} - Fotos de #{username}", href="#{site_domain}/feed/#{username}", type="application/rss+xml" )
 
 block content
-	!= partial('_breadcrumb')
+	include _breadcrumb
 
 	hr
 
-	!= partial('_pagination')
+	include _pagination
 
 	#content
 		- if (photos.length)
@@ -45,9 +45,9 @@ block content
 		- else
 			p.aligncenter No hay imagenes disponibles.
 				br
-				strong Y U NO UPLOAD MOAR PICTURES?! 
+				strong Y U NO UPLOAD MOAR PICTURES?!
 					= helpers.yuno
 
 	hr
 
-	!= partial('_pagination')
+	include _pagination

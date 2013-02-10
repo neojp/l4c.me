@@ -24,7 +24,7 @@
     "coffee-script": ">= 1.2.0",
     "connect-mongo": "0.1.7",
     "colors": "*",
-    "express": "2.x.x",
+    "express": "3.x",
     "gravatar": ">= 1.0.6",
     "gm": "*",
     "imagemagick": ">= 0.1.2",

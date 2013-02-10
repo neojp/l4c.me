@@ -8,11 +8,12 @@ express = require 'express'
 nodejs_url  = require 'url'
 fs  = require 'fs'
 spawn = require('child_process').spawn
+util = require 'util'
 
 
 # L4C library
 config = require('../config.json')
-app = module.exports.app = express.createServer()
+app = module.exports.app = express()
 lib = require './lib'
 helpers = lib.helpers
 error_handler = lib.error_handler
@@ -75,6 +76,37 @@ app.configure ->
 
 	app.use passport.initialize()
 	app.use passport.session()
+
+	app.use middleware.redirect_subdomain
+	app.use middleware.remove_trailing_slash
+
+	app.use (req, res, next) ->
+		res.locals
+			_: underscore
+			body_class: ''
+			document_description: ''
+			document_image: url_domain + '/images/logo.png'
+			document_title: config.info.name
+			document_url: url_domain
+			site_domain: config.domain
+			site_name: config.info.name
+			helpers: helpers
+			logged_user: if req.isAuthenticated() then req.user else null
+			original_url: req.originalUrl
+			page: 1
+			photos: []
+			pretty: true
+			res: res
+			sort: null
+			query_vars: nodejs_url.parse(req.url, true).query
+			google_analytics: config.google_analytics
+			twitter_config:
+				hashtag: config.twitter.hashtag
+				username: config.twitter.username
+
+		# res.locals helpers
+		next()
+
 	app.use app.router
 	app.use error_handler(404)  # 404 handler
 
@@ -124,33 +156,6 @@ app.param 'user', (req, res, next, id) ->
 
 
 # Routes
-app.all '*', middleware.redirect_subdomain, middleware.remove_trailing_slash, (req, res, next) ->
-	url_domain = "http://#{req.headers.host}"
-	res.locals
-		_: underscore
-		body_class: ''
-		document_description: ''
-		document_image: url_domain + '/images/logo.png'
-		document_title: config.info.name
-		document_url: url_domain
-		site_domain: url_domain
-		site_name: config.info.name
-		helpers: helpers
-		logged_user: if req.isAuthenticated() then req.user else null
-		original_url: req.originalUrl
-		page: 1
-		photos: []
-		res: res
-		sort: null
-		query_vars: nodejs_url.parse(req.url, true).query
-		google_analytics: config.google_analytics
-		twitter_config:
-			hashtag: config.twitter.hashtag
-			username: config.twitter.username
-
-	# res.locals helpers
-	next('route')
-
 
 app.get '/500', (req, res) ->
 	throw new Error('test')
@@ -181,30 +186,32 @@ app.get '/fotos/:sort?', (req, res, next) ->
 			.limit(per_page)
 			.skip(per_page * (page - 1))
 			.populate('_user')
-		
+
 		photos.sort({ created_at: -1 })  if sort == 'ultimas'
 		photos.sort({ views: -1, created_at: -1 })  if sort == 'top'
 		photos.exec callback
 
 	.rescue (err) ->
 		next err  if err
-	
+
 	.end null, (data) ->
 		count = data[0]
 		photos = data[1]
+		pages = Math.ceil count / per_page
 
-		res.locals
-			body_class: "gallery #{sort}"
-			pages: Math.ceil count / per_page
-			path: "/fotos/#{sort}"
-			page: page
-			photos: photos
-			sort: sort
-			total: count
-			document_description: if req.originalUrl == '/' then config.info.description else res.local 'document_description'
-			document_title: if req.originalUrl == '/' then config.info.title else res.local 'document_title'
+		res.locals.body_class = "gallery #{sort}"
+		res.locals.pages = pages
+		res.locals.path = "/fotos/#{sort}"
+		res.locals.page = page
+		res.locals.photos = photos
+		res.locals.sort = sort
+		res.locals.total = count
 
-		res.render 'gallery', { layout: false }
+		if req.originalUrl == '/'
+			res.locals.document_title = config.info.title  if config.info.title
+			res.locals.document_description = config.info.description  if config.info.description
+
+		res.render 'gallery'
 
 
 # TODO: Show list of users with his latest 6 photos
@@ -230,21 +237,20 @@ app.get '/fotos/galeria', (req, res, next) ->
 
 	.rescue (err) ->
 		next err  if err
-	
+
 	.end null, (data) ->
 		count = data[0]
 		photos = data[1]
 
-		res.locals
-			body_class: "gallery #{sort}"
-			pages: Math.ceil count / per_page
-			page: page
-			path: "/fotos/#{sort}"
-			photos: photos
-			sort: sort
-			total: count
+		res.locals.body_class = "gallery #{sort}"
+		res.locals.pages = Math.ceil count / per_page
+		res.locals.page = page
+		res.locals.path = "/fotos/#{sort}"
+		res.locals.photos = photos
+		res.locals.sort = sort
+		res.locals.total = count
 
-		res.render 'gallery', { layout: false }
+		res.render 'gallery'
 
 
 app.get '/feed/:user', (req, res) ->
@@ -258,7 +264,7 @@ app.get '/feed/:user', (req, res) ->
 		model.user.findOne { username: username }, (err, doc) ->
 			return callback err  if err
 			return error_handler(404)(req, res)  if doc == null || doc.username != username
-			
+
 			user = doc
 			callback null, user
 
@@ -290,7 +296,7 @@ app.get '/feed/:user', (req, res) ->
 	.then (data, callback) ->
 		_.each photos, (photo) ->
 			url = "#{url_domain}/#{username}/#{photo.slug}"
-			
+
 			body = if _.isEmpty(photo.description) then '' else helpers.markdown(photo.description)
 			body += """
 				<p><a href="#{url}"><img src="#{url_domain}/uploads/#{photo._id}_m.#{photo.image.ext}"></p>
@@ -308,36 +314,34 @@ app.get '/feed/:user', (req, res) ->
 	# send xml
 	.end null, (data) ->
 		xml = feed.xml()
-		res.send xml, 'Content-Type': 'application/xml'
+		res.set 'Content-Type', 'application.xml'
+		res.send xml
 
 
 app.get '/login', (req, res, next) ->
-	qs = res.local('query_vars')
-	req.flash 'auth_redirect', qs.r  if not _.isUndefined(qs.r)
+	qs = res.locals.query_vars
+	req.session.auth_redirect = qs.r  if not _.isUndefined(qs.r)
 
 	if (req.isAuthenticated())
 		return res.redirect if qs.r then qs.r else '/' + req.user.username
-	
-	res.local 'failed', not _.isUndefined(res.local('query_vars').failed)
+
+	res.locals.failed = not _.isUndefined(res.locals.query_vars.failed)
 	res.render 'login'
 
 set_auth_redirect = (req, res, next) ->
-	qs = res.local('query_vars')
-	req.flash 'auth_redirect', qs.r  if not _.isUndefined(qs.r)
+	qs = res.locals.query_vars
+	req.session.auth_redirect = qs.r  if not _.isUndefined(qs.r)
 	next()
 
 auth_redirect = (req, res, next) ->
-	flash = req.flash 'auth_redirect'
-	url = if _.size flash then _.first flash else '/' + req.user.username
+	url = req.session.auth_redirect || '/' + req.user.username
+	req.session.auth_redirect = null
 	res.redirect url
 
 app.post '/login', passport.authenticate('local', failureRedirect: '/login?failed'), auth_redirect
 
 app.get '/login/facebook', set_auth_redirect, passport.authenticate('facebook', { scope: config.facebook.permissions })
-app.get '/login/facebook/callback', passport.authenticate('facebook', failureRedirect: '/login'), (req, res, next) ->
-	flash = req.flash 'auth_redirect'
-	url = if _.size flash then _.first flash else '/' + req.user.username
-	res.redirect url
+app.get '/login/facebook/callback', passport.authenticate('facebook', failureRedirect: '/login'), auth_redirect
 
 app.get '/login/facebook/remove', middleware.auth, (req, res, next) ->
 	model.user.update({ _id: req.user._id }, { $unset: { facebook: 1} }, false, -> res.redirect('/profile'))
@@ -356,15 +360,14 @@ app.get '/userinfo', (req, res, next) ->
 
 app.get '/logout', (req, res, next) ->
 	req.logout()
-	
-	qs = res.local 'query_vars'
+
+	qs = res.locals.query_vars
 	return res.redirect if qs.r then qs.r else '/'
 
 
 app.get '/registro', (req, res, next) -> res.redirect '/register'
 app.get '/register', (req, res, next) ->
-	res.locals
-		body_class: 'register'
+	res.locals.body_class = 'register'
 
 	res.render 'register'
 
@@ -372,17 +375,17 @@ app.get '/register', (req, res, next) ->
 app.post '/register', (req, res, next) ->
 	d = req.body
 	u = new model.user
-	
+
 	invoke (data, callback) ->
 		# u.clab = d.clab  if d.clab_boolean == 'yes'
 		u.email = d.email
 		u.password = d.password
 		u.username = d.username
 		u.save (err) -> callback err
-	
+
 	.rescue (err) ->
 		next err  if err
-	
+
 	.end null, (data) ->
 		passport.authenticate('local', successRedirect: '/profile', failureRedirect: '/register?failed')(req, res)
 
@@ -400,7 +403,7 @@ app.post '/comment', (req, res, next) ->
 		user:
 			email: req.body.email
 			name: req.body.name
-	
+
 	if req.user
 		delete comment.user
 		comment._user = req.user._id
@@ -456,8 +459,7 @@ app.delete '/comment', (req, res, next) ->
 
 
 app.get '/fotos/publicar', middleware.auth, (req, res) ->
-	res.locals
-		body_class: 'upload'
+	res.locals.body_class = 'upload'
 
 	res.render 'gallery_upload'
 
@@ -505,7 +507,7 @@ app.post '/fotos/publicar', middleware.auth, (req, res, next) ->
 		if photo.privacy != 'private' && req.user.twitter and req.user.twitter.share
 			script = fs.realpathSync __dirname + '/../scripts/twitter.js'
 			proc = spawn 'node', [script, photo._id]
-			
+
 			# log output and errors
 			logBuffer = (buffer) -> console.log buffer.toString()
 			proc.stdout.on 'data', logBuffer
@@ -521,7 +523,7 @@ app.post '/fotos/publicar', middleware.auth, (req, res, next) ->
 	.rescue (err) ->
 		console.log "photo error"
 		next err  if err
-	
+
 	# end
 	.end null, (data) ->
 		# redirect
@@ -530,9 +532,8 @@ app.post '/fotos/publicar', middleware.auth, (req, res, next) ->
 
 
 app.get '/profile', middleware.auth, (req, res) ->
-	res.locals
-		body_class: 'profile'
-		user: req.user
+	res.locals.body_class = 'profile'
+	res.locals.user = req.user
 	res.render 'profile'
 
 
@@ -558,7 +559,7 @@ app.put '/profile', middleware.auth, (req, res) ->
 			if current_twitter_share != new_twitter_share
 				has_update = true
 				updated['twitter.share'] = new_twitter_share
-		
+
 		else if new_twitter_share
 			has_update = true
 			updated['twitter.share'] = new_twitter_share
@@ -570,14 +571,14 @@ app.put '/profile', middleware.auth, (req, res) ->
 		res.redirect('/profile')
 
 
-app.get '/tweets', middleware.auth, (req, res) ->
-	res.send "GET /tweets", 'Content-Type': 'text/plain'
+# app.get '/tweets', middleware.auth, (req, res) ->
+# 	res.send "GET /tweets", 'Content-Type': 'text/plain'
 
 
 app.get '/:user/:slug', (req, res, next) ->
 	slug = req.param 'slug'
 	username = req.param 'user'
-	logged_user = res.local 'logged_user'
+	logged_user = res.locals.logged_user
 	is_mine = logged_user && logged_user.username == username
 
 	user = null
@@ -607,7 +608,7 @@ app.get '/:user/:slug', (req, res, next) ->
 
 		if !is_mine
 			photos.nor([{ _id: photo._id }, {privacy: 'private'}])
-		
+
 		photos
 			.sort({ created_at: -1 })
 			.limit(6)
@@ -643,28 +644,27 @@ app.get '/:user/:slug', (req, res, next) ->
 						.prune(150)    # fancier version of truncate, doesn't return cut-off words
 						.value()
 
-		res.locals
-			body_class: 'small-header user single' + if photo.image.panorama then ' panorama' else ''
-			document_description: if !_.isUndefined(description) then description else ''
-			document_image: "#{url_domain}/uploads/#{photo._id}_m.#{photo.image.ext}"
-			document_title: photo.name
-			document_url: "#{url_domain}/#{username}/#{photo.slug}"
-			photo: photo
-			photos:
+		res.locals.body_class = 'small-header user single' + if photo.image.panorama then ' panorama' else ''
+		res.locals.document_description = if !_.isUndefined(description) then description else ''
+		res.locals.document_image = "#{url_domain}/uploads/#{photo._id}_m.#{photo.image.ext}"
+		res.locals.document_title = photo.name
+		res.locals.document_url = "#{url_domain}/#{username}/#{photo.slug}"
+		res.locals.photo = photo
+		res.locals.photos =
 				from_user: data[0]
 				from_all: data[1]
-			slug: slug
-			user: user
-			username: user.username
-		
-		res.render 'gallery_single', { layout: false }
+		res.locals.slug = slug
+		res.locals.user = user
+		res.locals.username = user.username
+
+		res.render 'gallery_single'
 
 
 app.get '/:user/:slug/sizes/:size', (req, res) ->
 	slug = req.param 'slug'
 	username = req.param 'user'
 
-	logged_user = res.local 'logged_user'
+	logged_user = res.locals.logged_user
 	is_mine = logged_user && logged_user.username == username
 
 	model.photo
@@ -685,24 +685,23 @@ app.get '/:user/:slug/sizes/:size', (req, res) ->
 						.prune(150)    # fancier version of truncate, doesn't return cut-off words
 						.value()
 
-			locals =
-				body_class: 'small-header  user sizes'
-				photo: photo
-				size: req.param 'size'
-				slug: slug
-				user: photo._user
-				username: username
-				document_description: if !_.isUndefined(description) then description else ''
-				document_image: "#{url_domain}/uploads/#{photo._id}_m.#{photo.image.ext}"
-				document_title: photo.name
-				document_url: "#{url_domain}/#{username}/#{photo.slug}"
+			res.locals.body_class = 'small-header  user sizes'
+			res.locals.photo = photo
+			res.locals.size = req.param 'size'
+			res.locals.slug = slug
+			res.locals.user = photo._user
+			res.locals.username = username
+			res.locals.document_description = if !_.isUndefined(description) then description else ''
+			res.locals.document_image = "#{url_domain}/uploads/#{photo._id}_m.#{photo.image.ext}"
+			res.locals.document_title = photo.name
+			res.locals.document_url = "#{url_domain}/#{username}/#{photo.slug}"
 
-			res.render 'gallery_sizes', { layout: false, locals: locals }
+			res.render 'gallery_sizes'
 
 
 app.get '/:user/pag/:page?', middleware.paged('/:user')
 app.get '/:user', (req, res, next) ->
-	logged_user = res.local 'logged_user'
+	logged_user = res.locals.logged_user
 	username = req.param 'user'
 	is_profile = logged_user && logged_user.username == username
 	per_page = config.pagination
@@ -716,16 +715,16 @@ app.get '/:user', (req, res, next) ->
 	.then (data, callback) ->
 		return error_handler(404)(req, res)  if (!data)
 		user = data
-		
+
 		model.photo.count { _user: user._id }, callback
-	
+
 	.and (data, callback) ->
 		photos = model.photo
 			.find( _user: user._id )
 
 		if !is_profile
 			photos.nor([{ privacy: 'private'}])
-		
+
 		photos
 			.limit(per_page)
 			.skip(per_page * (page - 1))
@@ -735,29 +734,28 @@ app.get '/:user', (req, res, next) ->
 
 	.rescue (err) ->
 		next err  if err
-	
+
 	.end user, (data) ->
 		count = data[0]
 		photos = data[1]
-		
-		res.locals
-			body_class: 'gallery user'
-			pages: Math.ceil count / per_page
-			page: page
-			path: "/#{user.username}"
-			photos: photos
-			sort: null
-			total: count
-			user: user
-			username: username
 
-		res.render 'gallery', { layout: false }
+		res.locals.body_class = 'gallery user'
+		res.locals.pages = Math.ceil count / per_page
+		res.locals.page = page
+		res.locals.path = "/#{user.username}"
+		res.locals.photos = photos
+		res.locals.sort = null
+		res.locals.total = count
+		res.locals.user = user
+		res.locals.username = username
+
+		res.render 'gallery'
 
 
 app.get '/:user/:slug/editar', middleware.auth, (req, res) ->
 	slug = req.param 'slug'
 	username = req.param 'user'
-	
+
 	user = null
 	photo = null
 
@@ -778,24 +776,23 @@ app.get '/:user/:slug/editar', middleware.auth, (req, res) ->
 		next err
 
 	.end null, (data) ->
-		res.locals
-			body_class: 'small-header user single-edit' + if photo.image.panorama then ' panorama' else ''
-			document_descrition: photo.description || ''
-			document_image: "#{url_domain}/uploads/#{photo._id}_m.#{photo.image.ext}"
-			document_title: photo.name
-			document_url: "#{url_domain}/#{username}/#{photo._id}/editar"
-			photo: photo
-			slug: slug
-			user: user
-			username: user.username
-		
-		res.render 'gallery_edit', { layout: false }
+		res.locals.body_class = 'small-header user single-edit' + if photo.image.panorama then ' panorama' else ''
+		res.locals.document_descrition = photo.description || ''
+		res.locals.document_image = "#{url_domain}/uploads/#{photo._id}_m.#{photo.image.ext}"
+		res.locals.document_title = photo.name
+		res.locals.document_url = "#{url_domain}/#{username}/#{photo._id}/editar"
+		res.locals.photo = photo
+		res.locals.slug = slug
+		res.locals.user = user
+		res.locals.username = user.username
+
+		res.render 'gallery_edit'
 
 
 app.put '/:user/:slug', middleware.auth, (req, res) ->
 	slug = req.param 'slug'
 	username = req.param 'user'
-	
+
 	user = null
 	photo = null
 
@@ -844,7 +841,7 @@ app.delete '/:user/:slug', middleware.auth, (req, res) ->
 
 	slug = req.param 'slug'
 	username = req.param 'user'
-	
+
 	user = null
 	photo = null
 
@@ -860,7 +857,7 @@ app.delete '/:user/:slug', middleware.auth, (req, res) ->
 				user = data._user
 				photo = data
 				callback()
-	
+
 	.then (data, callback) ->
 		photo.remove callback
 
@@ -868,10 +865,10 @@ app.delete '/:user/:slug', middleware.auth, (req, res) ->
 		queue = invoke()
 		index = 0
 		nodejs_path = require 'path'
-		
+
 		_.each helpers.image.sizes, (size, key) ->
 			path = nodejs_path.normalize "#{__dirname}/../public/uploads/#{photo._id}_#{size.size}.#{photo.image.ext}"
-			
+
 			if !index
 				queue = invoke (data, cb) ->
 					console.log 'photo delete start', path
@@ -892,7 +889,7 @@ app.delete '/:user/:slug', middleware.auth, (req, res) ->
 
 						console.log 'photo delete end', path
 						cb()
-			
+
 			index++
 
 		queue.rescue callback
@@ -906,23 +903,16 @@ app.delete '/:user/:slug', middleware.auth, (req, res) ->
 
 
 module.exports.listen = listen = () ->
-	if (_.isEmpty config.domains)
-		server = app
+	# Create HTTP server with your app
+	http   = require 'http'
+	server = http.createServer app
+	port = config.port || 3000
 
-	else
-		server = express.createServer()
-		available_apps =
-			app: app
-
-		_.each config.domains, (value, key, list) ->
-			if available_apps[value]
-				server.use express.vhost key, available_apps[value]
-				# url_domain = 'http://' + key  if _.isNull url_domain
-
-	server.listen config.port || 3000, ->
-		console.log "Listening on port %d \n\n", server.address().port
+	server.listen port, () ->
+		console.log util.format("Server started on port %d \n\n", port)
+		# console.log "Listening on port %d \n\n", server.address().port
 		user = config.users.default
-		
+
 		if user.gid
 			try
 				process.setgid user.gid
