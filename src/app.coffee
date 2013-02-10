@@ -171,7 +171,7 @@ app.get '/fotos/:sort?', (req, res, next) ->
 	page = parseInt req.param('page', 1), 10
 	per_page = config.pagination
 	photos = null
-	query = {}
+	query = { $nor: [{ privacy: 'private'}] }
 
 	if req.originalUrl == '/fotos'
 		return res.redirect '/'
@@ -182,7 +182,6 @@ app.get '/fotos/:sort?', (req, res, next) ->
 	.and (data, callback) ->
 		photos = model.photo
 			.find(query)
-			.nor([{ privacy: 'private'}])
 			.limit(per_page)
 			.skip(per_page * (page - 1))
 			.populate('_user')
@@ -213,7 +212,7 @@ app.get '/fotos/:sort?', (req, res, next) ->
 
 		res.render 'gallery'
 
-
+###
 # TODO: Show list of users with his latest 6 photos
 app.get '/fotos/galeria/pag/:page?', middleware.paged('/fotos/galeria')
 app.get '/fotos/galeria', (req, res, next) ->
@@ -251,7 +250,7 @@ app.get '/fotos/galeria', (req, res, next) ->
 		res.locals.total = count
 
 		res.render 'gallery'
-
+###
 
 app.get '/feed/:user', (req, res) ->
 	username = req.param 'user'
@@ -716,7 +715,11 @@ app.get '/:user', (req, res, next) ->
 		return error_handler(404)(req, res)  if (!data)
 		user = data
 
-		model.photo.count { _user: user._id }, callback
+		query = { _user: user._id }
+		if !is_profile
+			query['$nor'] = [{ privacy: 'private'}]
+
+		model.photo.count query, callback
 
 	.and (data, callback) ->
 		photos = model.photo
