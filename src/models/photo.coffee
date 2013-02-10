@@ -175,8 +175,6 @@ methods =
 		next = if _.isFunction logged_username then logged_username else next
 		is_mine = photo._user.username == logged_username
 		
-		console.log "prev_next is_mine?  #{is_mine}"
-
 		invoke (data, callback) ->
 			query = model.findOne({ _user: photo._user, created_at: { $lt: created_at } }, { slug: 1 })
 
