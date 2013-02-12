@@ -63,7 +63,9 @@ module.exports = (app) -> middleware =
 	# eg. static(_dirname + '/views', { urlPrefix: '/templates', maxAge: 31556926000 })
 	# will look for urls like this: /templates/layout.jade and send the file: _dirname + '/views/layout.jade'
 	static: (path, options = {}) ->
-		_.defaults options, app.set('static options')
+		default_options = app.get('static options')
+
+		_.defaults options, default_options
 		urlPrefix = options.urlPrefix
 
 		(req, res, next) ->

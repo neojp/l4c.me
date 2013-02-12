@@ -1,7 +1,5 @@
 {
-	"domains": {
-		"localhost": "app"
-	},
+	"domains": "localhost",
 
 	"facebook": {
 		"clientID": "",
@@ -63,6 +61,14 @@
 
 	"rss": {
 		"limit": 10
+	},
+
+	"session": {
+		"collection": "sessions",
+		"key": "sid",
+		"max_age": 2592000000,
+		"secret": "♥",
+		"secure": false
 	},
 
 	"twitter": {

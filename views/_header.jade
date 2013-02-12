@@ -7,10 +7,14 @@ hr.hidden
 - if (original_url.indexOf('/login') !== 0 && original_url.indexOf('/registro') !== 0)
 
 	aside#header-upload
-		a.button.upload( href="/fotos/publicar" )
+		a.button.icon-photo( href="/fotos/publicar" )
 			span Sube una foto
 
-		- if (logged_user)
+		- if (!logged_user)
+			a.button.icon-login( href="/login" )
+				span Login
+
+		- else
 			- src = (logged_user.email) ? helpers.gravatar(logged_user.email, 125) : helpers.image.blank
 			#header-profile
 				a#header-gravatar( href= "/" + logged_user.username )
