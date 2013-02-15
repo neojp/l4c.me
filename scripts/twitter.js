@@ -65,7 +65,7 @@ module.exports.tweet_photo = tweet_photo = function(photo_id, callback) {
     return twit.verifyCredentials(callback);
   }).then(function(data, callback) {
     var box, box_with_circle, box_with_circle2, calendar, equis, hashtag, length, photo_name, photo_url, tweet, tweet_format, url_length;
-    photo_url = "http://" + (_.first(_.keys(config.domains))) + "/" + user.username + "/" + photo.slug;
+    photo_url = "http://" + config.domain + "/" + user.username + "/" + photo.slug;
     hashtag = config.twitter.hashtag ? ' ' + config.twitter.hashtag : '';
     box = "▣";
     box_with_circle = "◘";

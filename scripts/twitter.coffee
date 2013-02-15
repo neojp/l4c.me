@@ -65,7 +65,7 @@ module.exports.tweet_photo = tweet_photo = (photo_id, callback) ->
 
 	.then (data, callback) ->
 		# create photo url
-		photo_url = "http://#{_.first(_.keys(config.domains))}/#{user.username}/#{photo.slug}"
+		photo_url = "http://#{config.domain}/#{user.username}/#{photo.slug}"
 
 		# hashtag
 		hashtag = if config.twitter.hashtag then ' ' + config.twitter.hashtag else ''
