@@ -20,6 +20,11 @@ app            = express()
 module.exports = app
 
 
+# template engine - jade
+app.set 'view engine', 'jade'
+app.set 'views', __dirname + '/../views'
+
+
 # L4C library
 config        = require '../config.json'
 lib           = require './lib'
