@@ -108,7 +108,6 @@ app.use (req, res, next) ->
 app.set 'strict routing', true
 app.use app.router
 app.use require './routes'
-app.use require './test'
 
 
 # 404 error handler
