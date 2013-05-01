@@ -1,3 +1,16 @@
+# config settings
+config        = require '../config.json'
+
+# Nodefly monitoring system
+if config.nodefly
+	hostname      = require('os').hostname()
+	processNumber = process.env.INDEX_OF_PROCESS || 0
+
+	require('nodefly').profile
+		config.nodefly.profile
+		[config.nodefly.name, hostname, processNumber]
+
+
 # Module dependencies
 _     = underscore     = require 'underscore'
 _.str = underscore.str = require 'underscore.string'
@@ -15,7 +28,6 @@ module.exports = app
 
 
 # L4C library
-config        = require '../config.json'
 lib           = require './lib'
 error_handler = lib.error_handler
 helpers       = lib.helpers

@@ -54,6 +54,11 @@
 		}
 	},
 
+	"nodefly": {
+		"name": "",
+		"profile": ""
+	},
+
 	"pagination": 50,
 
 	"port": 3000,
