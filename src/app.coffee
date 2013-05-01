@@ -6,9 +6,7 @@ if config.nodefly
 	hostname      = require('os').hostname()
 	processNumber = process.env.INDEX_OF_PROCESS || 0
 
-	require('nodefly').profile
-		config.nodefly.profile
-		[config.nodefly.name, hostname, processNumber]
+	require('nodefly').profile config.nodefly.profile, [config.nodefly.name, hostname, processNumber]
 
 
 # Module dependencies
